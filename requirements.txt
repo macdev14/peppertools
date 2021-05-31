@@ -40,7 +40,7 @@ django-qr-code==2.1.0
 django-qrcode==0.3
 django-utils-six==2.0
 djangorestframework==3.12.4
-djangorestframework-simplejwt==4.7.1
+djangorestframework-simplejwt==4.4.0
 dnspython==1.16.0
 docutils==0.15.2
 dominate==2.5.1
