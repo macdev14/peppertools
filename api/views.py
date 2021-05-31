@@ -10,7 +10,8 @@ from .permissions import IsOwnerOrReadOnly, IsOwnerProfileOrReadOnly
 # Create your views here.
 class ProcViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = Processo.objects.all().order_by('Nome')
+    queryset = Processo.objects.all().order_by('procname')
+    print(queryset)
     serializer_class = ProcessoSerializer
     
 

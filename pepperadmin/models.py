@@ -197,10 +197,10 @@ class Cadastro_OS(models.Model):
 
 
 class Processo(models.Model):
-    Nome = models.CharField(null=True, blank=True,max_length=254, db_column='Nome')
+    procname = models.CharField(_("Nome"), null=True, blank=True,max_length=254, db_column='Nome')
     Tempo_Objetivo = models.TimeField(null=True, blank=True, auto_now=False, auto_now_add=False, db_column='Tempo_Objetivo')
     def __str__(self):
-        return f"{self.Nome} - {self.Tempo_Objetivo}"
+        return f"{self.procname}"
     class Meta:
         db_table = 'processos'
         
@@ -208,7 +208,7 @@ class Processo(models.Model):
 
 
 class Historico_Os(models.Model):
-    processo = models.ForeignKey(Processo, null=True, blank=True,verbose_name=_("Processo"), on_delete=models.CASCADE, db_column='id_proc')
+    processo = models.ForeignKey(Processo, null=True, blank=True,verbose_name=_("Processo"), on_delete=models.CASCADE, db_column='id_proc',  related_name="id_proc")
     os = models.ForeignKey(Cadastro_OS, null=True, blank=True,verbose_name=_("Ordem de Serviço"), on_delete=models.CASCADE, related_name="id_os", db_column='id_os')
     inicio = models.TimeField(_("Início"), default=datetime.now().strftime('%H:%M:%S') ,auto_now=False, auto_now_add=False, db_column="inicio")
     fim =  models.TimeField(_("Fim"), null=True, blank=True,auto_now=False, auto_now_add=False, db_column="fim")

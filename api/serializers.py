@@ -13,10 +13,10 @@ JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
 JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 '''
 
-class ProcessoSerializer(serializers.HyperlinkedModelSerializer, TokenObtainPairSerializer):
+class ProcessoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Processo
-        fields = ('Nome', 'Tempo_Objetivo')
+        fields = ('procname','Tempo_Objetivo',)
 
 
 
@@ -37,7 +37,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
             pass
     class Meta:
         model = Historico_Os
-        fields = ('processo', 'os', 'qtd' ,'ocorrencias', 'ostok')
+        fields = ('id_proc', 'os', 'qtd' ,'ocorrencias', 'ostok')
        
 
     
