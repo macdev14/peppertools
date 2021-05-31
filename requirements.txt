@@ -66,7 +66,7 @@ Flask-SQLAlchemy==2.4.1
 flask-ssl==0.0.0.1rc1
 Flask-WTF==0.14.3
 future==0.18.2
-get==2019.4.13
+
 
 gunicorn==19.10.0
 help50==3.0.0
