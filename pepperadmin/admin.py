@@ -36,7 +36,8 @@ class osModel(DjangoObjectActions, admin.ModelAdmin):
         img.save(stream)
         svg = stream.getvalue().decode()
         historyos = Historico_Os.objects.all().filter(os=obj.id)
-        return render(request, 'pepperadmin/os.html',  {'field': obj,'qr':svg, 'tracker': historyos })   
+        processes = Processo.objects.all()
+        return render(request, 'pepperadmin/os.html',  {'field': obj,'qr':svg, 'tracker': historyos, 'processes':processes })   
          
     printos.label = 'Imprimir O.S'
     printos.short_description = 'Clique para imprimir ordem de serviço'

@@ -56,9 +56,7 @@
    
    </style>
    {% endblock %}
-   </head>
-   
-   <body>
+  
     {% block content %}
    <hr>
    
@@ -101,9 +99,7 @@
       </div>      </td>
       <td><div align="left" class="style6">
         <div align="right"><em>
-           
                 {{field.Numero_Pedido }}
-
         </em> </div>
       </div>
         <div align="right"><span class="style6"></span></div></td>
@@ -179,16 +175,139 @@
   </table>
 
 
-  <div class="input-group mb-3">
-    <div style="margin: auto">
-      {{ qr |safe }}
+  <table style="float:left" width="50%"  border="0" cellspacing="0" cellpadding="0">
+    <th style="font-family:verdana">
+          <strong>PROCESSOS:</strong>
+    </th>
+    <tr>
+       
+   <tr class="style13">
+     <td colspan="4" class="LINHA"><div align="left"></div>      <div align="center"></div></td>
+   </tr>
+
+   <tr>
+    <td width="20%" class="LINHA">
+   <div align="right" class="style15">
+      <div align="left"><span class="style13"><b>Nome</b></span></div>
     </div>
-  </div> 
-      
+   </td>
+    <td class="LINHA" width="20%" ><b>Quantidade</b></td>
+    <td class="LINHA" width="20%" ><b>Início</b></td>
+    <td class="LINHA" width="22%" ><b>Fim</b></td>
+  </tr>
+
+
+  {% if processes %}
+   {% for process in processes%}
+   {{procs}}
+  
+
+   <tr>
+    <td width="20%" class="LINHA">
+   <div align="right" class="style15">
+      <div align="left"><span class="style13">{{process.Nome}}</span></div>
+    </div>
+   </td>
+    <td class="LINHA" width="10%" align="center">{{process.qtd }}</td>
+    <td class="LINHA" width="20%" >{{process.inicio }}</td>
+    <td class="LINHA" width="22%" >{{process.fim }}</td>
+  </tr>
+   
+{%endfor%}
+{%endif %}
+ </table>
+
+ <table style="float: left; margin-left:10px" width="45%" border="0" cellspacing="0" cellpadding="0">
+  <th style="font-family:verdana"><strong>OCORR&Ecirc;NCIAS / REFUGO:</strong></th>
+  <tr class="style13">
+    <td class="LINHA"><div align="left"></div>      <div align="center"></div></td>
+  </tr>
+ {% if ocorrencias %}
+
+  {% for ocorrencia in historyos%}
+  <tr class="style13">
+    <td class="LINHA">{{ ocorrencia.Nome }} - {{ ocorrencia.ocorrencias }}</td>
+  </tr>
+  {%endfor%}
+  {%endif%}
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+ <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+ <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>  
+  <tr class="style13">
+   <td class="LINHA">&nbsp;</td>
+ </tr> 
+ <tr class="style13">
+   <td class="LINHA">&nbsp;</td>
+ </tr> 
+ <tr class="style13">
+   <td class="LINHA">&nbsp;</td>
+ </tr> 
+ <tr class="style13">
+   <td class="LINHA">&nbsp;</td>
+ </tr> 
+</table>
+
+
+
+<table style="float:left" width="100%"  border="0" align="center" cellpadding="0" cellspacing="1">
+  
+      <tr> <td colspan="95" align="center">---------------------------------------------------------------------------------------------------------------</td> </tr>
+ 
+   <tr>
+      <td class="style6"><div align="right">DESENHO PIMENTEL: &nbsp; </div></td>
+      <td colspan="2" class="style6"><div align="left"><em>{{ field.Desenho_Pimentel |default_if_none:""  }}</em></div></td><br>
+   </tr>
+   <tr>
+    <td width="23%" class="style6"><div align="right">FERRAMENTA: &nbsp;</div></td>
+    <td colspan="2" class="style6"><div align="left"><em>{{ field.Ferramenta |default_if_none:""  }}</em></div></td>
+    <td width="35%"><div align="center" class="style6">TIPO DA O.S. </div></td>
+  </tr>
+  <tr>
+    <td class="style6"><div align="right">MATERIAL: &nbsp;</div></td>
+    <td colspan="2" class="style6"><div align="left"><em>{{ field.Material |default_if_none:""  }}</em></div></td>
+    <td><div align="center" class="style6"><strong><em>{{ field.Tipo |default_if_none:""  }}</em></strong></div></td>
+  </tr>
+  <tr>
+    <td class="style6"><div align="right">DESENHO CLIENTE: &nbsp; </div></td>
+    <td colspan="2" class="style6"><div align="left"><em>{{ field.Desenho_Cliente |default_if_none:""   }}</em></div></td>
+    <td colspan="4"  class="style6"><div align="center" class="style6">
+      {{ qr |safe }}
+    </div></td>
+   </tr>
+ </table>
+
+
        {% endblock %}
 
    
 
-   </body>
-   </html>
+  
+      
    
