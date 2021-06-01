@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.urls import path, reverse_lazy
 from django.views.generic.base import RedirectView
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 urlpatterns = i18n_patterns(
     # ...
+    RedirectView.as_view(url=staticfiles_storage.url("favicon.ico")),
     path('', RedirectView.as_view(url=reverse_lazy('admin:index'))),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
