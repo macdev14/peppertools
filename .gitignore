@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+pepperadmin/__pycache__/
+pepperadmin/migrations/__pycache__/
 
 # C extensions
 *.so
