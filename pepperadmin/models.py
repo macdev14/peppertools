@@ -263,7 +263,7 @@ class Orcamento(models.Model):
 
 class Processo(models.Model):
     procname = models.CharField(_("Nome"), null=True, blank=True,max_length=254, db_column='Nome')
-    Tempo_Objetivo = models.TimeField(null=True, blank=True, auto_now=False, auto_now_add=False, db_column='Tempo_Objetivo')
+    #Tempo_Objetivo = models.TimeField(null=True, blank=True, auto_now=False, auto_now_add=False, db_column='Tempo_Objetivo')
     def __str__(self):
         return f"{self.procname}"
     class Meta:
