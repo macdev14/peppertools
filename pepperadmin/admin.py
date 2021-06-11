@@ -8,7 +8,7 @@ import peppertools.settings
 import qrcode
 import qrcode.image.svg
 from io import BytesIO
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 #from .utils import render_to_pdf
 import jwt
 from easy_pdf.views import PDFTemplateView, PDFTemplateResponseMixin
@@ -49,14 +49,62 @@ class ClienteModel(admin.ModelAdmin):
     list_display=('nome','cnpj','telefone')
     search_fields = ('nome', 'cnpj')
     
+class OrcamentoModel(DjangoObjectActions, admin.ModelAdmin):
+    filter_horizontal = ("item",)
+    def createPedido(self, request,obj):
+        if obj.pedido_id != None:
+            ped = Pedido.objects.get(pk=obj.pedido_id.id)
+            if ped:
+               return redirect("admin:pepperadmin_pedido_change", obj.pedido_id.id)
+        price = 0
+        for i in obj.item.all():
+            print(i)
+            price = price + i.preco
+            
+        pedido = Pedido(Cliente=obj.cliente,qnt = obj.qnt,preco_pedido=price)
+        pedido.save()
+        Orcamento.objects.filter(pk=obj.numero).update(pedido_id=pedido.id)
+        
+        for content in obj.item.all():
+           pedido.item.add(content)
+           print(pedido.item)
+        pedido.save()
+            
+
+        print(pedido.id)
+        return redirect("admin:pepperadmin_pedido_change", pedido.id)
+    createPedido.label = 'Criar Pedido'
+    createPedido.short_description = 'Clique aqui para Criar Pedido do orçamento.'
+    change_actions = ('createPedido',)
+
+class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
+    filter_horizontal = ("item",)
+    def createOs(self, request, obj):
+        if obj.os_pedido:
+            os = Cadastro_OS.objects.get(pk=obj.os_pedido.id)
+            if os:
+               return redirect("admin:pepperadmin_cadastro_os_change", obj.os_pedido.id)
+        materialadd = ''
+        qtd = 0
+        precototal = 0
+        for item in obj.item:
+            print(item)
+            materialadd = materialadd  + ' '+ item.nome
+            qtd = qtd + item.qtd
+            precototal = precototal + item.preco
+        print(materialadd)
+        os = Cadastro_OS.create(Cliente=obj.Cliente, Especificacao=obj.especificacao, desenho_pimentel=obj.desenho, Material=materialadd, gravacao=obj.gravacao, numero_pedido=obj.numero_pedido, data_pedido=obj.data_entrada, Quantidade=qtd) 
+        os.save()
+        Pedido.objects.filter(pk=obj.numero_pedido).update(os_pedido=os.id)
+        return redirect("admin:pepperadmin_cadastro_os_change", os.id)
 
 
 admin.site.register(Cliente, ClienteModel)
 admin.site.register(Cadastro_OS, osModel)
 admin.site.register(Item)
-admin.site.register(Orcamento)
+admin.site.register(Orcamento, OrcamentoModel)
 admin.site.register(Linha)
 admin.site.register(Material)
 admin.site.register(Historico_Os)
 admin.site.register(Processo)
-admin.site.disable_action('delete_selected')
+admin.site.register(Pedido, PedidoModel)
