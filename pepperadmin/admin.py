@@ -97,7 +97,7 @@ class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
 
         os = Cadastro_OS.objects.create(Cliente=obj.Cliente, Especificacao=obj.Especificacao, Desenho_Pimentel=obj.desenho, Material=materialadd, Numero_Pedido=obj.numero_pedido, Data_Pedido=obj.data_entrada or None, Quantidade=qtd) 
         os.save()
-        Pedido.objects.filter(pk=obj.numero_pedido).update(os_pedido=os.id)
+        Pedido.objects.filter(pk=obj.id).update(os_pedido=os.id)
         return redirect("admin:pepperadmin_cadastro_os_change", os.id)
     createOs.label = "Criar O.S"
     createOs.short_description = 'Clique aqui para criar uma ordem de serviço do pedido.'
