@@ -74,7 +74,7 @@ class OrcamentoModel(DjangoObjectActions, admin.ModelAdmin):
         print(pedido.id)
         return redirect("admin:pepperadmin_pedido_change", pedido.id)
     createPedido.label = 'Criar Pedido'
-    createPedido.short_description = 'Clique aqui para Criar Pedido do orçamento.'
+    createPedido.short_description = 'Clique aqui para criar pedido do orçamento.'
     change_actions = ('createPedido',)
 
 class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
@@ -97,6 +97,9 @@ class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
         os.save()
         Pedido.objects.filter(pk=obj.numero_pedido).update(os_pedido=os.id)
         return redirect("admin:pepperadmin_cadastro_os_change", os.id)
+    createOs.label = "Criar O.S"
+    createOs.short_description = 'Clique aqui para criar uma ordem de serviço do pedido.'
+    change_actions = ('createOs',)
 
 
 admin.site.register(Cliente, ClienteModel)
