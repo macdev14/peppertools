@@ -143,10 +143,11 @@ class Item(models.Model):
     
     def save(self, *args, **kwargs):
         fer = Ferramenta.objects.create(nome=self.nome, arquivo_desenho=self.arquivo_desenho)
+        super().save(*args, **kwargs)
         for content in self.material:
             fer.material.add(content)
-        fer.save()
-        super().save(*args, **kwargs) 
+        
+         
 
     def __str__(self):
         return self.nome
