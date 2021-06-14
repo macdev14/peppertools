@@ -87,7 +87,7 @@ class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
         materialadd = ''
         qtd = 0
         precototal = 0
-        for item in obj.item:
+        for item in obj.item.all():
             print(item)
             materialadd = materialadd  + ' '+ item.nome
             qtd = qtd + item.qtd
