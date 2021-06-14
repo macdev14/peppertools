@@ -91,7 +91,11 @@ class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
         ferramenta = ''
         for item in obj.item.all():
             print(item)
+            print(item.material.all())
             for material in item.material.all():
+                print(material)
+                print('material name: ')
+                print(material.nome)
                 materialadd = materialadd  + ' '+ material.nome
             ferramenta = ferramenta  + ' '+ item.nome
             qtd = qtd + item.qtd

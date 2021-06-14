@@ -26,7 +26,7 @@ print(BASE_DIR)
 SECRET_KEY = 'm51l@4%c42^q2c2o9l72o@&nc&@ssr93%yrwn5zj5phf2*)520'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['.vercel.app', 'peppertools.herokuapp.com']
 
@@ -150,7 +150,7 @@ REST_FRAMEWORK = {
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-#LANGUAGE_CODE = 'pt-br'
+LANGUAGE_CODE = 'pt-br'
 
 LOCALE_NAME = 'pt_BR'
 
