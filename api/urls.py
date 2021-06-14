@@ -10,7 +10,7 @@ from rest_framework.authtoken.views import(
     obtain_auth_token
 )
 router = routers.DefaultRouter()
-router.register(r'processos', views.ProcViewSet)
+#router.register(r'processos', views.ProcViewSet)
 router.register(r'historico_os', views.HistoricalView)
 router.register(r'ordem_de_servico', views.Cadastro_OSView)
 # Wire up our API using automatic URL routing.
