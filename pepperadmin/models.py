@@ -140,18 +140,20 @@ class Item(models.Model):
     qtd = models.IntegerField(_("Quantidade") ,null=True, blank=True, default=1, db_column="qtd")
     preco = models.FloatField(_("Preço"), null=True, blank=True, db_column="preco")
     arquivo_desenho = models.ImageField(_("Arquivo do desenho"), null=True, blank=True, upload_to='media/desenhos_pedidos', db_column="arquivo_desenho" )
+    
+    def save(self, *args, **kwargs):
+        fer = Ferramenta.objects.create(nome=self.nome, arquivo_desenho=self.arquivo_desenho)
+        for content in self.material:
+            fer.material.add(content)
+        fer.save()
+        super().save(*args, **kwargs) 
 
     def __str__(self):
         return self.nome
     class Meta:
         verbose_name_plural = _("Itens")
         db_table = 'itens'
-    def save(self, *args, **kwargs):
-        fer = Ferramenta.create(nome=self.nome, arquivo_desenho=self.arquivo_desenho)
-        for content in self.material:
-            fer.material.add(content)
-        fer.save()
-        super().save(*args, **kwargs) 
+   
 
    
 
