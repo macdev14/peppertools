@@ -123,6 +123,16 @@ class Linha(models.Model):
         return self.nome
     class Meta:
       db_table = 'linha'
+
+class Ferramenta(models.Model):
+    nome = models.CharField(max_length=254, default='')
+    material = models.ManyToManyField(Material, null=True, blank=True, db_column='cod_mat', related_name="material_ferramenta")
+    arquivo_desenho = models.ImageField(_("Arquivo do desenho"), null=True, blank=True, upload_to='media/desenhos_pedidos', db_column="arquivo_desenho" )
+    relatorio = models.ImageField(_("Relatorio do desenho"), null=True, blank=True, upload_to='media/relatorio_ferramenta', db_column="relatorio" )
+    def __str__(self):
+        return self.nome
+    class Meta:
+        db_table = 'Ferramenta'
 class Item(models.Model):
     nome = models.CharField(max_length=254, default='')
     descricao = models.TextField(_("Descrição"), db_column="descricao", null=True, blank=True)
@@ -136,14 +146,14 @@ class Item(models.Model):
     class Meta:
         verbose_name_plural = _("Itens")
         db_table = 'itens'
+    def save(self, *args, **kwargs):
+        fer = Ferramenta.create(nome=self.nome, arquivo_desenho=self.arquivo_desenho)
+        for content in self.material:
+            fer.material.add(content)
+        fer.save()
+        super().save(*args, **kwargs) 
 
-class Ferramenta(models.Model):
-    nome = models.CharField(max_length=254, db_column='nome')
-    mm = models.IntegerField( db_column='mm')
-    def __str__(self):
-        return self.nome
-    class Meta:
-        db_table = 'Ferramenta'
+   
 
 
 
@@ -221,8 +231,6 @@ class Pedido(models.Model):
         super().save(*args, **kwargs) 
         qnt = 0
         pricetotal = 0
-        matches = [val for val in self.item.all() if val in self.item.all()]
-        print(matches)
         queryset = self.item.all().aggregate(
         total_price=models.Sum('preco'), total_qtd=models.Sum('qtd'))
         
@@ -263,7 +271,7 @@ class Orcamento(models.Model):
 
 class Processo(models.Model):
     procname = models.CharField(_("Nome"), null=True, blank=True,max_length=254, db_column='Nome')
-    #Tempo_Objetivo = models.TimeField(null=True, blank=True, auto_now=False, auto_now_add=False, db_column='Tempo_Objetivo')
+    Tempo_Objetivo = models.TimeField(null=True, blank=True, auto_now=False, auto_now_add=False, db_column='Tempo_Objetivo')
     def __str__(self):
         return f"{self.procname}"
     class Meta:
