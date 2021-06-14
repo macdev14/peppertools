@@ -5,7 +5,7 @@
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
 <head>
-<link rel="shortcut icon" href="{% static 'favicon/favicon.ico' %}"/>
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}"/>
 <link rel="icon"href="{% static 'favicon.ico' %}">
 <title>{% block title %}{% endblock %}</title>
 <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
