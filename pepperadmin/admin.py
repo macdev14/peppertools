@@ -9,6 +9,7 @@ import qrcode
 import qrcode.image.svg
 from io import BytesIO
 from django.shortcuts import render, redirect
+from datetime import datetime
 #from .utils import render_to_pdf
 import jwt
 from easy_pdf.views import PDFTemplateView, PDFTemplateResponseMixin
@@ -93,7 +94,7 @@ class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
             qtd = qtd + item.qtd
             precototal = precototal + item.preco
         print(materialadd)
-        os = Cadastro_OS.objects.create(Cliente=obj.Cliente, Especificacao=obj.Especificacao, Desenho_Pimentel=obj.desenho, Material=materialadd, Numero_Pedido=obj.numero_pedido, Data_Pedido=datetime.datetime.strptime(obj.data_entrada, '%Y-%m-%d'), Quantidade=qtd) 
+        os = Cadastro_OS.objects.create(Cliente=obj.Cliente, Especificacao=obj.Especificacao, Desenho_Pimentel=obj.desenho, Material=materialadd, Numero_Pedido=obj.numero_pedido, Data_Pedido=datetime.strptime(obj.data_entrada, '%Y-%m-%d'), Quantidade=qtd) 
         os.save()
         Pedido.objects.filter(pk=obj.numero_pedido).update(os_pedido=os.id)
         return redirect("admin:pepperadmin_cadastro_os_change", os.id)
