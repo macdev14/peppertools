@@ -216,7 +216,7 @@ class Pedido(models.Model):
     numero_pedido = models.IntegerField(db_column="numero", editable=False)
     ano = models.IntegerField(_('ano'), default=datetime.now().year, db_column='ano', editable=False)
     Cliente = models.ForeignKey(Cliente, swappable=False, on_delete=models.CASCADE, db_column='id_cliente', related_name="cliente_pedido")
-    item = models.ManyToManyField(Item, blank=True, db_column='id_ferramenta', related_name="item_pedido")
+    item = models.ManyToManyField(Item, db_column='id_ferramenta', related_name="item_pedido")
     Especificacao = models.TextField(null=True, blank=True,db_column="especificacao")
     desenho = models.CharField(_("Obs. do desenho"), null=True, blank=True, max_length=150, db_column="desenho")
     unidade_pedido = models.CharField(null=True, blank=True,max_length=50, db_column="unidade", choices=UNIDADE, default='peca')
@@ -229,7 +229,14 @@ class Pedido(models.Model):
     class Meta:
         db_table = 'Pedido'
     def __str__(self):
-        return f"{self.Cliente} - R${self.preco_pedido} - Qtd: {self.qnt}"
+        if self.preco_pedido and self.preco_pedido:
+            return f"{self.Cliente} - R${self.preco_pedido} - Qtd: {self.qnt}"
+        elif self.preco_pedido:
+            return f"{self.Cliente} - R${self.preco_pedido}"
+        elif self.qnt:
+            return f"{self.Cliente} - Qtd: {self.qnt}"
+        else:
+            return f"{self.Cliente}" 
     def save(self, *args, **kwargs):
         if self.numero_pedido == None: self.numero_pedido = 0
         self.numero_pedido = self.numero_pedido + 1
@@ -250,7 +257,7 @@ class Orcamento(models.Model):
     numero = models.AutoField(primary_key=True, db_column='numero')
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, db_column='id_cliente', related_name="cliente_orcamento")
     ano = models.IntegerField(_('ano'), default=datetime.now().year, db_column='ano')
-    item = models.ManyToManyField(Item, null=True, blank=True, db_column='cod_item', related_name="item_orcamento")
+    item = models.ManyToManyField(Item, db_column='cod_item', related_name="item_orcamento")
     data = models.DateTimeField(default=now ,db_column='data')
     prazo_entrega = models.DateField(db_column='prazo_entrega', null=True, blank=True)
     prazo_pagamento = models.DateField(db_column='prazo_pagto', null=True, blank=True, )
