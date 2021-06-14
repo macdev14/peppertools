@@ -92,6 +92,9 @@ class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
         for item in obj.item.all():
             print(item)
             print(item.material.all())
+            material_item = item.objects.get(pk=obj.id).only('material')
+            print(material_item)
+            
             for material in item.material.all():
                 print(material)
                 print('material name: ')

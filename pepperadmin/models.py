@@ -150,6 +150,8 @@ class Item(models.Model):
          
 
     def __str__(self):
+        if self.preco and self.nome:
+            return f"{self.nome} - Qtd: {self.qtd} - R${self.preco}"
         return self.nome
     class Meta:
         verbose_name_plural = _("Itens")
@@ -250,8 +252,8 @@ class Orcamento(models.Model):
     ano = models.IntegerField(_('ano'), default=datetime.now().year, db_column='ano')
     item = models.ManyToManyField(Item, null=True, blank=True, db_column='cod_item', related_name="item_orcamento")
     data = models.DateTimeField(default=now ,db_column='data')
-    prazo_entrega = models.DateTimeField(db_column='prazo_entrega', null=True, blank=True)
-    prazo_pagamento = models.DateTimeField(db_column='prazo_pagto', null=True, blank=True, )
+    prazo_entrega = models.DateField(db_column='prazo_entrega', null=True, blank=True)
+    prazo_pagamento = models.DateField(db_column='prazo_pagto', null=True, blank=True, )
     ipi = models.CharField(max_length=50, null=True, blank=True, db_column='ipi')
     icms = models.CharField(max_length=50, null=True, blank=True, db_column='icms')
     pedido_id = models.ForeignKey(Pedido, null=True, blank=True, on_delete=models.CASCADE ,editable=False)
