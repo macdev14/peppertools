@@ -95,7 +95,7 @@ class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
             precototal = precototal + item.preco
 
 
-        os = Cadastro_OS.objects.create(Cliente=obj.Cliente, Especificacao=obj.Especificacao, Desenho_Pimentel=obj.desenho, Material=materialadd, Numero_Pedido=obj.numero_pedido, Data_Pedido=osdatetime or None, Quantidade=qtd) 
+        os = Cadastro_OS.objects.create(Cliente=obj.Cliente, Especificacao=obj.Especificacao, Desenho_Pimentel=obj.desenho, Material=materialadd, Numero_Pedido=obj.numero_pedido, Data_Pedido=obj.data_entrada or None, Quantidade=qtd) 
         os.save()
         Pedido.objects.filter(pk=obj.numero_pedido).update(os_pedido=os.id)
         return redirect("admin:pepperadmin_cadastro_os_change", os.id)
