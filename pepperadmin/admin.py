@@ -11,6 +11,7 @@ from io import BytesIO
 from django.shortcuts import render, redirect
 from datetime import datetime
 #from .utils import render_to_pdf
+from simple_history import admin as simpleHistory
 import jwt
 from easy_pdf.views import PDFTemplateView, PDFTemplateResponseMixin
 from easy_pdf.rendering import render_to_pdf
@@ -20,7 +21,7 @@ class renderOS(PDFTemplateView, PDFTemplateResponseMixin):
     template_name = 'pepperadmin/os.html'
     encoding = "utf-8",
 
-class osModel(DjangoObjectActions, admin.ModelAdmin):
+class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     list_display=('Numero_Os','Cliente','Tipo','Quantidade')
     search_fields = ('Numero_Os', 'Especificacao' )
     readonly_fields=('Data',)
@@ -46,11 +47,11 @@ class osModel(DjangoObjectActions, admin.ModelAdmin):
     class Meta:
         verbose_name = _("Ordem de Serviço")
 
-class ClienteModel(admin.ModelAdmin):
+class ClienteModel(simpleHistory.SimpleHistoryAdmin):
     list_display=('nome','cnpj','telefone')
     search_fields = ('nome', 'cnpj')
     
-class OrcamentoModel(DjangoObjectActions, admin.ModelAdmin):
+class OrcamentoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     filter_horizontal = ("item",)
     def createPedido(self, request,obj):
         if obj.pedido_id != None:
@@ -78,7 +79,7 @@ class OrcamentoModel(DjangoObjectActions, admin.ModelAdmin):
     createPedido.short_description = 'Clique aqui para criar pedido do orçamento.'
     change_actions = ('createPedido',)
 
-class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
+class PedidoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     filter_horizontal = ("item",)
     def createOs(self, request, obj):
         if obj.os_pedido:
@@ -117,11 +118,11 @@ class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
 
 admin.site.register(Cliente, ClienteModel)
 admin.site.register(Cadastro_OS, osModel)
-admin.site.register(Item)
+admin.site.register(Item, simpleHistory.SimpleHistoryAdmin)
 admin.site.register(Orcamento, OrcamentoModel)
-admin.site.register(Linha)
-admin.site.register(Material)
-admin.site.register(Historico_Os)
-admin.site.register(Processo)
+admin.site.register(Linha, simpleHistory.SimpleHistoryAdmin)
+admin.site.register(Material, simpleHistory.SimpleHistoryAdmin)
+admin.site.register(Historico_Os, simpleHistory.SimpleHistoryAdmin)
+admin.site.register(Processo, simpleHistory.SimpleHistoryAdmin)
 admin.site.register(Pedido, PedidoModel)
-admin.site.register(Ferramenta)
+admin.site.register(Ferramenta, simpleHistory.SimpleHistoryAdmin)
