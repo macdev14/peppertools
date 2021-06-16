@@ -90,13 +90,12 @@ class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
         precototal = 0
         ferramenta = ''
         for item in obj.item.all():
-            print(item)
-            print(item.material.all())
-            material_item = item.objects.get(pk=obj.id).only('material')
-            print(material_item)
+            #print(item)
+            #print(item.material.all())
+            #material_item = Item.objects.get(pk=item.id).only('material')
+            #print(material_item)
             
             for material in item.material.all():
-                print(material)
                 print('material name: ')
                 print(material.nome)
                 materialadd = materialadd  + ' '+ material.nome
@@ -104,8 +103,10 @@ class PedidoModel(DjangoObjectActions, admin.ModelAdmin):
             qtd = qtd + item.qtd
             precototal = precototal + item.preco
 
-
-        os = Cadastro_OS.objects.create(Cliente=obj.Cliente, Especificacao=obj.Especificacao, Desenho_Pimentel=obj.desenho, Material=materialadd, Ferramenta = ferramenta, Numero_Pedido=obj.numero_pedido, Data_Pedido=obj.data_entrada or None, Quantidade=qtd) 
+        #return redirect("/")
+        orc = Orcamento.objects.get(pedido_id=obj.id)
+        prazo = orc.prazo_entrega
+        os = Cadastro_OS.objects.create(Cliente=obj.Cliente, Especificacao=obj.Especificacao, Desenho_Pimentel=obj.desenho, Material=materialadd, Ferramenta = ferramenta, Numero_Pedido=obj.numero_pedido, Prazo = prazo, Data_Pedido=obj.data_entrada or None, Quantidade=qtd, unidade=obj.unidade_pedido) 
         os.save()
         Pedido.objects.filter(pk=obj.id).update(os_pedido=os.id)
         return redirect("admin:pepperadmin_cadastro_os_change", os.id)
