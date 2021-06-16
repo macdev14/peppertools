@@ -27,7 +27,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
         try:
             url = self.context['request'].data['os']
             if 'http' in url:
-                token = url[37:]
+                token = url[49:]
             else:
                 token = url
             decodtoken = jwt.decode(token, algorithms=['HS256'])
