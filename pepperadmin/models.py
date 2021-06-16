@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
 #from .utils import get_last_periodo
 # Create your models here.
+from simple_history.models import HistoricalRecords
 from django.utils import timezone
 from django.core.exceptions import  ObjectDoesNotExist
 
@@ -60,6 +61,7 @@ def set_periodo(osid):
 class Tipo(models.Model):
     nome = models.CharField(max_length=254)
     quantidade = models.IntegerField()
+    history = HistoricalRecords()
     def __str__(self):
         return self.nome
     class Meta:
@@ -80,6 +82,7 @@ class Cliente(models.Model):
     estado = BRStateField(blank=True, null=True, default=None, max_length=50, db_column='estado')
     endereco = models.TextField(blank=True, null=True, db_column='endereco')
     obs = models.CharField(blank=True, null=True, max_length=254, default='', db_column='obs')
+    history = HistoricalRecords()
     def __str__(self):
         return self.nome
     class Meta:
@@ -99,6 +102,7 @@ class Fornecedor(models.Model):
     estado = BRStateField(blank=True, null=True, default=None, max_length=50, db_column='estado')
     endereco = models.TextField(blank=True, null=True, db_column='endereco')
     obs = models.CharField(blank=True, null=True, max_length=254, default='', db_column='obs')
+    history = HistoricalRecords()
     def __str__(self):
         return self.nome
     class Meta:
@@ -110,6 +114,7 @@ class Fornecedor(models.Model):
 class Material(models.Model):
     nome = models.CharField(blank=True, null=True, max_length=254, db_column='nome')
     custo = models.IntegerField(blank=True, null=True, db_column='custo')
+    history = HistoricalRecords()
     def __str__(self):
         return self.nome
     class Meta:
@@ -119,6 +124,7 @@ class Material(models.Model):
 class Linha(models.Model):
     nome = models.CharField(max_length=254, db_column='nome')
     numero_inicial = models.IntegerField(primary_key=True,db_column="numero_inicial")
+    history = HistoricalRecords()
     def __str__(self):
         return self.nome
     class Meta:
@@ -129,6 +135,7 @@ class Ferramenta(models.Model):
     material = models.ManyToManyField(Material, null=True, blank=True, db_column='cod_mat', related_name="material_ferramenta")
     arquivo_desenho = models.ImageField(_("Arquivo do desenho"), null=True, blank=True, upload_to='media/desenhos_pedidos', db_column="arquivo_desenho" )
     relatorio = models.ImageField(_("Relatorio do desenho"), null=True, blank=True, upload_to='media/relatorio_ferramenta', db_column="relatorio" )
+    history = HistoricalRecords()
     def __str__(self):
         return self.nome
     class Meta:
@@ -140,7 +147,7 @@ class Item(models.Model):
     qtd = models.IntegerField(_("Quantidade") ,null=True, blank=True, default=1, db_column="qtd")
     preco = models.FloatField(_("Preço"), null=True, blank=True, db_column="preco")
     arquivo_desenho = models.ImageField(_("Arquivo do desenho"), null=True, blank=True, upload_to='media/desenhos_pedidos', db_column="arquivo_desenho" )
-    
+    history = HistoricalRecords()
     def save(self, *args, **kwargs):
         fer = Ferramenta.objects.create(nome=self.nome, arquivo_desenho=self.arquivo_desenho)
         super().save(*args, **kwargs)
@@ -200,6 +207,7 @@ class Cadastro_OS(models.Model):
     Data_Pedido = models.DateField(null=True, blank=True,db_column="Data_Pedido")
     STATUS = models.CharField(null=True, blank=True, db_column="STATUS", max_length=70)
     Linha = models.ForeignKey(Linha, null=True, blank=True, db_column="id_Linha", on_delete=models.CASCADE, related_name="linha_os")
+    history = HistoricalRecords()
     def __str__(self):
         return f"{self.Numero_Os} - {self.Cliente}"
     class Meta:
@@ -225,7 +233,7 @@ class Pedido(models.Model):
     data_entrada = models.DateField(_("Data de Entrada"), null=True, blank=True, db_column="data_entrada", default=datetime.now().strftime("%Y-%m-%d"), max_length=50)
     qtd_acabada = models.IntegerField(_("Quantidade Acabada"), null=True, blank=True, db_column="qtd_acabada")
     os_pedido = models.ForeignKey(Cadastro_OS, null=True, blank=True,verbose_name=_("Ordem de Serviço"), on_delete=models.CASCADE,db_column='id_os', related_name="pedido_os", editable=False)
-   
+    history = HistoricalRecords()
     class Meta:
         db_table = 'Pedido'
     def __str__(self):
@@ -266,6 +274,7 @@ class Orcamento(models.Model):
     pedido_id = models.ForeignKey(Pedido, null=True, blank=True, on_delete=models.CASCADE ,editable=False)
     qnt = models.IntegerField(_("Quantidade"), null=True, blank=True,db_column="qnt", editable=False)
     total = models.FloatField(_("Total"), null=True, blank=True, editable=False)
+    history = HistoricalRecords()
     class Meta:
         db_table = 'orcamento' 
         verbose_name = _("Orçamento")
@@ -284,6 +293,7 @@ class Orcamento(models.Model):
 class Processo(models.Model):
     procname = models.CharField(_("Nome"), null=True, blank=True,max_length=254, db_column='Nome')
     Tempo_Objetivo = models.TimeField(null=True, blank=True, auto_now=False, auto_now_add=False, db_column='Tempo_Objetivo')
+    history = HistoricalRecords()
     def __str__(self):
         return f"{self.procname}"
     class Meta:
@@ -301,6 +311,7 @@ class Historico_Os(models.Model):
     periodo = models.IntegerField(null=True, blank=True, db_column="periodo")
     data = models.DateTimeField(db_column='data', default=now, null=True, blank=True)
     qtd = models.IntegerField(null=True, blank=True,db_column="qtd")
+    history = HistoricalRecords()
     def __str__(self):
         
         return f"{self.processo} - {self.qtd}"
