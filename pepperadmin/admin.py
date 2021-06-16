@@ -33,7 +33,7 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         qr = 'https://peppertools.herokuapp.com/admin/os/change/' + jwt.encode({'osid': osid }, peppertools.settings.SECRET_KEY)
         print(qr)
         factory = qrcode.image.svg.SvgImage
-        img = qrcode.make(qr, image_factory=factory, box_size=7)
+        img = qrcode.make(qr, image_factory=factory, box_size=5)
         stream = BytesIO()
         img.save(stream)
         svg = stream.getvalue().decode()
