@@ -17,10 +17,10 @@ class ProcViewSet(viewsets.ModelViewSet):
 
 
 class HistoricalView(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwnerProfileOrReadOnly]
+    permission_classes = [IsAuthenticated]
     queryset = Historico_Os.objects.all().order_by('id')
     serializer_class = HistoricoSerializer
-    print(serializer_class.data)
+    
     
 
 
