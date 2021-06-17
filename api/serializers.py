@@ -98,7 +98,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
             print(url)
             token = url
         else:
-            token = url[49:]
+            token = url[50:]
         print('token2:')
         print(token)
         decodtoken = jwt.decode(token, peppertools.settings.SECRET_KEY ,algorithms=['HS256'])
