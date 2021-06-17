@@ -15,7 +15,7 @@ from simple_history import admin as simpleHistory
 import jwt
 from easy_pdf.views import PDFTemplateView, PDFTemplateResponseMixin
 from easy_pdf.rendering import render_to_pdf
-
+from django.db.models import Max
 class renderOS(PDFTemplateView, PDFTemplateResponseMixin):
     model = Cadastro_OS
     template_name = 'pepperadmin/os.html'
@@ -37,7 +37,9 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         stream = BytesIO()
         img.save(stream)
         svg = stream.getvalue().decode()
-        historyos = Historico_Os.objects.all().filter(os=obj.id)
+        historyos = Historico_Os.objects.filter(os=obj.id)
+        teste = historyos.aggregate(Max('periodo'), 'proc_id', 'ocorrencias')
+        print(teste)
         processes = Processo.objects.all()
         return render(request, 'pepperadmin/os.html',  {'field': obj,'qr':svg, 'tracker': historyos, 'processes':processes })   
          

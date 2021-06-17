@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 import jwt
 import peppertools.settings
-from django.db.models import Max, F
+from django.db.models import Max
 '''
 from rest_framework_jwt.settings import api_settings
 
@@ -27,35 +27,62 @@ class HistoricoSerializer(serializers.ModelSerializer):
     
     def create(self, data):
         osedit = None
-        #try:
-        allos = Historico_Os.objects.filter(os=data["os"])
-        period = allos.aggregate(Max('periodo'))
-        osget = Historico_Os.objects.get(periodo=period['periodo__max'])
-        
+        osget = None
+        try:
+            allos = Historico_Os.objects.filter(os=data["os"])
+            period = allos.aggregate(Max('periodo'))
+            osget = Historico_Os.objects.get(periodo=period['periodo__max'])
+        except:
+            pass 
            
         print("teste::")
-        print(osedit)
+        
         try:
             edfim = osget.fim
+            edinicio = osget.inicio
         except:
             edfim = None
+            edinicio = None
         
-        if edfim:
+            
+        if edfim and 'inicio' in data:
             # se estiver finalizado criar outro
             
             print(f"periodos: {period}")
             data['periodo'] = period['periodo__max'] + 1
             hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=data['periodo'], qtd=data['qtd'], os=data["os"], processo=data['processo'])
             return hist_os
-        else:
+        
+        
+
+        elif edinicio:
             Historico_Os.objects.filter(os=data["os"], periodo=period['periodo__max']).update(ocorrencias=data["ocorrencias"], fim=data["fim"] )
             hist_os =  Historico_Os.objects.get(os=data["os"], periodo=period['periodo__max'])
             return hist_os
-        #except:
-        #    hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=data['periodo'], qtd=data['qtd'], os=data["os"], processo=data['processo'])
-        #    return hist_os
+        if not edfim and 'inicio' in data:
+           hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=1, qtd=data['qtd'], os=data["os"], processo=data['processo'])
+           return hist_os
         
-
+    def validate(self, data):
+        osget = None
+        osinicio = None
+        try:
+            allos = Historico_Os.objects.filter(os=data["os"])
+            period = allos.aggregate(Max('periodo'))
+            osget = Historico_Os.objects.get(periodo=period['periodo__max'])
+            osinicio = osget.inicio
+            osfim = osget.fim
+        except:
+            pass 
+        if 'fim' in data and not osget:
+            raise serializers.ValidationError("Ordem de serviço não iniciada!")
+        elif 'fim' in data and not osinicio:
+            raise serializers.ValidationError("Ordem de serviço não iniciada!")
+        if not osget and not 'inicio' in data:
+            raise serializers.ValidationError("Ordem de serviço não iniciada!")
+        if osinicio and 'fim' in data and osfim:
+            raise serializers.ValidationError("Ordem de serviço não iniciada!")
+        return data 
 
     def to_internal_value(self, data):
         print('initial:')
