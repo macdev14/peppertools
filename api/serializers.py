@@ -18,7 +18,7 @@ JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 class ProcessoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Processo
-        fields = ('procname','Tempo_Objetivo',)
+        fields = ('id', 'procname','Tempo_Objetivo',)
 
 
 
