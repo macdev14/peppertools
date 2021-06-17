@@ -101,11 +101,11 @@ class HistoricoSerializer(serializers.ModelSerializer):
             token = url[50:]
         print('token2:')
         print(token)
+        print(f"processo: {data['processo']}")
         decodtoken = jwt.decode(token, peppertools.settings.SECRET_KEY ,algorithms=['HS256'])
         self.context['request'].data['os'] = decodtoken['osid']
         data['os'] = decodtoken['osid']
         proc = Processo.objects.get(pk=int(data['processo']))
-        print(f"processo: {data['processo']}")
         osinstance = Cadastro_OS.objects.get(pk=data['os'])
        
 
