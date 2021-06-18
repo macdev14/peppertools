@@ -67,8 +67,9 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         return render(request, 'pepperadmin/os.html',  {'field': obj,'qr':svg, 'historyos': historyos, 'processes':processes })   
          
     printos.label = 'Imprimir O.S'
-    printos.short_description = 'Clique para imprimir ordem de serviço'
+    printos.short_description = 'Imprimir ordem de serviço'
     change_actions = ('printos',)
+    actions = ['printos']
     class Meta:
         verbose_name = _("Ordem de Serviço")
 
@@ -101,9 +102,9 @@ class OrcamentoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         print(pedido.id)
         return redirect("admin:pepperadmin_pedido_change", pedido.id)
     createPedido.label = 'Criar Pedido'
-    createPedido.short_description = 'Clique aqui para criar pedido do orçamento.'
+    createPedido.short_description = 'Criar pedido do orçamento.'
     change_actions = ('createPedido',)
-
+    actions = ['createPedido']
 class PedidoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     filter_horizontal = ("item",)
     def createOs(self, request, obj):
@@ -137,9 +138,9 @@ class PedidoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         Pedido.objects.filter(pk=obj.id).update(os_pedido=os.id)
         return redirect("admin:pepperadmin_cadastro_os_change", os.id)
     createOs.label = "Criar O.S"
-    createOs.short_description = 'Clique aqui para criar uma ordem de serviço do pedido.'
+    createOs.short_description = 'Criar ordem de serviço do pedido.'
     change_actions = ('createOs',)
-
+    actions = ['createOs']
 
 admin.site.register(Cliente, ClienteModel)
 admin.site.register(Cadastro_OS, osModel)
