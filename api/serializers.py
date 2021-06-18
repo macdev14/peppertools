@@ -40,6 +40,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
         try:
             edfim = osget.fim
             edinicio = osget.inicio
+            edproc = osget.processo
         except:
             edfim = None
             edinicio = None
@@ -55,34 +56,45 @@ class HistoricoSerializer(serializers.ModelSerializer):
         
         
 
-        elif edinicio:
+        elif edinicio and 'fim' in data:
             Historico_Os.objects.filter(os=data["os"], periodo=period['periodo__max']).update(ocorrencias=data["ocorrencias"], fim=data["fim"] )
             hist_os =  Historico_Os.objects.get(os=data["os"], periodo=period['periodo__max'])
             return hist_os
-        if not edfim and 'inicio' in data:
+        elif not edfim and 'inicio' in data:
            hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=1, qtd=data['qtd'], os=data["os"], processo=data['processo'])
            return hist_os
         
     def validate(self, data):
-        osget = None
-        osinicio = None
-        try:
-            allos = Historico_Os.objects.filter(os=data["os"])
-            period = allos.aggregate(Max('periodo'))
+      
+        allos = Historico_Os.objects.filter(os=data["os"]).exists()
+        if allos:
+            period = Historico_Os.objects.filter(os=data["os"]).aggregate(Max('periodo'))
             osget = Historico_Os.objects.get(periodo=period['periodo__max'])
+            prochere = osget.processo
+            #proc = Processo.objects.get(pk=osget.processo.id)
             osinicio = osget.inicio
             osfim = osget.fim
-        except:
-            pass 
-        if 'fim' in data and not osget:
-            raise serializers.ValidationError("Ordem de serviço não iniciada!")
-        elif 'fim' in data and not osinicio:
-            raise serializers.ValidationError("Ordem de serviço não iniciada!")
-        if not osget and not 'inicio' in data:
-            raise serializers.ValidationError("Ordem de serviço não iniciada!")
-        if osinicio and 'fim' in data and osfim:
-            raise serializers.ValidationError("Ordem de serviço não iniciada!")
+
+        if osget and 'fim' in data and not osinicio:
+            # o.s exists but not ended
+            raise serializers.ValidationError("O.S não iniciada.")
+        
+        elif osget and 'fim' and prochere.id != data['processo'].id:
+            raise serializers.ValidationError(f"O.S iniciada em {prochere}.")
+
+        elif 'fim' in data and osfim:
+            raise serializers.ValidationError(f"O.S já finalizada em {prochere}.")
+        elif 'fim' in data and not allos:
+            # o.s does not exist and not initialized
+            raise serializers.ValidationError("O.S não iniciada.")
+        elif 'inicio' in data and not osfim:
+            # o.s did not finish and being initialized by user
+            raise serializers.ValidationError(f"O.S já iniciada em {prochere}.")
+        
+        
         return data 
+
+
 
     def to_internal_value(self, data):
         print('initial:')
