@@ -208,9 +208,9 @@
       <div align="left"><span class="style13">{{process.processo.procname}}</span></div>
     </div>
    </td>
-    <td class="LINHA" width="10%" align="center">{{process.qtd }}</td>
-    <td class="LINHA" width="20%" >{{process.inicio }}</td>
-    <td class="LINHA" width="22%" >{{process.fim }}</td>
+    <td class="LINHA" width="10%" align="center">{{process.qtd |default_if_none:"" }}</td>
+    <td class="LINHA" width="20%" >{{process.inicio |default_if_none:"" }}</td>
+    <td class="LINHA" width="22%" >{{process.fim |default_if_none:"" }}</td>
   </tr>
    
 {%endfor%}

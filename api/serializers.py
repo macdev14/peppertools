@@ -69,6 +69,8 @@ class HistoricoSerializer(serializers.ModelSerializer):
     def validate(self, data):
       
         allos = Historico_Os.objects.filter(os=data["os"]).exists()
+        osget, prochere, osinicio, osfim = None, None, None, None
+        
         if allos:
             period = Historico_Os.objects.filter(os=data["os"]).aggregate(Max('periodo'))
             osget = Historico_Os.objects.get(periodo=period['periodo__max'])
@@ -89,7 +91,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
         elif 'fim' in data and not allos:
             # o.s does not exist and not initialized
             raise serializers.ValidationError("O.S não iniciada.")
-        elif 'inicio' in data and not osfim:
+        elif 'inicio' in data and osget and not osfim:
             # o.s did not finish and being initialized by user
             raise serializers.ValidationError(f"O.S já iniciada em {prochere}.")
         
