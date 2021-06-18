@@ -39,7 +39,7 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         svg = stream.getvalue().decode()
         historyos = Historico_Os.objects.filter(os=obj.id).exists()
         if historyos:
-            teste = historyos.aggregate(Max('periodo'), 'proc_id', 'ocorrencias')
+            teste = Historico_Os.objects.filter(os=obj.id).aggregate(Max('periodo'), 'proc_id', 'ocorrencias')
             print(teste)
         processes = Processo.objects.all()
         return render(request, 'pepperadmin/os.html',  {'field': obj,'qr':svg, 'tracker': historyos, 'processes':processes })   
