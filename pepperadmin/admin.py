@@ -38,6 +38,7 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         img.save(stream)
         svg = stream.getvalue().decode()
         historyos = Historico_Os.objects.filter(os=obj.id).exists()
+        processes = None
         if historyos:
             # max period
             teste = Historico_Os.objects.filter(os=obj.id).aggregate(latest=Max('periodo'))
@@ -58,11 +59,12 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
                 if ocorrencia:
                     ocortimeproc.append(processo + ': ' + ocorrencia)
             historyos = ocortimeproc
+            processes = allprocdesc
             #print(processos_dis)
             #print(allocorrencias)
             #print(allprocdesc)
         #processes = Processo.objects.all()
-        return render(request, 'pepperadmin/os.html',  {'field': obj,'qr':svg, 'historyos': historyos, 'processes':allprocdesc })   
+        return render(request, 'pepperadmin/os.html',  {'field': obj,'qr':svg, 'historyos': historyos, 'processes':processes })   
          
     printos.label = 'Imprimir O.S'
     printos.short_description = 'Clique para imprimir ordem de serviço'
