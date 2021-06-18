@@ -6,6 +6,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 import jwt
 import peppertools.settings
 from django.db.models import Max
+from django.http import JsonResponse
 '''
 from rest_framework_jwt.settings import api_settings
 
@@ -51,6 +52,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
             
             print(f"periodos: {period}")
             data['periodo'] = period['periodo__max'] + 1
+            periodoprint= data['periodo']
             hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=data['periodo'], qtd=data['qtd'], os=data["os"], processo=data['processo'])
             return hist_os
         
@@ -79,7 +81,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
             # o.s exists but not ended
             raise serializers.ValidationError("O.S não iniciada.")
         
-        elif osget and 'fim' and prochere.id != data['processo'].id:
+        elif osget and 'fim' in data and prochere.id != data['processo'].id:
             raise serializers.ValidationError(f"O.S iniciada em {prochere}.")
 
         elif 'fim' in data and osfim:
