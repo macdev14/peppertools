@@ -15,7 +15,7 @@ from simple_history import admin as simpleHistory
 import jwt
 from easy_pdf.views import PDFTemplateView, PDFTemplateResponseMixin
 from easy_pdf.rendering import render_to_pdf
-from django.db.models import Max
+from django.db.models import Max, F
 class renderOS(PDFTemplateView, PDFTemplateResponseMixin):
     model = Cadastro_OS
     template_name = 'pepperadmin/os.html'
@@ -31,7 +31,7 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         obj.Data_digit = codyear[-2:]
         osid = obj.id
         qr = 'https://peppertools.herokuapp.com/admin/os/change/' + jwt.encode({'osid': osid }, peppertools.settings.SECRET_KEY)
-        print(qr)
+        #print(qr)
         factory = qrcode.image.svg.SvgImage
         img = qrcode.make(qr, image_factory=factory, box_size=5)
         stream = BytesIO()
@@ -39,10 +39,30 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         svg = stream.getvalue().decode()
         historyos = Historico_Os.objects.filter(os=obj.id).exists()
         if historyos:
-            teste = Historico_Os.objects.filter(os=obj.id).aggregate(Max('periodo'), 'proc_id', 'ocorrencias')
-            print(teste)
-        processes = Processo.objects.all()
-        return render(request, 'pepperadmin/os.html',  {'field': obj,'qr':svg, 'tracker': historyos, 'processes':processes })   
+            # max period
+            teste = Historico_Os.objects.filter(os=obj.id).aggregate(latest=Max('periodo'))
+            all_proc = Historico_Os.objects.filter(os=obj.id).values_list('processo__procname','processo' ,'periodo','ocorrencias')
+            processos_dis = list(dict.fromkeys(all_proc))
+            #print(all_proc)
+            allprocdesc = []
+            ocortimeproc = []
+            #allocorrencias = []
+            #ocor = Historico_Os.objects.filter(os=obj.id).only('ocorrencias')
+            #allocorrencias.append({ procins.procname : ocor } ) 
+            for processo, proc_id, periodo, ocorrencia in processos_dis:
+                procins = Processo.objects.get(pk=proc_id)
+                lateperiod = Historico_Os.objects.filter(os=obj.id, processo=procins).aggregate(latest=Max('periodo'))
+                procview = Historico_Os.objects.get(os=obj.id, processo=procins, periodo=lateperiod['latest'])
+                if procview not in allprocdesc:
+                   allprocdesc.append(procview)
+                if ocorrencia:
+                    ocortimeproc.append(processo + ': ' + ocorrencia)
+            historyos = ocortimeproc
+            #print(processos_dis)
+            #print(allocorrencias)
+            #print(allprocdesc)
+        #processes = Processo.objects.all()
+        return render(request, 'pepperadmin/os.html',  {'field': obj,'qr':svg, 'historyos': historyos, 'processes':allprocdesc })   
          
     printos.label = 'Imprimir O.S'
     printos.short_description = 'Clique para imprimir ordem de serviço'

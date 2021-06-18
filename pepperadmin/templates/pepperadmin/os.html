@@ -205,7 +205,7 @@
    <tr>
     <td width="20%" class="LINHA">
    <div align="right" class="style15">
-      <div align="left"><span class="style13">{{process.Nome}}</span></div>
+      <div align="left"><span class="style13">{{process}}</span></div>
     </div>
    </td>
     <td class="LINHA" width="10%" align="center">{{process.qtd }}</td>
@@ -222,11 +222,13 @@
   <tr class="style13">
     <td class="LINHA"><div align="left"></div>      <div align="center"></div></td>
   </tr>
- {% if ocorrencias %}
+ {% if historyos %}
 
   {% for ocorrencia in historyos%}
+     
+  
   <tr class="style13">
-    <td class="LINHA">{{ ocorrencia.Nome }} - {{ ocorrencia.ocorrencias }}</td>
+    <td class="LINHA"> {{ ocorrencia |default_if_none:"" }}</td>
   </tr>
   {%endfor%}
   {%endif%}
