@@ -233,7 +233,7 @@ class Pedido(models.Model):
     preco_pedido = models.FloatField(_("Preço"), null=True, blank=True, db_column="preco", editable=False)
     data_entrada = models.DateField(_("Data de Entrada"), null=True, blank=True, db_column="data_entrada", default=datetime.now().strftime("%Y-%m-%d"), max_length=50)
     qtd_acabada = models.IntegerField(_("Quantidade Acabada"), null=True, blank=True, db_column="qtd_acabada")
-    os_pedido = models.ForeignKey(Cadastro_OS, null=True, blank=True,verbose_name=_("Ordem de Serviço"), on_delete=models.CASCADE,db_column='id_os', related_name="pedido_os", editable=False)
+    os_pedido = models.ForeignKey(Cadastro_OS, null=True, blank=True,verbose_name=_("Ordem de Serviço"), on_delete=models.SET_NULL, db_column='id_os', related_name="pedido_os", editable=False)
     history = HistoricalRecords()
     class Meta:
         db_table = 'Pedido'
@@ -264,7 +264,7 @@ class Pedido(models.Model):
 
 class Orcamento(models.Model):
     numero = models.AutoField(primary_key=True, db_column='numero')
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, db_column='id_cliente', related_name="cliente_orcamento")
+    cliente = models.ForeignKey(Cliente, null=True, blank=True, on_delete=models.SET_NULL, db_column='id_cliente', related_name="cliente_orcamento")
     ano = models.IntegerField(_('ano'), default=datetime.now().year, db_column='ano')
     item = models.ManyToManyField(Item, db_column='cod_item', related_name="item_orcamento")
     data = models.DateTimeField(default=now ,db_column='data')
@@ -272,7 +272,7 @@ class Orcamento(models.Model):
     prazo_pagamento = models.DateField(db_column='prazo_pagto', null=True, blank=True, )
     ipi = models.CharField(max_length=50, null=True, blank=True, db_column='ipi')
     icms = models.CharField(max_length=50, null=True, blank=True, db_column='icms')
-    pedido_id = models.ForeignKey(Pedido, null=True, blank=True, on_delete=models.CASCADE ,editable=False)
+    pedido_id = models.ForeignKey(Pedido, null=True, blank=True, on_delete=models.SET_NULL ,editable=False)
     qnt = models.IntegerField(_("Quantidade"), null=True, blank=True,db_column="qnt", editable=False)
     total = models.FloatField(_("Total"), null=True, blank=True, editable=False)
     history = HistoricalRecords()
@@ -304,8 +304,8 @@ class Processo(models.Model):
 
 
 class Historico_Os(models.Model):
-    processo = models.ForeignKey(Processo, null=True, blank=True,verbose_name=_("Processo"), on_delete=models.CASCADE, db_column='id_proc',  related_name="id_proc")
-    os = models.ForeignKey(Cadastro_OS, null=True, blank=True,verbose_name=_("Ordem de Serviço"), on_delete=models.CASCADE, related_name="id_os", db_column='id_os')
+    processo = models.ForeignKey(Processo, null=True, blank=True,verbose_name=_("Processo"), on_delete=models.SET_NULL, db_column='id_proc',  related_name="id_proc")
+    os = models.ForeignKey(Cadastro_OS, null=True, blank=True,verbose_name=_("Ordem de Serviço"), on_delete=models.SET_NULL, related_name="id_os", db_column='id_os')
     inicio = models.TimeField(_("Início"), default=datetime.now().strftime('%H:%M:%S') ,auto_now=False, auto_now_add=False, db_column="inicio")
     fim =  models.TimeField(_("Fim"), null=True, blank=True,auto_now=False, auto_now_add=False, db_column="fim")
     ocorrencias = models.TextField(null=True, blank=True, db_column="ocorrencias")

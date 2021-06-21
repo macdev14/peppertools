@@ -159,7 +159,7 @@ class PedidoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
             for object in obj:
                 self.createOs(request=request,obj=object, list=True)
             return messages.add_message(request, messages.SUCCESS, 'Ordem de serviços(s) criados.')
-        if obj.os_pedido:
+        if obj.os_pedido and Cadastro_OS.objects.filter(pk=obj.os_pedido.id).exists():
             os = Cadastro_OS.objects.get(pk=obj.os_pedido.id)
             if os and not list:
                return redirect("admin:pepperadmin_cadastro_os_change", obj.os_pedido.id)
@@ -190,7 +190,8 @@ class PedidoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
             prazo = orc.prazo_entrega
         os = Cadastro_OS.objects.create(Cliente=obj.Cliente, Especificacao=obj.Especificacao, Desenho_Pimentel=obj.desenho, Material=materialadd, Ferramenta = ferramenta, Numero_Pedido=obj.numero_pedido, Prazo = prazo or None, Data_Pedido=obj.data_entrada or None, Quantidade=qtd, unidade=obj.unidade_pedido) 
         os.save()
-        Pedido.objects.filter(pk=obj.id).update(os_pedido=os.id)
+        if Pedido.objects.filter(pk=obj.id).exists():
+            Pedido.objects.filter(pk=obj.id).update(os_pedido=os.id)
         if not list:
             return redirect("admin:pepperadmin_cadastro_os_change", os.id)
         return
