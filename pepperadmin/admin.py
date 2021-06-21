@@ -61,7 +61,23 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
                 if procview not in allprocdesc:
                    allprocdesc.append(procview)
                 if ocorrencia:
-                    ocortimeproc.append(processo + ': ' + ocorrencia)
+                    print(any(processo in word  for word in ocortimeproc))
+                    if not any(processo in word for word in ocortimeproc):
+                        
+                        ocortimeproc.append(processo + ': ' + ocorrencia.rstrip())
+                    else:
+                        index = None
+                        for ocor in ocortimeproc:
+                            if processo in ocor:
+                                index = ocortimeproc.index(ocor)
+                        #print(index)
+                        #lenstr = len(ocortimeproc[index]) - 1
+                        '''
+                        if ocortimeproc[index][lenstr-1:] == ' ':
+                            print(ocortimeproc[index][lenstr-1:])
+                            ocortimeproc[index] = ocortimeproc[index][:lenstr-1]
+                        '''
+                        ocortimeproc[index] = ocortimeproc[index] + ', ' + ocorrencia.rstrip()
             historyos = ocortimeproc
             processes = allprocdesc
             #print(processos_dis)
