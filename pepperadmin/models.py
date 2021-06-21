@@ -207,6 +207,7 @@ class Cadastro_OS(models.Model):
     Data_Pedido = models.DateField(null=True, blank=True,db_column="Data_Pedido")
     STATUS = models.CharField(null=True, blank=True, db_column="STATUS", max_length=70)
     Linha = models.ForeignKey(Linha, null=True, blank=True, db_column="id_Linha", on_delete=models.CASCADE, related_name="linha_os")
+    data_digit = models.IntegerField(null=True, blank=True,db_column="data_digit", editable=False)
     history = HistoricalRecords()
     def __str__(self):
         return f"{self.Numero_Os} - {self.Cliente}"

@@ -7,9 +7,11 @@ from django.http import HttpResponse
 import peppertools.settings
 import qrcode
 import qrcode.image.svg
+from django.db.models.query import QuerySet
 from io import BytesIO
 from django.shortcuts import render, redirect
 from datetime import datetime
+from django.contrib import messages
 #from .utils import render_to_pdf
 from simple_history import admin as simpleHistory
 import jwt
@@ -26,7 +28,9 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     search_fields = ('Numero_Os', 'Especificacao' )
     readonly_fields=('Data',)
     def printos(self, request, obj):
-        
+       
+        if isinstance(obj, QuerySet):
+            obj = obj[0]
         codyear = str(obj.Data.year)
         obj.Data_digit = codyear[-2:]
         osid = obj.id
@@ -78,40 +82,88 @@ class ClienteModel(simpleHistory.SimpleHistoryAdmin):
     search_fields = ('nome', 'cnpj')
     
 class OrcamentoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
-    filter_horizontal = ("item",)
-    def createPedido(self, request,obj):
+    
+    def createselected(self, obj):
+        
         if obj.pedido_id != None:
             ped = Pedido.objects.get(pk=obj.pedido_id.id)
             if ped:
-               return redirect("admin:pepperadmin_pedido_change", obj.pedido_id.id)
+                return #redirect("admin:pepperadmin_pedido_change", obj.pedido_id.id)
+        
+            
         price = 0
         for i in obj.item.all():
             print(i)
             price = price + i.preco
-            
+                
         pedido = Pedido(Cliente=obj.cliente,qnt = obj.qnt,preco_pedido=price)
         pedido.save()
         Orcamento.objects.filter(pk=obj.numero).update(pedido_id=pedido.id)
-        
-        for content in obj.item.all():
-           pedido.item.add(content)
-           print(pedido.item)
-        pedido.save()
             
+        for content in obj.item.all():
+            pedido.item.add(content)
+            print(pedido.item)
+            pedido.save()
+                
 
         print(pedido.id)
-        return redirect("admin:pepperadmin_pedido_change", pedido.id)
+        return #redirect("admin:pepperadmin_pedido_change", pedido.id)
+    
+    filter_horizontal = ("item",)
+    
+    def createPedido(self, request,obj):
+        
+        try:
+            if isinstance(obj, QuerySet):
+                for object in obj:
+                    self.createselected(object)
+                return messages.add_message(request, messages.SUCCESS, 'Pedido(s) criados.')
+            
+            if obj.pedido_id != None:
+                ped = Pedido.objects.get(pk=obj.pedido_id.id)
+                if ped:
+                    return redirect("admin:pepperadmin_pedido_change", obj.pedido_id.id)
+            price = 0
+            for i in obj.item.all():
+                print(i)
+                price = price + i.preco
+                
+            pedido = Pedido(Cliente=obj.cliente,qnt = obj.qnt,preco_pedido=price)
+            pedido.save()
+            Orcamento.objects.filter(pk=obj.numero).update(pedido_id=pedido.id)
+            
+            for content in obj.item.all():
+                pedido.item.add(content)
+                print(pedido.item)
+                pedido.save()
+                
+
+            print(pedido.id)
+            return redirect("admin:pepperadmin_pedido_change", pedido.id)
+        
+        except Exception as e:
+            print(e)
+
+                    
+
+
+                
     createPedido.label = 'Criar Pedido'
     createPedido.short_description = 'Criar pedido do orçamento.'
     change_actions = ('createPedido',)
     actions = ['createPedido']
 class PedidoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     filter_horizontal = ("item",)
-    def createOs(self, request, obj):
+    def createOs(self, request=None, obj=None, list=None):
+        if isinstance(obj, QuerySet) and not list:
+            for object in obj:
+                self.createOs(request=request,obj=object, list=True)
+            return messages.add_message(request, messages.SUCCESS, 'Ordem de serviços(s) criados.')
         if obj.os_pedido:
             os = Cadastro_OS.objects.get(pk=obj.os_pedido.id)
-            if os:
+            if os and not list:
                return redirect("admin:pepperadmin_cadastro_os_change", obj.os_pedido.id)
+            return
         materialadd = ''
         qtd = 0
         precototal = 0
@@ -131,12 +183,17 @@ class PedidoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
             precototal = precototal + item.preco
 
         #return redirect("/")
-        orc = Orcamento.objects.get(pedido_id=obj.id)
-        prazo = orc.prazo_entrega
-        os = Cadastro_OS.objects.create(Cliente=obj.Cliente, Especificacao=obj.Especificacao, Desenho_Pimentel=obj.desenho, Material=materialadd, Ferramenta = ferramenta, Numero_Pedido=obj.numero_pedido, Prazo = prazo, Data_Pedido=obj.data_entrada or None, Quantidade=qtd, unidade=obj.unidade_pedido) 
+        print(obj.id)
+        prazo=None
+        if  Orcamento.objects.filter(pedido_id=obj.id).exists():
+            orc = Orcamento.objects.get(pedido_id=obj.id)
+            prazo = orc.prazo_entrega
+        os = Cadastro_OS.objects.create(Cliente=obj.Cliente, Especificacao=obj.Especificacao, Desenho_Pimentel=obj.desenho, Material=materialadd, Ferramenta = ferramenta, Numero_Pedido=obj.numero_pedido, Prazo = prazo or None, Data_Pedido=obj.data_entrada or None, Quantidade=qtd, unidade=obj.unidade_pedido) 
         os.save()
         Pedido.objects.filter(pk=obj.id).update(os_pedido=os.id)
-        return redirect("admin:pepperadmin_cadastro_os_change", os.id)
+        if not list:
+            return redirect("admin:pepperadmin_cadastro_os_change", os.id)
+        return
     createOs.label = "Criar O.S"
     createOs.short_description = 'Criar ordem de serviço do pedido.'
     change_actions = ('createOs',)
