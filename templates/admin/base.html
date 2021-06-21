@@ -35,13 +35,14 @@
     <!-- Header -->
     <div id="header">
         <div id="branding">
-          Sistema - <a href="{% static 'peppertools.apk' %}" download>App</a>
+          Sistema 
         {% block branding %}{% endblock %}
        
         </div>
         {% block usertools %}
         {% if has_permission %}
         <div id="user-tools">
+          <a href="{% static 'peppertools.apk' %}" download>App</a>
             {% block welcome-msg %}
                 {% translate 'Welcome,' %}
                 <strong>{% firstof user.get_short_name user.get_username %}</strong>.
