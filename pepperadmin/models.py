@@ -323,10 +323,7 @@ class Historico_Os(models.Model):
         verbose_name_plural = _("Localizar O.S")
 
     def save(self, *args, **kwargs):
-        
-        osupdate = Cadastro_OS.get(pk=self.os.id)
-        osupdate.STATUS = self.processo.procname
-        osupdate.save()
+        Cadastro_OS.objects.filter(pk=self.os.id).update(STATUS=self.processo.procname)
         super().save(*args, **kwargs)
 
 
