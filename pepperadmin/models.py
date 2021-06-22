@@ -315,11 +315,19 @@ class Historico_Os(models.Model):
     history = HistoricalRecords()
     def __str__(self):
         
-        return f"{self.processo} - {self.qtd}"
+        return f"O.S: {self.os.Numero_Os} - {self.processo} - {self.qtd}"
+    
     class Meta:
         db_table = 'Historico_os'
         verbose_name = _("Localização O.S")
         verbose_name_plural = _("Localizar O.S")
+        
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        osupdate = Cadastro_OS.get(pk=self.os.id)
+        osupdate.STATUS = self.processo.procname
+        osupdate.save()
+        super().save(*args, **kwargs)
 
 
 
