@@ -25,7 +25,7 @@ class renderOS(PDFTemplateView, PDFTemplateResponseMixin):
 
 class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     list_display=('Numero_Os','Cliente','Tipo','Quantidade')
-    search_fields = ('Numero_Os', 'Especificacao' )
+    search_fields = ('Numero_Os', 'Especificacao', 'Cliente' )
     readonly_fields=('Data',)
     def printos(self, request, obj):
        
