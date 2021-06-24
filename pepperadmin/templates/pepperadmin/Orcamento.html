@@ -1,0 +1,743 @@
+{% extends "easy_pdf/base.html" %}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+
+<HEAD>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i,900" rel="stylesheet" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arial" />
+	<TITLE>pdf-html</TITLE>
+
+	{% block extra_style %}
+	<STYLE type="text/css">
+		@import url(https://fonts.googleapis.com/css?family=Arial);
+
+		@page {
+			size: "A4";
+			margin-left: 0.5cm;
+			margin-right: 1.5cm;
+			margin-top: 0.5cm;
+			margin-bottom: 0.5cm;
+
+
+		}
+
+
+
+
+
+		body {
+			font-family: Arial, serif;
+			margin-top: 0px;
+			margin-left: 0px;
+		}
+
+		#page_1 {
+			position: relative;
+			overflow: hidden;
+
+			padding: 0px;
+			border: none;
+			width: 774px;
+			height: 1039px;
+		}
+
+		#page_1 #id1_1 {
+			border: none;
+			margin: 0px 0px 0px 1px;
+			padding: 0px;
+			border: none;
+			width: 773px;
+			overflow: hidden;
+		}
+
+		#page_1 #id1_2 {
+			border: none;
+			margin: 423px 0px 0px 681px;
+			padding: 0px;
+			border: none;
+			width: 93px;
+			overflow: hidden;
+		}
+
+		#page_1 #p1dimg1 {
+			position: absolute;
+			top: 57px;
+			left: 0px;
+			z-index: -1;
+			width: 755px;
+			height: 982px;
+		}
+
+		#page_1 #p1dimg1 #p1img1 {
+			width: 755px;
+			height: 982px;
+		}
+
+
+
+
+		.ft0 {
+			font: 13px 'Arial';
+			color: #777777;
+			line-height: 16px;
+		}
+
+		.ft1 {
+			font: bold 19px 'Arial';
+			line-height: 22px;
+		}
+
+		.ft2 {
+			font: 16px 'Arial';
+			color: #777777;
+			line-height: 18px;
+		}
+
+		.ft3 {
+			font: 1px 'Arial';
+			line-height: 12px;
+		}
+
+		.ft4 {
+			font: bold 16px 'Arial';
+			line-height: 19px;
+		}
+
+		.ft5 {
+			font: 13px 'Arial';
+			line-height: 14px;
+		}
+
+		.ft6 {
+			font: 1px 'Arial';
+			line-height: 1px;
+		}
+
+		.ft7 {
+			font: 13px 'Arial';
+			line-height: 15px;
+		}
+
+		.ft8 {
+			font: 12px 'Arial';
+			line-height: 15px;
+		}
+
+		.ft9 {
+			font: 1px 'Arial';
+			line-height: 10px;
+		}
+
+		.ft10 {
+			font: 12px 'Arial';
+			color: #777777;
+			line-height: 15px;
+		}
+
+		.ft11 {
+			font: bold 13px 'Arial';
+			line-height: 16px;
+		}
+
+		.ft12 {
+			font: 1px 'Arial';
+			line-height: 5px;
+		}
+
+		.ft13 {
+			font: 13px 'Arial';
+			line-height: 16px;
+		}
+
+		.ft14 {
+			font: bold 12px 'Arial';
+			line-height: 15px;
+		}
+
+		.ft15 {
+			font: 11px 'Arial';
+			line-height: 14px;
+		}
+
+		.ft16 {
+			font: 1px 'Arial';
+			line-height: 14px;
+		}
+
+		.ft17 {
+			font: 12px 'Arial';
+			line-height: 14px;
+		}
+
+		.ft18 {
+			font: 11px 'Arial';
+			color: #777777;
+			line-height: 14px;
+		}
+
+		.ft19 {
+			font: 1px 'Arial';
+			line-height: 6px;
+		}
+
+		.p0 {
+			text-align: left;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			white-space: nowrap;
+		}
+
+		.p1 {
+			text-align: right;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			white-space: nowrap;
+		}
+
+		.p2 {
+			text-align: left;
+			padding-left: 105px;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			white-space: nowrap;
+		}
+
+		.p3 {
+			text-align: left;
+			padding-left: 12px;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			white-space: nowrap;
+		}
+
+		.p4 {
+			text-align: left;
+			padding-left: 61px;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			white-space: nowrap;
+		}
+
+		.p5 {
+			text-align: right;
+			padding-right: 47px;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			white-space: nowrap;
+		}
+
+		.p6 {
+			text-align: right;
+			padding-right: 23px;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			white-space: nowrap;
+		}
+
+		.p7 {
+			text-align: right;
+			padding-right: 14px;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			white-space: nowrap;
+		}
+
+		.p8 {
+			text-align: left;
+			padding-left: 3px;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			white-space: nowrap;
+		}
+
+		.p9 {
+			text-align: right;
+			padding-right: 86px;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			white-space: nowrap;
+		}
+
+		.p10 {
+			text-align: right;
+			padding-right: 13px;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			white-space: nowrap;
+		}
+
+		.p11 {
+			text-align: left;
+			padding-left: 9px;
+			margin-top: 42px;
+			margin-bottom: 0px;
+		}
+
+		.p12 {
+			text-align: left;
+			padding-left: 9px;
+			margin-top: 2px;
+			margin-bottom: 0px;
+		}
+
+		.p13 {
+			text-align: left;
+			padding-left: 9px;
+			margin-top: 72px;
+			margin-bottom: 0px;
+		}
+
+		.p14 {
+			text-align: left;
+			margin-top: 0px;
+			margin-bottom: 0px;
+		}
+
+		.td0 {
+			padding: 0px;
+			margin: 0px;
+			width: 542px;
+			vertical-align: bottom;
+		}
+
+		.td1 {
+			padding: 0px;
+			margin: 0px;
+			width: 211px;
+			vertical-align: bottom;
+		}
+
+		.td2 {
+			border-bottom: #000000 1px solid;
+			padding: 0px;
+			margin: 0px;
+			width: 542px;
+			vertical-align: bottom;
+		}
+
+		.td3 {
+			border-bottom: #000000 1px solid;
+			padding: 0px;
+			margin: 0px;
+			width: 211px;
+			vertical-align: bottom;
+		}
+
+		.td4 {
+			padding: 0px;
+			margin: 0px;
+			width: 96px;
+			vertical-align: bottom;
+		}
+
+		.td5 {
+			padding: 0px;
+			margin: 0px;
+			width: 203px;
+			vertical-align: bottom;
+		}
+
+		.td6 {
+			padding: 0px;
+			margin: 0px;
+			width: 272px;
+			vertical-align: bottom;
+		}
+
+		.td7 {
+			padding: 0px;
+			margin: 0px;
+			width: 112px;
+			vertical-align: bottom;
+		}
+
+		.td8 {
+			padding: 0px;
+			margin: 0px;
+			width: 70px;
+			vertical-align: bottom;
+		}
+
+		.td9 {
+			border-bottom: #000000 1px solid;
+			padding: 0px;
+			margin: 0px;
+			width: 96px;
+			vertical-align: bottom;
+		}
+
+		.td10 {
+			border-bottom: #000000 1px solid;
+			padding: 0px;
+			margin: 0px;
+			width: 203px;
+			vertical-align: bottom;
+		}
+
+		.td11 {
+			border-bottom: #000000 1px solid;
+			padding: 0px;
+			margin: 0px;
+			width: 272px;
+			vertical-align: bottom;
+		}
+
+		.td12 {
+			border-bottom: #000000 1px solid;
+			padding: 0px;
+			margin: 0px;
+			width: 112px;
+			vertical-align: bottom;
+		}
+
+		.td13 {
+			border-bottom: #000000 1px solid;
+			padding: 0px;
+			margin: 0px;
+			width: 70px;
+			vertical-align: bottom;
+		}
+
+		.td14 {
+			border-bottom: #000000 1px solid;
+			padding: 0px;
+			margin: 0px;
+			width: 384px;
+			vertical-align: bottom;
+		}
+
+		.td15 {
+			padding: 0px;
+			margin: 0px;
+			width: 384px;
+			vertical-align: bottom;
+		}
+
+		.tr0 {
+			height: 29px;
+		}
+
+		.tr1 {
+			height: 12px;
+		}
+
+		.tr2 {
+			height: 36px;
+		}
+
+		.tr3 {
+			height: 14px;
+		}
+
+		.tr4 {
+			height: 15px;
+		}
+
+		.tr5 {
+			height: 25px;
+		}
+
+		.tr6 {
+			height: 10px;
+		}
+
+		.tr7 {
+			height: 19px;
+			margin-bottom: 10px;
+		}
+
+		.tr8 {
+			height: 21px;
+		}
+
+		.tr9 {
+			height: 16px;
+		}
+
+		.tr10 {
+			height: 42px;
+		}
+
+		.tr11 {
+			height: 47px;
+		}
+
+		.tr12 {
+			height: 5px;
+		}
+
+		.tr13 {
+			height: 6px;
+		}
+
+		.t0 {
+			width: 753px;
+			font: 13px 'Arial';
+		}
+
+		.t1 {
+			width: 753px;
+			margin-top: 75px;
+			font: bold 12px 'Arial';
+		}
+	</STYLE>
+	{% endblock %}
+
+</HEAD>
+
+
+
+<BODY>
+	{% block content %}
+	<DIV id="page_1">
+		<DIV id="p1dimg1">
+			<IMG src="data:image/png;base64,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"
+				id="p1img1">
+		</DIV>
+
+
+		<DIV id="id1_1">
+			<TABLE cellpadding=0 cellspacing=0 class="t0">
+				<TR>
+					<TD class="tr0 td0">
+						<P class="p0 ft0">{{ orcamento.data }}</P>
+					</TD>
+					<TD class="tr0 td1">
+						<P class="p1 ft2">Orçamento <SPAN class="ft1">{{ orcamento.numero }}</SPAN></P>
+					</TD>
+				</TR>
+				<TR>
+					<TD class="tr1 td2">
+						<P class="p0 ft3">&nbsp;</P>
+					</TD>
+					<TD class="tr1 td3">
+						<P class="p0 ft3">&nbsp;</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD class="tr2 td0">
+						<P class="p2 ft4">PIMENTEL FERRAMENTAS LTDA - ME</P>
+					</TD>
+					<TD class="tr2 td1">
+						<P class="p1 ft4">(11) 969695375</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD class="tr3 td0">
+						<P class="p2 ft5">R VOL. ANTONIO DOS SANTOS, 429 - VILA BIANCHI - Bragança</P>
+					</TD>
+					<TD class="tr3 td1">
+						<P class="p0 ft6">&nbsp;</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD class="tr4 td0">
+						<P class="p2 ft7">Paulista - SP - CEP: <NOBR>12910-320</NOBR>
+						</P>
+					</TD>
+					<TD rowspan=2 class="tr5 td1">
+						<P class="p1 ft8">contato@peppertools.com.br</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD class="tr6 td0">
+						<P class="p0 ft9">&nbsp;</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD class="tr7 td0">
+						<P class="p2 ft10">PIMENTEL FERRAMENTAS LTDA - ME</P>
+					</TD>
+					<TD class="tr7 td1">
+						<P class="p0 ft6">&nbsp;</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD class="tr8 td0">
+						<P class="p2 ft10">CNPJ: 05499375000161 IE: 225192730118</P>
+					</TD>
+					<TD class="tr8 td1">
+						<P class="p0 ft6">&nbsp;</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD class="tr9 td2">
+						<P class="p0 ft6">&nbsp;</P>
+					</TD>
+					<TD class="tr9 td3">
+						<P class="p0 ft6">&nbsp;</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD class="tr10 td0">
+						<P class="p3 ft11">{{ orcamento.cliente.nome }}</P>
+					</TD>
+					<TD rowspan=2 class="tr11 td1">
+						<P class="p4 ft11">Validade da proposta</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD class="tr12 td0">
+						<P class="p0 ft12">&nbsp;</P>
+					</TD>
+				</TR>
+				<TR>
+					<TD class="tr9 td0">
+						<P class="p0 ft6">&nbsp;</P>
+					</TD>
+					<TD class="tr9 td1">
+						<P class="p4 ft13">{{orcamento.prazo_pagamento}}</P>
+					</TD>
+				</TR>
+
+			</TABLE>
+			<TABLE cellpadding=0 cellspacing=0 class="t1">
+				<thead class="table-header">
+
+
+					<TR>
+						<TD class="tr7 td4">
+							<P class="p5 ft14">Qt.</P>
+						</TD>
+						<TD class="tr7 td5">
+							<P class="p0 ft14">Produto/Serviço</P>
+						</TD>
+						<TD class="tr7 td6">
+							<P class="p0 ft14">Detalhe do item</P>
+						</TD>
+						<TD class="tr7 td7">
+							<P class="p6 ft14">Valor unitário</P>
+						</TD>
+						<TD class="tr7 td8">
+							<P class="p7 ft14">Subtotal</P>
+						</TD>
+					</TR>
+				</thead>
+
+
+
+				<tbody>
+
+					{% for item in orcamento.item.all %}
+					<TR>
+						<TD class="tr5 td4">
+							<P class="p5 ft8">{{item.qtd}}</P>
+						</TD>
+						<TD class="tr5 td5">
+							<P class="p8 ft8">{{item.nome}}</P>
+						</TD>
+						<TD class="tr5 td6">
+							<P class="p0 ft15">{{item.descricao}}</P>
+						</TD>
+						<TD class="tr5 td7">
+							<P class="p6 ft8">{{item.preco}}</P>
+						</TD>
+						<TD class="tr5 td8">
+
+							<P class="p7 ft8">{% widthratio item.preco 1 item.qtd %}</P>
+						</TD>
+					</TR>
+					{%endfor%}
+					<TR>
+						<TD class="tr3 td4">
+							<P class="p0 ft16">&nbsp;</P>
+						</TD>
+						<TD class="tr3 td5">
+							<P class="p0 ft16">&nbsp;</P>
+						</TD>
+						<TD class="tr3 td6">
+							<P class="p0 ft17"></P>
+						</TD>
+						<TD class="tr3 td7">
+							<P class="p0 ft16">&nbsp;</P>
+						</TD>
+						<TD class="tr3 td8">
+							<P class="p0 ft16">&nbsp;</P>
+						</TD>
+					</TR>
+					<TR>
+						<TD class="tr12 td9">
+							<P class="p0 ft12">&nbsp;</P>
+						</TD>
+						<TD class="tr12 td10">
+							<P class="p0 ft12">&nbsp;</P>
+						</TD>
+						<TD class="tr12 td11">
+							<P class="p0 ft12">&nbsp;</P>
+						</TD>
+						<TD class="tr12 td12">
+							<P class="p0 ft12">&nbsp;</P>
+						</TD>
+						<TD class="tr12 td13">
+							<P class="p0 ft12">&nbsp;</P>
+						</TD>
+					</TR>
+					<TR>
+						<TD class="tr7 td4">
+							<P class="p0 ft6">&nbsp;</P>
+						</TD>
+						<TD class="tr7 td5">
+							<P class="p0 ft6">&nbsp;</P>
+						</TD>
+						<TD class="tr7 td6">
+							<P class="p0 ft6">&nbsp;</P>
+						</TD>
+						<TD class="tr7 td7">
+							<P class="p9 ft18">Total</P>
+						</TD>
+						<TD class="tr7 td8">
+							<P class="p10 ft14">{{total}}</P>
+						</TD>
+					</TR>
+					<TR>
+						<TD class="tr13 td9">
+							<P class="p0 ft19">&nbsp;</P>
+						</TD>
+						<TD class="tr13 td10">
+							<P class="p0 ft19">&nbsp;</P>
+						</TD>
+						<TD colspan=2 class="tr13 td14">
+							<P class="p0 ft19">&nbsp;</P>
+						</TD>
+						<TD class="tr13 td13">
+							<P class="p0 ft19">&nbsp;</P>
+						</TD>
+					</TR>
+					<TR>
+						<TD class="tr8 td4">
+							<P class="p0 ft6">&nbsp;</P>
+						</TD>
+						<TD class="tr8 td5">
+							<P class="p0 ft6">&nbsp;</P>
+						</TD>
+						<TD colspan=2 class="tr8 td15">
+							<P class="p9 ft14">Valor líquido</P>
+						</TD>
+						<TD class="tr8 td8">
+							<P class="p10 ft14">{{ total }}</P>
+						</TD>
+					</TR>
+				</tbody>
+			</TABLE>
+			<script>
+				window.print();
+
+			</script>
+			<P class="p11 ft14">Forma de pagamento:</P>
+			<P class="p12 ft8">28 DDL</P>
+			<P class="p13 ft14">Observações:</P>
+			<P class="p12 ft8">FRETE FOB</P>
+		</DIV>
+		<DIV id="id1_2">
+			<P class="p14 ft15">Página 1 de 1</P>
+		</DIV>
+	</DIV>
+	{% endblock %}
+</BODY>
+
+</HTML>

@@ -20,9 +20,11 @@ from django.urls import path, reverse_lazy
 from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.storage import staticfiles_storage
 from pepperadmin.views import tokRedirect
+from pepperadmin.views import HelloPDFView
 urlpatterns = i18n_patterns(
     # ...
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url("favicon.ico") ) ),
+    path('hello.pdf', HelloPDFView.as_view()),
     path('', RedirectView.as_view(url=reverse_lazy('admin:index')) ),
     path('admin/os/change/<str:token>', tokRedirect, name="tokenRedirect"),
     path('admin/', admin.site.urls),

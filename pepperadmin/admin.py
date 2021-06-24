@@ -12,7 +12,7 @@ from io import BytesIO
 from django.shortcuts import render, redirect
 from datetime import datetime
 from django.contrib import messages
-#from .utils import render_to_pdf
+from .utils import render_to_pdf as render_pdf
 from simple_history import admin as simpleHistory
 import jwt
 from easy_pdf.views import PDFTemplateView, PDFTemplateResponseMixin
@@ -98,7 +98,18 @@ class ClienteModel(simpleHistory.SimpleHistoryAdmin):
     search_fields = ('nome', 'cnpj')
     
 class OrcamentoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
+    def printOrcamento(self, request, obj):
+        total=0
+        for item in obj.item.all():
+            subtotal = (item.preco * item.qtd)
+            total = subtotal + total
+        
+        return render(request, 'pepperadmin/Orcamento.html',  {'orcamento': obj, 'total':total })
+    printOrcamento.label = 'Imprimir Orçamento'
+    printOrcamento.short_description = 'Imprimir Orçamento'
     
+
+
     def createselected(self, obj):
         
         if obj.pedido_id != None:
@@ -166,8 +177,8 @@ class OrcamentoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
                 
     createPedido.label = 'Criar Pedido'
     createPedido.short_description = 'Criar pedido do orçamento.'
-    change_actions = ('createPedido',)
-    actions = ['createPedido']
+    change_actions = ('createPedido','printOrcamento')
+    actions = ['createPedido', 'printOrcamento']
 class PedidoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     filter_horizontal = ("item",)
     def createOs(self, request=None, obj=None, list=None):

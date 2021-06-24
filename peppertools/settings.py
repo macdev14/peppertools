@@ -108,10 +108,10 @@ DATABASES = {
 DATABASES = {
     'default': {
        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd3bfobrtvrs988', 
-        'USER': 'secncnqkovoxfw', 
-        'PASSWORD': 'eae01439c9611cfdec38eb3b6cf03a013f91e28f5f27d352290a007d27b10809',
-        'HOST': 'ec2-34-193-113-223.compute-1.amazonaws.com', 
+        'NAME': 'dj6c9d4qm0jg', 
+        'USER': 'qlwomodhbwxnas', 
+        'PASSWORD': 'f84b47c547f9a0ff4c2b2f66c6d5fead66fa1ddc84727f053a1bf00908c90365',
+        'HOST': 'ec2-54-157-100-65.compute-1.amazonaws.com', 
         'PORT': '5432',
     }
 }
@@ -206,6 +206,7 @@ STATIC_URL = '/static/'
 # Extra lookup directories for collectstatic to find static files
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
+   
 )
 
 #  Add configuration for static files storage using whitenoise
