@@ -16,6 +16,10 @@ import datetime
 import django_heroku
 from django.utils.timezone import activate
 from oscar.defaults import *
+
+location = lambda x: os.path.join(
+os.path.dirname(os.path.realpath(__file__)), x)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 print(BASE_DIR)
@@ -28,10 +32,14 @@ SECRET_KEY = 'm51l@4%c42^q2c2o9l72o@&nc&@ssr93%yrwn5zj5phf2*)520'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-DEBUG_PROPAGATE_EXCEPTIONS = True
-ALLOWED_HOSTS = ['peppertools.herokuapp.com']
+DEBUG_PROPAGATE_EXCEPTIONS = False
+#THUMBNAIL_DEBUG = True
+ALLOWED_HOSTS = ['peppertools.herokuapp.com', 'localhost:8000']
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = location('media')
 
+THUMBNAIL_KEY_PREFIX = 'oscar-sandbox'
 
 
 # Application definition

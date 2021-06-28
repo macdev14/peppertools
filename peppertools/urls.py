@@ -22,6 +22,8 @@ from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.storage import staticfiles_storage
 from pepperadmin.views import tokRedirect
 from pepperadmin.views import HelloPDFView
+from django.conf import settings
+from django.conf.urls.static import static
 # path('', RedirectView.as_view(url=reverse_lazy('admin:index')) ),
 urlpatterns = i18n_patterns(
     # ...
@@ -35,6 +37,6 @@ urlpatterns = i18n_patterns(
  
     # If no prefix is given, use the default language
     prefix_default_language=False
-)
+)  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #admin.site.site_header = 'Pimentel Ferramentas'
