@@ -16,6 +16,12 @@ JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
 JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 '''
 
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['name', 'code']
+
 class ProcessoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Processo

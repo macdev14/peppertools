@@ -140,6 +140,7 @@ class Ferramenta(models.Model):
         return self.nome
     class Meta:
         db_table = 'Ferramenta'
+
 class Item(models.Model):
     nome = models.CharField(max_length=254, default='')
     descricao = models.TextField(_("Descrição"), db_column="descricao", null=True, blank=True)
@@ -148,6 +149,7 @@ class Item(models.Model):
     preco = models.FloatField(_("Preço"), null=True, blank=True, db_column="preco")
     arquivo_desenho = models.ImageField(_("Arquivo do desenho"), null=True, blank=True, upload_to='media/desenhos_pedidos', db_column="arquivo_desenho" )
     history = HistoricalRecords()
+    
     def save(self, *args, **kwargs):
         fer = Ferramenta.objects.create(nome=self.nome, arquivo_desenho=self.arquivo_desenho)
         super().save(*args, **kwargs)
@@ -164,11 +166,6 @@ class Item(models.Model):
         verbose_name_plural = _("Itens")
         db_table = 'itens'
    
-
-   
-
-
-
 class Cadastro_OS(models.Model):
     readonly_fields = ("Numero_Os","Data",)
     UNIDADE = [
@@ -327,6 +324,23 @@ class Historico_Os(models.Model):
         super().save(*args, **kwargs)
 
 
+class Product(models.Model):
+    """
+    Simple single type product.
+    """
+
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=18, decimal_places=2, default=0)
+    
+    def __str__(self):
+        return self.name
+
+    def get_price(self, request):
+        return self.price
+
+    @property
+    def code(self):
+        return str(self.id)
 
 
 '''

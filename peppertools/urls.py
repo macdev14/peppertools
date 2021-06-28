@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.apps import apps
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import path, include
@@ -21,14 +22,15 @@ from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.storage import staticfiles_storage
 from pepperadmin.views import tokRedirect
 from pepperadmin.views import HelloPDFView
+# path('', RedirectView.as_view(url=reverse_lazy('admin:index')) ),
 urlpatterns = i18n_patterns(
     # ...
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url("favicon.ico") ) ),
-    path('hello.pdf', HelloPDFView.as_view()),
-    path('', RedirectView.as_view(url=reverse_lazy('admin:index')) ),
+    path('', include(apps.get_app_config('oscar').urls[0])),
     path('admin/os/change/<str:token>', tokRedirect, name="tokenRedirect"),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
+    
     # ...
  
     # If no prefix is given, use the default language
