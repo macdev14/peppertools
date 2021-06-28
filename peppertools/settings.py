@@ -156,8 +156,8 @@ SETTINGS_PATH = os.path.normpath(os.path.dirname(__file__))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates/'), os.path.join(SETTINGS_PATH, 'templates')],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates/'), os.path.join(SETTINGS_PATH, 'templates'), BASE_DIR / 'templates'],
+        
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -170,6 +170,16 @@ TEMPLATES = [
                 'oscar.core.context_processors.metadata',
                 
             ],
+
+
+        'loaders': [
+            ('django.template.loaders.cached.Loader', [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+                
+            ]),
+        ],
+
         },
     },
 ]
