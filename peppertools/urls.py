@@ -24,6 +24,7 @@ from pepperadmin.views import tokRedirect
 from pepperadmin.views import HelloPDFView
 from django.conf import settings
 from django.conf.urls.static import static
+
 # path('', RedirectView.as_view(url=reverse_lazy('admin:index')) ),
 urlpatterns = i18n_patterns(
     # ...
@@ -32,6 +33,10 @@ urlpatterns = i18n_patterns(
     path('admin/os/change/<str:token>', tokRedirect, name="tokenRedirect"),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
+   
+    path('dashboard/accounts/', apps.get_app_config('accounts_dashboard').urls),
+    path('dashboard/correios/', include('correios.urls')),
+   
     
     # ...
  

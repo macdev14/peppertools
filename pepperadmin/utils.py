@@ -11,6 +11,10 @@ from weasyprint import HTML
 from weasyprint.fonts import FontConfiguration
 import base64
 
+
+
+
+
 def render_to_pdf(template_src, context_dict):
     template = get_template(template_src)
     context = context_dict
@@ -23,6 +27,7 @@ def render_to_pdf(template_src, context_dict):
     return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
     #pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
     #return response
+
 
 
 

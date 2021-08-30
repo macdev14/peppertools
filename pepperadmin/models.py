@@ -10,7 +10,7 @@ from django.utils.timezone import now
 from simple_history.models import HistoricalRecords
 from django.utils import timezone
 from django.core.exceptions import  ObjectDoesNotExist
-
+from django.contrib.auth.models import User, Group
 osid = None
 
 
@@ -56,6 +56,19 @@ def year_choices():
 
 def set_periodo(osid):
     return get_last_periodo(osid)
+
+
+
+class Processo(models.Model):
+    procname = models.CharField(_("Nome"), null=True, blank=True,max_length=254, db_column='Nome')
+    Tempo_Objetivo = models.TimeField(null=True, blank=True, auto_now=False, auto_now_add=False, db_column='Tempo_Objetivo')
+    history = HistoricalRecords()
+    def __str__(self):
+        return f"{self.procname}"
+    class Meta:
+        db_table = 'processos'
+        
+
 
 
 class Tipo(models.Model):
@@ -130,22 +143,59 @@ class Linha(models.Model):
     class Meta:
       db_table = 'linha'
 
+class Formato(models.Model):
+    nome = models.CharField(max_length=254, default='')
+    def __str__(self):
+        return self.nome
+class Rosca(models.Model):
+    nome = models.CharField(max_length=254, default='')
+    def __str__(self):
+        return self.nome
+
 class Ferramenta(models.Model):
     nome = models.CharField(max_length=254, default='')
     material = models.ManyToManyField(Material, null=True, blank=True, db_column='cod_mat', related_name="material_ferramenta")
     arquivo_desenho = models.ImageField(_("Arquivo do desenho"), null=True, blank=True, upload_to='media/desenhos_pedidos', db_column="arquivo_desenho" )
     relatorio = models.ImageField(_("Relatorio do desenho"), null=True, blank=True, upload_to='media/relatorio_ferramenta', db_column="relatorio" )
+    descricao = models.TextField(_("Descrição"), db_column="descricao", null=True, blank=True)
+    passo = models.FloatField(_("Passo da Rosca(mm)"), null=True, blank=True, default=1, db_column="passo")
+    rosca = models.ForeignKey(Rosca, on_delete=models.SET_NULL, db_column='tipo', related_name="ferramenta_rosca", null=True)
+    diamnuceo = models.FloatField(_("Diâmetro do Núcleo"), null=True, blank=True, db_column="diametro_nucleo")
+    diamtotal = models.FloatField(_("Diâmetro Total "), null=True, blank=True, db_column="diametro_total")
+    qtd = models.IntegerField(_("Quantidade") ,null=True, blank=True, default=1, db_column="qtd")
+    preco = models.FloatField(_("Valor por unidade"), null=True, blank=True, db_column="preco")
+    diamrosca = models.CharField(_("Diâmetro da Rosca"),db_column="diametro_rosca", max_length=254, default='')
+    tolerancia = models.CharField(_("Tolerância"),db_column="tolerancia", max_length=254, default='')
+    norma = models.ForeignKey(Formato, on_delete=models.SET_NULL, db_column='formato', related_name="ferramenta_formato", null=True, default=0)
+    processos = models.ManyToManyField(Processo, verbose_name=_("Processo(s)"), related_name="ferramenta_processo" )
+    tempo = models.FloatField(_("Tempo"), null=True, blank=True, db_column="tempo")
+    preco = models.FloatField(_("Preço por unidade"), null=True, blank=True, db_column="preco")
+    
+    
+    
     history = HistoricalRecords()
     def __str__(self):
         return self.nome
     class Meta:
         db_table = 'Ferramenta'
 
+
+
 class Item(models.Model):
+    TIPO = [
+        ('canal reto', 'canal reto')
+    ]
     nome = models.CharField(max_length=254, default='')
     descricao = models.TextField(_("Descrição"), db_column="descricao", null=True, blank=True)
     material = models.ManyToManyField(Material, null=True, blank=True, db_column='cod_mat', related_name="materialitem")
     qtd = models.IntegerField(_("Quantidade") ,null=True, blank=True, default=1, db_column="qtd")
+    passo = models.FloatField(_("Passo da Rosca(mm)"), null=True, blank=True, default=1, db_column="passo")
+    rosca = models.TextField(db_column="tipo", choices=TIPO, default='canal reto', null=True, blank=True)
+    diamrosca = models.CharField(_("Diâmetro da Rosca"),db_column="diametro_rosca", max_length=254, default='')
+    tolerancia = models.CharField(_("Tolerância"),db_column="tolerancia", max_length=254, default='')
+    norma = models.ForeignKey(Formato, on_delete=models.SET_NULL, db_column='formato', related_name="format", null=True)
+    processos = models.ManyToManyField(Processo, verbose_name=_("Processo(s)"), related_name="item_processo" )
+    tempo = models.FloatField(_("Tempo"), null=True, blank=True, db_column="tempo")
     preco = models.FloatField(_("Preço"), null=True, blank=True, db_column="preco")
     arquivo_desenho = models.ImageField(_("Arquivo do desenho"), null=True, blank=True, upload_to='media/desenhos_pedidos', db_column="arquivo_desenho" )
     history = HistoricalRecords()
@@ -219,10 +269,19 @@ class Pedido(models.Model):
         ('Jogo', 'Jogo'),
         
     ]
-    numero_pedido = models.IntegerField(db_column="numero", editable=False)
+
+    def get_last_pedido(self):
+        largest = self.objects.values("numero_pedido").latest('numero_pedido')
+        print(largest['numero_pedido'])
+        if not largest:
+            return 1
+        return largest['numero_pedido'] + 1
+
+
+    numero_pedido = models.IntegerField(default=get_last_pedido ,db_column="numero", editable=False)
     ano = models.IntegerField(_('ano'), default=datetime.now().year, db_column='ano', editable=False)
     Cliente = models.ForeignKey(Cliente, swappable=False, on_delete=models.CASCADE, db_column='id_cliente', related_name="cliente_pedido")
-    item = models.ManyToManyField(Item, db_column='id_ferramenta', related_name="item_pedido")
+    item = models.ManyToManyField(Ferramenta, db_column='id_ferramenta', related_name="item_pedido")
     Especificacao = models.TextField(null=True, blank=True,db_column="especificacao")
     desenho = models.CharField(_("Obs. do desenho"), null=True, blank=True, max_length=150, db_column="desenho")
     unidade_pedido = models.CharField(null=True, blank=True,max_length=50, db_column="unidade", choices=UNIDADE, default='peca')
@@ -263,7 +322,7 @@ class Orcamento(models.Model):
     numero = models.AutoField(primary_key=True, db_column='numero')
     cliente = models.ForeignKey(Cliente, null=True, blank=True, on_delete=models.SET_NULL, db_column='id_cliente', related_name="cliente_orcamento")
     ano = models.IntegerField(_('ano'), default=datetime.now().year, db_column='ano')
-    item = models.ManyToManyField(Item, db_column='cod_item', related_name="item_orcamento")
+    item = models.ManyToManyField(Ferramenta, verbose_name=_("Ferramenta(s)"), db_column='cod_ferramenta', related_name="item_orcamento")
     data = models.DateTimeField(default=now ,db_column='data')
     prazo_entrega = models.DateField(db_column='prazo_entrega', null=True, blank=True)
     prazo_pagamento = models.DateField(db_column='prazo_pagto', null=True, blank=True, )
@@ -277,8 +336,8 @@ class Orcamento(models.Model):
         db_table = 'orcamento' 
         verbose_name = _("Orçamento")
     def __str__(self):
-       
         return f"{self.cliente}"
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         queryset = self.item.all().aggregate(
@@ -287,16 +346,6 @@ class Orcamento(models.Model):
         self.qnt = queryset["total_qtd"]  
         self.total = queryset["total_price"]  
         super().save(*args, **kwargs)
-
-class Processo(models.Model):
-    procname = models.CharField(_("Nome"), null=True, blank=True,max_length=254, db_column='Nome')
-    Tempo_Objetivo = models.TimeField(null=True, blank=True, auto_now=False, auto_now_add=False, db_column='Tempo_Objetivo')
-    history = HistoricalRecords()
-    def __str__(self):
-        return f"{self.procname}"
-    class Meta:
-        db_table = 'processos'
-        
 
 
 

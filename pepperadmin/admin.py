@@ -99,12 +99,21 @@ class ClienteModel(simpleHistory.SimpleHistoryAdmin):
     
 class OrcamentoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     def printOrcamento(self, request, obj):
+        
+
         total=0
         for item in obj.item.all():
+            if type(item.preco) is not float or type(item.qtd) is not float:
+                messages.add_message(request, messages.WARNING, 'Preço ou Quantidade inválida.')
+                print(item.id)
+                return redirect("admin:pepperadmin_ferramenta_change", item.id)
             subtotal = (item.preco * item.qtd)
             total = subtotal + total
-        
+            
         return render(request, 'pepperadmin/Orcamento.html',  {'orcamento': obj, 'total':total })
+       
+
+            
     printOrcamento.label = 'Imprimir Orçamento'
     printOrcamento.short_description = 'Imprimir Orçamento'
     
@@ -227,6 +236,18 @@ class PedidoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     change_actions = ('createOs',)
     actions = ['createOs']
 
+
+class FerramentaModel(simpleHistory.SimpleHistoryAdmin):
+    filter_horizontal = ("processos", "material")
+    def get_form(self, request, obj=None, **kwargs):
+        users_in_group=None
+        if Group.objects.filter(name="Producao").exists():
+            users_in_group = Group.objects.get(name="Producao").user_set.all()
+        if users_in_group:
+            if request.user in users_in_group:
+                self.fields = ('nome', 'material', 'arquivo_desenho', 'relatorio', 'descricao', 'passo', 'rosca', 'diamrosca', 'tolerancia')
+        form = super().get_form(request, obj, **kwargs)
+        return form
 admin.site.register(Cliente, ClienteModel)
 admin.site.register(Cadastro_OS, osModel)
 admin.site.register(Item, simpleHistory.SimpleHistoryAdmin)
@@ -236,4 +257,6 @@ admin.site.register(Material, simpleHistory.SimpleHistoryAdmin)
 admin.site.register(Historico_Os, simpleHistory.SimpleHistoryAdmin)
 admin.site.register(Processo, simpleHistory.SimpleHistoryAdmin)
 admin.site.register(Pedido, PedidoModel)
-admin.site.register(Ferramenta, simpleHistory.SimpleHistoryAdmin)
+admin.site.register(Ferramenta, FerramentaModel)
+admin.site.register(Rosca, simpleHistory.SimpleHistoryAdmin)
+admin.site.register(Formato, simpleHistory.SimpleHistoryAdmin)

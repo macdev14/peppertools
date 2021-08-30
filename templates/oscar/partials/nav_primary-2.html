@@ -1,0 +1,43 @@
+{% load currency_filters %} {% load category_tags %} {% load i18n %}
+
+
+<nav class="navbar navbar-main navbar-expand-lg navbar-light border-bottom">
+    <div class="container">
+        {% block navbar_toggler %}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav" aria-controls="main_nav" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button> {% endblock %} {% block navbar_collapse %}
+        <div class="collapse navbar-collapse" id="main_nav">
+            {% block nav %}
+            <ul class="navbar-nav">
+                {% block nav_items %} {% category_tree depth=1 as tree_categories %} {% if tree_categories %} {% for tree_category in tree_categories %}
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="{{ tree_category.get_absolute_url }}">{{tree_category.name}}</a>
+                </li>
+
+                {% endfor %} {% endif %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"> More</a>
+                    <div class="dropdown-menu">
+                        {% category_tree depth=1 as tree_categories %} {% if tree_categories %} {% for tree_category in tree_categories %}
+                        <a class="dropdown-item" href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a> {% endfor %} {% endif %}
+
+                        <div class="dropdown-divider"></div>
+
+                        {% block nav_dropdown_extra_items %}
+                        <a class="dropdown-item" href="{% url 'offer:list' %}">{% trans "Offers" %}</a> {% endblock %}
+
+                    </div>
+                </li>
+                {% endblock %}
+            </ul>
+            {% endblock %}
+        </div>
+        {% endblock %}
+        <!-- collapse .// -->
+    </div>
+    <!-- container .// -->
+
+
+</nav>
