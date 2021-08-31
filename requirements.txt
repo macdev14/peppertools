@@ -12,6 +12,7 @@ CairoSVG==2.5.2
 certifi==2021.5.30
 cffi==1.14.5
 chardet==4.0.0
+charset-normalizer==2.0.4
 click==8.0.1
 colorama==0.4.4
 cookiecutter==1.7.3
@@ -20,7 +21,7 @@ cssselect2==0.4.1
 defusedxml==0.7.1
 distlib==0.3.2
 dj-database-url==0.5.0
-Django==3.1.12
+Django==2.2.24
 django-easy-pdf==0.1.1
 django-extra-views==0.13.0
 django-filter==2.4.0
@@ -77,7 +78,7 @@ python-stdnum==1.16
 pytz==2021.1
 qrcode==6.1
 reportlab==3.5.67
-requests==2.25.1
+requests==2.26.0
 requests-file==1.5.1
 requests-toolbelt==0.9.1
 six==1.16.0
