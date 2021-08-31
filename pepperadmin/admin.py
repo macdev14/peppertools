@@ -15,13 +15,10 @@ from django.contrib import messages
 from .utils import render_to_pdf as render_pdf
 from simple_history import admin as simpleHistory
 import jwt
-from easy_pdf.views import PDFTemplateView, PDFTemplateResponseMixin
-from easy_pdf.rendering import render_to_pdf
+
+
 from django.db.models import Max, F
-class renderOS(PDFTemplateView, PDFTemplateResponseMixin):
-    model = Cadastro_OS
-    template_name = 'pepperadmin/os.html'
-    encoding = "utf-8",
+
 
 class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     list_display=('Numero_Os','Cliente','Tipo','Quantidade')

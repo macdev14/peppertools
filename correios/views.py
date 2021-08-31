@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 
 from pysigep.client import SOAPClient
 from pysigep.utils import URLS, HOMOLOGACAO, PRODUCAO
-from etiquetas_correios import *
+from .etiquetas_correios import *
 
 HOMOG_CODIGO_ADMIN = '12517429'
 HOMOG_USUARIO  = 'papper2016**'
