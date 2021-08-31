@@ -31,7 +31,7 @@ django-localflavor==3.1
 django-object-actions==3.0.2
 django-oscar==3.0.2
 django-oscar-accounts==3.0
-django-oscar-paypal @git+git://github.com/django-oscar/django-oscar-paypal.git
+django-oscar-paypal @ git+git://github.com/django-oscar/django-oscar-paypal.git
 django-phonenumber-field==3.0.1
 django-qrcode==0.3
 django-simple-history==3.0.0
