@@ -29,7 +29,7 @@ django-heroku==0.3.1
 django-localflavor==3.1
 django-object-actions==3.0.2
 django-oscar==3.1
-django-oscar-accounts==2.2.dev16+gb3c22c5
+django-oscar-accounts==3.0
 django-oscar-paypal==2.0.0
 django-phonenumber-field==5.2.0
 django-qrcode==0.3
