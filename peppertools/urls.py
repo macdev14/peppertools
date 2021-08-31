@@ -16,15 +16,21 @@ Including another URLconf
 from django.apps import apps
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
+import django.http
 from django.urls import path, include
 from django.urls import path, reverse_lazy
 from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.storage import staticfiles_storage
 from pepperadmin.views import tokRedirect
-
+from django.http import HttpResponse
 from django.conf import settings
 from django.conf.urls.static import static
 
+def ssl_view(request):
+
+    content = '3ntwQiXqiZ77EFQlJtaWlZzmkA_zu8lkhXWpCzv0nmI.1tWBfLlnFRvAzp8SnlPF8GQsqCxzC36BC1vRDGe0sFs'
+    return HttpResponse(content, content_type='text/plain')
+    
 # path('', RedirectView.as_view(url=reverse_lazy('admin:index')) ),
 urlpatterns = i18n_patterns(
     # ...
@@ -33,7 +39,7 @@ urlpatterns = i18n_patterns(
     path('admin/os/change/<str:token>', tokRedirect, name="tokenRedirect"),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
-   
+    path('.well-known/acme-challenge/3ntwQiXqiZ77EFQlJtaWlZzmkA_zu8lkhXWpCzv0nmI', ssl_view),
     path('dashboard/accounts/', apps.get_app_config('accounts_dashboard').urls),
     path('dashboard/correios/', include('correios.urls')),
    
