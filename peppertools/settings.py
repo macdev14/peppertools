@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'rest_framework_simplejwt',
+    'easy_pdf',
     'pepperadmin',
     'django.contrib.admin',
     'django.contrib.auth',
