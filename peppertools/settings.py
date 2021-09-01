@@ -77,7 +77,7 @@ SECRET_KEY = 'm51l@4%c42^q2c2o9l72o@&nc&@ssr93%yrwn5zj5phf2*)520'
 DEBUG = False
 DEBUG_PROPAGATE_EXCEPTIONS = False
 THUMBNAIL_DEBUG = False
-ALLOWED_HOSTS = ['peppertools.herokuapp.com', 'localhost:8000']
+ALLOWED_HOSTS = ['peppertools.herokuapp.com', 'peppertools.lauromtp.com', 'localhost:8000']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = location('media')
