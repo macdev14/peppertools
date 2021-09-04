@@ -9,17 +9,14 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import os
+import datetime, django_heroku, dj_database_url, environ, os, sys
 from pathlib import Path
-import dj_database_url
-import datetime
-import django_heroku
 from django.utils.timezone import activate
 from oscar.defaults import *
-
-
 from django.utils.translation import gettext_lazy as _
 
+env = environ.Env()
+environ.Env.read_env()
 
 
 OSCAR_DASHBOARD_NAVIGATION.append(
@@ -71,12 +68,12 @@ print(BASE_DIR)
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'm51l@4%c42^q2c2o9l72o@&nc&@ssr93%yrwn5zj5phf2*)520'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-DEBUG_PROPAGATE_EXCEPTIONS = True
-THUMBNAIL_DEBUG = True
+DEBUG = env('DEBUG')
+DEBUG_PROPAGATE_EXCEPTIONS = env('DEBUG')
+THUMBNAIL_DEBUG = env('DEBUG')
 ALLOWED_HOSTS = ['peppertools.herokuapp.com', 'peppertools.lauromtp.com', 'localhost:8000']
 
 MEDIA_URL = '/media/'
@@ -159,19 +156,19 @@ INSTALLED_APPS = [
 
 ] 
 
-STRIPE_SECRET_KEY = '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'
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 
-STRIPE_PUBLISHABLE_KEY = 'pk_live_2lmD8loxvIHHUo2xwRRkRd6C00UtozvR6W'
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
 
-STRIPE_CURRENCY = "BRL"
+STRIPE_CURRENCY = env("STRIPE_CURRENCY")
 
-ADYEN_IDENTIFIER = 'Peppertools'
+ADYEN_IDENTIFIER = env('ADYEN_IDENTIFIER')
 
-ADYEN_SKIN_CODE = '1xzvdIQD'
+ADYEN_SKIN_CODE = env('ADYEN_SKIN_CODE')
 
-ADYEN_SECRET_KEY = '761C814D2F15FC6FDDAA506804924C0FA010D9BC0A4E3F8A8066A825BED16F4B'
+ADYEN_SECRET_KEY = env('ADYEN_SECRET_KEY')
 
-ADYEN_ACTION_URL = 'https://test.adyen.com/hpp/cse/js/8216250740900522.shtml'
+ADYEN_ACTION_URL = env('ADYEN_ACTION_URL')
 
 INSTALLED_APPS += ['paypal.express.dashboard.apps.ExpressDashboardApplication']
 
@@ -186,12 +183,12 @@ MERCADOPAGO = {
 
 SITE_ID = 1
 
-PAYPAL_API_USERNAME = 'sb-fkkmx6656268_api1.business.example.com'
-PAYPAL_API_PASSWORD = '2GUSZJEHNJNKPF6Y'
-PAYPAL_API_SIGNATURE = 'AJNToUO45e9kLOTlLpVzI198s-T0AbKhPrCmAraNQAC48e.x3xSC0WSp'
+PAYPAL_API_USERNAME = env('PAYPAL_API_USERNAME')
+PAYPAL_API_PASSWORD = env('PAYPAL_API_PASSWORD')
+PAYPAL_API_SIGNATURE = env('PAYPAL_API_SIGNATURE')
 
-OSCAR_DEFAULT_CURRENCY = 'BRL'
-OSCAR_SHOP_NAME = 'Peppertools'
+OSCAR_DEFAULT_CURRENCY = env('OSCAR_DEFAULT_CURRENCY')
+OSCAR_SHOP_NAME = env('OSCAR_SHOP_NAME')
 OSCAR_INITIAL_ORDER_STATUS = 'Pending'
 OSCAR_INITIAL_LINE_STATUS = 'Pending'
 OSCAR_ORDER_STATUS_PIPELINE = {
@@ -282,13 +279,19 @@ DATABASES = {
 DATABASES = {
     'default': {
        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dj6c9d4qm0jg', 
-        'USER': 'qlwomodhbwxnas', 
-        'PASSWORD': 'f84b47c547f9a0ff4c2b2f66c6d5fead66fa1ddc84727f053a1bf00908c90365',
-        'HOST': 'ec2-54-157-100-65.compute-1.amazonaws.com', 
-        'PORT': '5432',
+        'NAME': env('DATABASE'),
+        'USER': env('USERNAME'),
+        'PASSWORD': env('PASSWORD'),
+        'HOST':  env('HOST'), 
+        'PORT': env('PORT'),
     }
 }
+
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'dbtest'
+    }
 
 
 
