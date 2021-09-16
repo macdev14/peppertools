@@ -11,6 +11,23 @@ from simple_history.models import HistoricalRecords
 from django.utils import timezone
 from django.core.exceptions import  ObjectDoesNotExist
 from django.contrib.auth.models import User, Group
+
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, post_save
+from django.conf import settings
+from django.core.mail import send_mail
+from django.db.models import signals
+#signal used for is_active=False to is_active=True
+''' 
+@receiver(pre_save, sender=User, dispatch_uid='active')
+def active(sender, instance, **kwargs):
+    if instance.is_active and User.objects.filter(pk=instance.pk, is_active=False).exists():
+        subject = 'Active account'
+        message = '%s your account is now active' %(instance.username)
+        from_email = settings.EMAIL_HOST_USER
+        send_mail(subject, message, from_email, [instance.email], fail_silently=False)
+
+'''
 osid = None
 
 

@@ -27,7 +27,7 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     def printos(self, request, obj):
        
         if isinstance(obj, QuerySet):
-            obj = obj[0]
+            obj = obj.first()
         codyear = str(obj.Data.year)
         obj.Data_digit = codyear[-2:]
         osid = obj.id
