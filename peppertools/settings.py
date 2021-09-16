@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import datetime, django_heroku, dj_database_url, environ, os, sys, socket, request
+import datetime, django_heroku, dj_database_url, environ, os, sys, socket
+from django.http import HttpRequest
 from pathlib import Path
 from django.utils.timezone import activate
 from oscar.defaults import *
@@ -25,7 +26,7 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 '''
 SECURE_SSL_REDIRECT = True 
-if env('DEBUG') == 'True' or request.is_secure():
+if env('DEBUG') == 'True' or HttpRequest.is_secure():
     SECURE_SSL_REDIRECT = False # [1]
    
 
