@@ -14,7 +14,7 @@ from pathlib import Path
 from django.utils.timezone import activate
 from oscar.defaults import *
 from django.utils.translation import gettext_lazy as _
-
+import socket
 env = environ.Env()
 environ.Env.read_env()
 ''' 
@@ -25,7 +25,7 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 '''
 SECURE_SSL_REDIRECT = True 
-if env('DEBUG') == 'True':
+if env('DEBUG') == 'True' or socket.gethostname() == 'peppertools.lauromtp.com':
     SECURE_SSL_REDIRECT = False # [1]
    
 
