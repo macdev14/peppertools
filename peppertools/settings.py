@@ -26,7 +26,7 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 '''
 
-SECURE_SSL_REDIRECT = True 
+SECURE_SSL_REDIRECT = False
 if env('DEBUG') == 'True' or HttpRequest.scheme == 'https':
     SECURE_SSL_REDIRECT = False # [1]
    
