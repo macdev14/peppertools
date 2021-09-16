@@ -9,12 +9,12 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import datetime, django_heroku, dj_database_url, environ, os, sys
+import datetime, django_heroku, dj_database_url, environ, os, sys, socket, request
 from pathlib import Path
 from django.utils.timezone import activate
 from oscar.defaults import *
 from django.utils.translation import gettext_lazy as _
-import socket
+
 env = environ.Env()
 environ.Env.read_env()
 ''' 
@@ -25,10 +25,7 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 '''
 SECURE_SSL_REDIRECT = True 
-print('host:')
-print(socket.gethostname())
-print('')
-if env('DEBUG') == 'True' or socket.gethostname() == 'peppertools.lauromtp.com':
+if env('DEBUG') == 'True' or request.is_secure():
     SECURE_SSL_REDIRECT = False # [1]
    
 
