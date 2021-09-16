@@ -27,8 +27,7 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 '''
 
 SECURE_SSL_REDIRECT = False
-if env('DEBUG') == 'True' or HttpRequest.scheme == 'https':
-    SECURE_SSL_REDIRECT = False # [1]
+
    
 
 OSCAR_DASHBOARD_NAVIGATION.append(
