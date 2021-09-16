@@ -25,6 +25,9 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 '''
 SECURE_SSL_REDIRECT = True 
+print('host:')
+print(socket.gethostname())
+print('')
 if env('DEBUG') == 'True' or socket.gethostname() == 'peppertools.lauromtp.com':
     SECURE_SSL_REDIRECT = False # [1]
    
