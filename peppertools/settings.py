@@ -24,6 +24,10 @@ EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 '''
+if env('DEBUG') == False:
+    SECURE_SSL_REDIRECT = True # [1]
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 OSCAR_DASHBOARD_NAVIGATION.append(
     {
         'label': _('Correios'),
