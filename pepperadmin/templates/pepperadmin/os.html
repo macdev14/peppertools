@@ -99,23 +99,23 @@
       </div>      </td>
       <td><div align="left" class="style6">
         <div align="right"><em>
-                {{field.Numero_Pedido }}
+                {{field.Numero_Pedido |default_if_none:""}}
         </em> </div>
       </div>
         <div align="right"><span class="style6"></span></div></td>
       <td><div align="right"><span class="style6">N&deg;:</span></div></td>
       <td><div align="right"><span class="style6"><em>
            
-              {{ field.Numero_Nf }}
+              {{ field.Numero_Nf |default_if_none:"" }}
       
         </em></span> <span class="style6"></span> </div></td>
     </tr>
     <tr>
       <td valign="top"><div align="center"><span class="style6"><em> {{ field.unidade |default_if_none:"" }}</em></span></div></td>
       <td><div align="right"><span class="style6">DATA:</span></div></td>
-      <td><div align="right"><span class="style6"><em> {{ field.Data_Pedido |default_if_none:""   }} </em></span></div></td>
+      <td><div align="right"><span class="style6"><em>{% if field.Data_Pedido %} {{ field.Data_Pedido.day |default_if_none:""   }}/{{ field.Data_Pedido.month |default_if_none:""}}/{{ field.Data_Pedido.year |default_if_none:""}} {% endif %} </em></span></div></td>
       <td><div align="right"><span class="style6">DATA:</span></div></td>
-      <td><div align="right"><span class="style6"><em>{{ field.Data_Nf  | default_if_none:"" }}</em></span></div></td>
+      <td><div align="right"><span class="style6"><em>{% if field.Data_Nf %}{{ field.Data_Nf.day  | default_if_none:"" }}/{{ field.Data_Nf.month  | default_if_none:"" }}/{{ field.Data_Nf.year  | default_if_none:"" }}{%endif%}</em></span></div></td>
     </tr>
     
     <tr>
@@ -218,7 +218,7 @@
  </table>
 
  <table style="float: left; margin-left:10px" width="45%" border="0" cellspacing="0" cellpadding="0">
-  <th style="font-family:verdana"><strong>OCORR&Ecirc;NCIAS / REFUGO:</strong></th>
+  <th style="font-family:verdana"><strong>OCORR&Ecirc;NCIAS</strong></th>
   <tr class="style13">
     <td class="LINHA"><div align="left"></div>      <div align="center"></div></td>
   </tr>
@@ -275,7 +275,7 @@
   <tr>
     <td class="style6"><div align="right">MATERIAL: &nbsp;</div></td>
     <td colspan="2" class="style6"><div align="left"><em>{{ field.Material |default_if_none:""  }}</em></div></td>
-    <td><div align="center" class="style6"><strong><em>{{ field.Tipo |default_if_none:""  }}</em></strong></div></td>
+    <td><div align="center" class="style6"><strong><em>{{ field.Tipo|upper |default_if_none:""  }}</em></strong></div></td>
   </tr>
   <tr>
     <td class="style6"><div align="right">DESENHO CLIENTE: &nbsp; </div></td>
