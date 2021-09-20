@@ -61,7 +61,7 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
                     print(any(processo in word  for word in ocortimeproc))
                     if not any(processo in word for word in ocortimeproc):
                         
-                        ocortimeproc.append(processo + ': ' + ocorrencia.rstrip())
+                        ocortimeproc.append(processo.upper() + ': ' + ocorrencia.rstrip())
                     else:
                         index = None
                         for ocor in ocortimeproc:
