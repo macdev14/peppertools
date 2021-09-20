@@ -35,6 +35,9 @@ class HistoricoSerializer(serializers.ModelSerializer):
     def create(self, data):
         osedit = None
         osget = None
+        edinicio, edfim, edproc = None, None, None
+
+       
         try:
             allos = Historico_Os.objects.filter(os=data["os"])
             period = allos.aggregate(Max('periodo'))
@@ -42,9 +45,10 @@ class HistoricoSerializer(serializers.ModelSerializer):
         except Exception as e:
             print(e) 
        
-        edfim = osget.fim
-        edinicio = osget.inicio
-        edproc = osget.processo
+        if osget:
+            edfim = osget.fim
+            edinicio = osget.inicio
+            edproc = osget.processo
         
         if edfim and 'inicio' in data:
             # se estiver finalizado criar outro 
