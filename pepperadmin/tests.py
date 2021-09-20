@@ -23,14 +23,16 @@ class SystemTests(TestCase):
 
         self.processo = Processo.objects.create(procname="corte")
         
+        self.formato = Formato.objects.create(nome="DIN371")
         # Create item
-        self.item = Ferramenta.objects.create(nome="Test")
+        self.item = Ferramenta.objects.create(nome="Test", norma=self.formato)
         self.item.processos.set(Processo.objects.filter(pk=self.processo.id))
         self.item.save()
         # Create quote
         
        
-        self.quote = Orcamento.objects.create(cliente=self.customer)
+        self.quote = Orcamento.objects.create(cliente=self.customer, numero=1)
+        self.quote = Orcamento.objects.get(pk=self.quote.id)
         self.quote.ferramenta.set(Ferramenta.objects.filter(pk=self.item.id))
         self.quote.save()
         

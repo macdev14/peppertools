@@ -67,7 +67,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Processo não encontrado.")
         elif not data['os']:
             raise serializers.ValidationError("Ordem de Serviço não encontrada.")
-
+            
         allos = Historico_Os.objects.filter(os=data["os"]).exists()
         osget, prochere, osinicio, osfim = None, None, None, None
         if allos:
@@ -78,9 +78,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
             osinicio = osget.inicio
             osfim = osget.fim
            
-        if not osget or not allos:
-            raise serializers.ValidationError(f"O.S não encontrada.")
-        elif osget and 'fim' in data and not osinicio:
+        if osget and 'fim' in data and not osget.inicio:
             # o.s exists but not ended
             raise serializers.ValidationError("O.S não iniciada.")
         
@@ -110,9 +108,12 @@ class HistoricoSerializer(serializers.ModelSerializer):
             self.context['request'].data['os'] = decodtoken['osid']
         except:
             decodtoken = None
+        print(decodtoken['osid'])
         osid = decodtoken['osid'] if decodtoken else None
         data['os'] = Cadastro_OS.objects.get(pk=osid) if Cadastro_OS.objects.filter(pk=osid).exists() else None
+        print(data['os'])
         data['processo'] =  Processo.objects.get(pk=data['processo']) if Processo.objects.filter(pk=data['processo']).exists() else None
+        print(data['processo'])
         return data
 
     class Meta:
