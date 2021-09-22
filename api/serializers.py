@@ -50,7 +50,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
             edinicio = osget.inicio
             edproc = osget.processo
         # se finalizada mas iniciar novamente
-        if edfim and 'inicio' in data and edinicio:
+        if edfim and 'inicio' in data and edinicio and edproc == data['processo']:
             # se estiver finalizado criar outro 
             print(f"periodos: {period}")
             data['periodo'] = period['periodo__max'] + 1
