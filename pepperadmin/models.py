@@ -19,7 +19,7 @@ from django.core.mail import send_mail
 from django.db.models import signals
 from django.contrib.auth.signals import user_logged_in
 #signal used for is_active=False to is_active=True
- 
+
 @receiver(pre_save, sender=User, dispatch_uid='active')
 def active(sender, instance, **kwargs):
     if instance.is_active and User.objects.filter(pk=instance.pk, is_active=True).exists():
@@ -28,6 +28,16 @@ def active(sender, instance, **kwargs):
         from_email = settings.EMAIL_HOST_USER
         send_mail(subject, message, from_email, [settings.EMAIL_HOST_USER], fail_silently=False)
 
+
+def login_handler(sender, user, request, **kwargs):
+    print('logged in')
+    subject = f'{user.username} realizou login'
+    message = f'{user.username} realizou login'
+    from_email = settings.EMAIL_HOST_USER
+    send_mail(subject, message, from_email, [settings.EMAIL_HOST_USER], fail_silently=False)
+
+
+user_logged_in.connect(login_handler)
 
 osid = None
 
