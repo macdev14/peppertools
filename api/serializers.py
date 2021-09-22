@@ -62,9 +62,10 @@ class HistoricoSerializer(serializers.ModelSerializer):
             Historico_Os.objects.filter(os=data["os"], periodo=period['periodo__max']).update(ocorrencias=data["ocorrencias"], fim=data["fim"] )
             hist_os =  Historico_Os.objects.get(os=data["os"], periodo=period['periodo__max'])
             return hist_os
-        elif not edfim and 'inicio' in data:
+        elif edfim and edinicio and 'inicio' in data:
            hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=1, qtd=data['qtd'], os=data["os"], processo=data['processo'])
            return hist_os
+        
         
     def validate(self, data):
         if not data['processo']:
