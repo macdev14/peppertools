@@ -39,9 +39,9 @@ class HistoricoSerializer(serializers.ModelSerializer):
 
        
         try:
-            allos = Historico_Os.objects.filter(os=data["os"])
+            allos = Historico_Os.objects.filter(os=data["os"], processo=data['processo'])
             period = allos.aggregate(Max('periodo'))
-            osget = Historico_Os.objects.get(os=data["os"], periodo=period['periodo__max'])
+            osget = Historico_Os.objects.get(os=data["os"], processo=data['processo'], periodo=period['periodo__max'])
         except Exception as e:
             print(e) 
        
@@ -49,8 +49,8 @@ class HistoricoSerializer(serializers.ModelSerializer):
             edfim = osget.fim
             edinicio = osget.inicio
             edproc = osget.processo
-        # se finalizada mas iniciar novamente
-        if edfim and 'inicio' in data and edinicio and edproc == data['processo']:
+        
+        if edfim and 'inicio' in data:
             # se estiver finalizado criar outro 
             print(f"periodos: {period}")
             data['periodo'] = period['periodo__max'] + 1
@@ -59,13 +59,12 @@ class HistoricoSerializer(serializers.ModelSerializer):
             return hist_os
 
         elif edinicio and 'fim' in data:
-            Historico_Os.objects.filter(os=data["os"], periodo=period['periodo__max']).update(ocorrencias=data["ocorrencias"], fim=data["fim"] )
-            hist_os =  Historico_Os.objects.get(os=data["os"], periodo=period['periodo__max'])
+            Historico_Os.objects.filter(os=data["os"], periodo=period['periodo__max'], processo=data['processo']).update(ocorrencias=data["ocorrencias"], fim=data["fim"] )
+            hist_os =  Historico_Os.objects.get(os=data["os"], periodo=period['periodo__max'], processo=data['processo'])
             return hist_os
-        elif edfim and edinicio and 'inicio' in data:
+        elif not edfim and 'inicio' in data:
            hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=1, qtd=data['qtd'], os=data["os"], processo=data['processo'])
            return hist_os
-        
         
     def validate(self, data):
         if not data['processo']:
@@ -73,11 +72,11 @@ class HistoricoSerializer(serializers.ModelSerializer):
         elif not data['os']:
             raise serializers.ValidationError("Ordem de Serviço não encontrada.")
             
-        allos = Historico_Os.objects.filter(os=data["os"]).exists()
+        allos = Historico_Os.objects.filter(os=data["os"], processo=data['processo']).exists()
         osget, prochere, osinicio, osfim = None, None, None, None
         if allos:
-            period = Historico_Os.objects.filter(os=data["os"]).aggregate(Max('periodo'))
-            osget = Historico_Os.objects.get(periodo=period['periodo__max'], os=data["os"])
+            period = Historico_Os.objects.filter(os=data["os"], processo=data['processo']).aggregate(Max('periodo'))
+            osget = Historico_Os.objects.get(periodo=period['periodo__max'], processo=data['processo'], os=data["os"])
             prochere = osget.processo
             #proc = Processo.objects.get(pk=osget.processo.id)
             osinicio = osget.inicio
@@ -85,7 +84,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
            
         if osget and 'fim' in data and not osget.inicio:
             # o.s exists but not ended
-            raise serializers.ValidationError("O.S não iniciada.")
+            raise serializers.ValidationError("Processo da O.S não iniciado.")
         
         elif osget and 'fim' in data and prochere.id != data['processo'].id:
             raise serializers.ValidationError(f"O.S iniciada em {prochere}.")
