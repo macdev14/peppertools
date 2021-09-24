@@ -11,11 +11,12 @@ from django.db.models.query import QuerySet
 from io import BytesIO
 from django.shortcuts import render, redirect
 from datetime import datetime
+import datetime as datetime2
 from django.contrib import messages
 from .utils import render_to_pdf as render_pdf
 from simple_history import admin as simpleHistory
 import jwt
-
+from tabular_export.admin import export_to_csv_action, export_to_excel_action
 
 from django.db.models import Max, F
 
@@ -245,13 +246,52 @@ class FerramentaModel(simpleHistory.SimpleHistoryAdmin):
                 self.fields = ('nome', 'material', 'arquivo_desenho', 'relatorio', 'descricao', 'passo', 'rosca', 'diamrosca', 'tolerancia')
         form = super().get_form(request, obj, **kwargs)
         return form
+
+class Historico_OsAdmin(simpleHistory.SimpleHistoryAdmin):
+    
+    
+    raw_id_fields=('os',)
+
+    def time(self, obj):
+        try:
+            enter_delta = datetime2.timedelta(hours=obj.inicio.hour, minutes=obj.inicio.minute, seconds=obj.inicio.second)
+            exit_delta = datetime2.timedelta(hours=obj.fim.hour, minutes=obj.fim.minute, seconds=obj.fim.second)
+            difference_delta = exit_delta - enter_delta
+            return difference_delta
+        except:
+            return 'Não Finalizado'
+    def avg_qtd(self,obj):
+        try:
+            result_hour, plural_hour= None, None
+            result =  self.time(obj).total_seconds()/obj.qtd/60
+            plural = 'minutos' if round(result, 2) > 1 else 'minuto'
+            if round(result, 2) >= 60:
+                result_hour = round(round(result, 2)/60,2) 
+                plural_hour = 'hora(s)'
+                plural = plural+' / '
+            return f'{round(result, 2)} {plural} {result_hour or ""} {plural_hour or ""}'
+        except:
+            return 'Não Finalizado'
+    def date_obj(self,obj):
+        try:
+            return f'{obj.data.day}/{obj.data.month}/{obj.data.year}'
+        except:
+            return 'Data não encontrada.'
+    avg_qtd.short_description = 'Tempo médio por peça'
+    date_obj.short_description = 'Data'
+    time.short_description = 'Tempo total'
+    list_display=('os','qtd','processo','date_obj', 'time' , 'avg_qtd', 'inicio', 'fim', 'periodo')
+    search_fields = ('processo', 'qtd', 'os' )
+    actions = (export_to_csv_action, )
+
+
 admin.site.register(Cliente, ClienteModel)
 admin.site.register(Cadastro_OS, osModel)
 admin.site.register(Item, simpleHistory.SimpleHistoryAdmin)
 admin.site.register(Orcamento, OrcamentoModel)
 admin.site.register(Linha, simpleHistory.SimpleHistoryAdmin)
 admin.site.register(Material, simpleHistory.SimpleHistoryAdmin)
-admin.site.register(Historico_Os, simpleHistory.SimpleHistoryAdmin)
+admin.site.register(Historico_Os, Historico_OsAdmin)
 admin.site.register(Processo, simpleHistory.SimpleHistoryAdmin)
 admin.site.register(Pedido, PedidoModel)
 admin.site.register(Ferramenta, FerramentaModel)
