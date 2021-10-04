@@ -388,6 +388,7 @@ class Historico_Os(models.Model):
     periodo = models.IntegerField(null=True, blank=True, db_column="periodo")
     data = models.DateTimeField(db_column='data', default=now, null=True, blank=True)
     qtd = models.IntegerField(null=True, blank=True,db_column="qtd")
+    id_func = models.ForeignKey(User, null=True, blank=True, db_column="Colaborador", on_delete=models.SET_NULL)
     history = HistoricalRecords()
     def __str__(self):
         
