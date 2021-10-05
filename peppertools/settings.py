@@ -293,14 +293,11 @@ DATABASES = {
 '''
 
 DATABASES = {
-    'default': {
-       'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env('DATABASE'),
-        'USER': env('USERNAME'),
-        'PASSWORD': env('PASSWORD'),
-        'HOST':  env('HOST'), 
-        'PORT': env('DB_PORT'),
+     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+    
 }
 
 if 'test' in sys.argv:
@@ -415,15 +412,15 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 
-prod_db  =  dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(prod_db)
+# prod_db  =  dj_database_url.config(conn_max_age=500)
+# DATABASES['default'].update(prod_db)
 #DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 GDAL_LIBRARY_PATH = os.getenv('GDAL_LIBRARY_PATH')
 GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
 
 
-django_heroku.settings(locals())
+django_heroku.settings(locals(), staticfiles=False)
 
 
 
