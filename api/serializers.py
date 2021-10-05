@@ -55,15 +55,15 @@ class HistoricoSerializer(serializers.ModelSerializer):
             print(f"periodos: {period}")
             data['periodo'] = period['periodo__max'] + 1
             periodoprint= data['periodo']
-            hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=data['periodo'], qtd=data['qtd'], os=data["os"], processo=data['processo'], id_func=data['id_func'] or None)
+            hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=data['periodo'], qtd=data['qtd'], os=data["os"], processo=data['processo'], id_func= data['id_func'] if 'id_func' in data else None)
             return hist_os
 
         elif edinicio and 'fim' in data:
-            Historico_Os.objects.filter(os=data["os"], periodo=period['periodo__max'], processo=data['processo']).update(ocorrencias=data["ocorrencias"], fim=data["fim"], id_func=data['id_func'] or None)
+            Historico_Os.objects.filter(os=data["os"], periodo=period['periodo__max'], processo=data['processo']).update(ocorrencias=data["ocorrencias"], fim=data["fim"],  id_func= data['id_func'] if 'id_func' in data else None)
             hist_os =  Historico_Os.objects.get(os=data["os"], periodo=period['periodo__max'], processo=data['processo'])
             return hist_os
         elif not edfim and 'inicio' in data:
-           hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=1, qtd=data['qtd'], os=data["os"], processo=data['processo'], id_func=data['id_func'] or None)
+           hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=1, qtd=data['qtd'], os=data["os"], processo=data['processo'], id_func= data['id_func'] if 'id_func' in data else None)
            return hist_os
         
     def validate(self, data):
