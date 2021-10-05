@@ -45,27 +45,32 @@ osid = None
 
 
 def get_last_os():
-    largest = Cadastro_OS.objects.values("Numero_Os").latest('Numero_Os')
-    print(largest['Numero_Os'])
-    if not largest:
+    try:
+        largest = Cadastro_OS.objects.values("Numero_Os").latest('Numero_Os')
+        print(largest['Numero_Os'])
+        if not largest:
+            return 1
+        return largest['Numero_Os'] + 1
+    except:
         return 1
-    return largest['Numero_Os'] + 1
 
 
 
 
 def get_last_periodo(osid):
-    lastperiodo = Historico_Os.objects.values('periodo').filter(os=osid).latest('periodo')
-    #print(lastperiodo['periodo'])
-    if not lastperiodo:
+    try:
+        lastperiodo = Historico_Os.objects.values('periodo').filter(os=osid).latest('periodo')
+        #print(lastperiodo['periodo'])
+        if not lastperiodo:
+            return 1
+        return lastperiodo['periodo'] + 1
+    except:
         return 1
-    return lastperiodo['periodo'] + 1
-
-def get_last_pedido():
+# def get_last_pedido():
     
-    if Pedido.objects.exists():
-        return 2
-    return 1
+#     if Pedido.objects.exists():
+#         return 2
+#     return 1
     
    
        
