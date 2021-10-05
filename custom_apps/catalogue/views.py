@@ -7,10 +7,12 @@ class CatalogueView(Catalogue):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['analytics'] = ProductRecord.objects.all()
-        if not context['analytics']:
+        if context['analytics']:
+            print(context['analytics'])
+            print(context['analytics'][0].product)
+        else:
             context['analytics'] = self.ProductClass.objects.all()
-        print(context['analytics'])
-        print(context['analytics'][0].product)
+        
         #print(super().get_context_data()) 
         return super().get_context_data()
 
