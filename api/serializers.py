@@ -9,9 +9,6 @@ from django.db.models import Max
 from django.http import JsonResponse
 '''
 from rest_framework_jwt.settings import api_settings
-
-
-
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
 JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 '''
@@ -55,15 +52,15 @@ class HistoricoSerializer(serializers.ModelSerializer):
             print(f"periodos: {period}")
             data['periodo'] = period['periodo__max'] + 1
             periodoprint= data['periodo']
-            hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=data['periodo'], qtd=data['qtd'], os=data["os"], processo=data['processo'], id_func= data['id_func'] if 'id_func' in data else None)
+            hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=data['periodo'], qtd=data['qtd'], os=data["os"], processo=data['processo'])
             return hist_os
 
         elif edinicio and 'fim' in data:
-            Historico_Os.objects.filter(os=data["os"], periodo=period['periodo__max'], processo=data['processo']).update(ocorrencias=data["ocorrencias"], fim=data["fim"],  id_func= data['id_func'] if 'id_func' in data else None)
+            Historico_Os.objects.filter(os=data["os"], periodo=period['periodo__max'], processo=data['processo']).update(ocorrencias=data["ocorrencias"], fim=data["fim"] )
             hist_os =  Historico_Os.objects.get(os=data["os"], periodo=period['periodo__max'], processo=data['processo'])
             return hist_os
         elif not edfim and 'inicio' in data:
-           hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=1, qtd=data['qtd'], os=data["os"], processo=data['processo'], id_func= data['id_func'] if 'id_func' in data else None)
+           hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=1, qtd=data['qtd'], os=data["os"], processo=data['processo'])
            return hist_os
         
     def validate(self, data):
@@ -112,23 +109,22 @@ class HistoricoSerializer(serializers.ModelSerializer):
             self.context['request'].data['os'] = decodtoken['osid']
         except:
             decodtoken = None
-        if 'id_func' in data and User.objects.filter(pk=data['id_func']).exists():
-            data['id_func'] = User.objects.get(pk=data['id_func'])
-      
-            
         print(decodtoken['osid'])
         osid = decodtoken['osid'] if decodtoken else None
         data['os'] = Cadastro_OS.objects.get(pk=osid) if Cadastro_OS.objects.filter(pk=osid).exists() else None
         print(data['os'])
         data['processo'] =  Processo.objects.get(pk=data['processo']) if Processo.objects.filter(pk=data['processo']).exists() else None
         print(data['processo'])
+        data['id_func'] =  Processo.objects.get(pk=data['id_func']) if Processo.objects.filter(pk=data['id_func']).exists() else None
+         
         return data
 
     class Meta:
         model = Historico_Os
-        fields = ('processo', 'os', 'qtd' ,'ocorrencias', 'periodo','inicio', 'fim', 'id_func')
+        fields = ('processo', 'os', 'qtd' ,'ocorrencias', 'periodo','inicio', 'fim')
        
 class Cadastro_OS_Serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Cadastro_OS
         fields = ('STATUS',)
+       
