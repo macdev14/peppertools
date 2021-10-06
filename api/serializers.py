@@ -112,6 +112,10 @@ class HistoricoSerializer(serializers.ModelSerializer):
             self.context['request'].data['os'] = decodtoken['osid']
         except:
             decodtoken = None
+        if 'id_func' in data and User.objects.filter(pk=data['id_func']).exists():
+            data['id_func'] = User.objects.get(pk=data['id_func'])
+      
+            
         print(decodtoken['osid'])
         osid = decodtoken['osid'] if decodtoken else None
         data['os'] = Cadastro_OS.objects.get(pk=osid) if Cadastro_OS.objects.filter(pk=osid).exists() else None
