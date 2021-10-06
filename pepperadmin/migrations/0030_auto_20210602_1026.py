@@ -4,6 +4,7 @@ import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
 import pepperadmin.models
+from pepperadmin.admin import PedidoModel
 
 
 class Migration(migrations.Migration):
@@ -55,7 +56,7 @@ class Migration(migrations.Migration):
             name='Pedido',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('numero_pedido', models.IntegerField(db_column='numero', default=pepperadmin.models.get_last_pedido, editable=False)),
+                ('numero_pedido', models.IntegerField(db_column='numero', default=pepperadmin.models.Pedido.get_last_pedido, editable=False)),
                 ('ano', models.IntegerField(db_column='ano', default=2021, validators=[django.core.validators.MinValueValidator(1984), pepperadmin.models.max_value_current_year], verbose_name='ano')),
                 ('Especificacao', models.TextField(blank=True, db_column='especificacao', null=True)),
                 ('arquivo_desenho', models.ImageField(blank=True, db_column='arquivo_desenho', null=True, upload_to='media/desenhos_pedidos', verbose_name='Arquivo do desenho')),

@@ -32,7 +32,11 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         codyear = str(obj.Data.year)
         obj.Data_digit = codyear[-2:]
         osid = obj.id
-        qr = 'https://peppertools.herokuapp.com/admin/os/change/' + jwt.encode({'osid': osid }, peppertools.settings.SECRET_KEY)
+        print(request.META['HTTP_HOST'])
+        if 'localhost' in request.META['HTTP_HOST']:
+            qr = 'https://peppertools-test.herokuapp.com/admin/os/change/' + jwt.encode({'osid': osid }, peppertools.settings.SECRET_KEY)
+        else:
+            qr = 'https://'+request.META['HTTP_HOST']+'/admin/os/change/' + jwt.encode({'osid': osid }, peppertools.settings.SECRET_KEY)
         #print(qr)
         factory = qrcode.image.svg.SvgImage
         img = qrcode.make(qr, image_factory=factory, box_size=5)
