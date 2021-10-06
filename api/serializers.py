@@ -109,7 +109,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
             self.context['request'].data['os'] = decodtoken['osid']
         except:
             decodtoken = None
-        print(decodtoken['osid'])
+        print(token)
         osid = decodtoken['osid'] if decodtoken else None
         data['os'] = Cadastro_OS.objects.get(pk=osid) if Cadastro_OS.objects.filter(pk=osid).exists() else None
         print(data['os'])
