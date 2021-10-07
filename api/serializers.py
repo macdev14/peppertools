@@ -103,7 +103,10 @@ class HistoricoSerializer(serializers.ModelSerializer):
         if  u < 0:
             token = url
         else:
-            token = url[50:]    
+            if 'test' in url:
+                token = url[55:]    
+            else:
+                token = url[50:]
         try:
             decodtoken = jwt.decode(token, peppertools.settings.SECRET_KEY ,algorithms=['HS256'])
             self.context['request'].data['os'] = decodtoken['osid']
