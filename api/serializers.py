@@ -71,8 +71,9 @@ class HistoricoSerializer(serializers.ModelSerializer):
         elif not data['id_func']:
             raise serializers.ValidationError("Usuário não encontrado.")
         elif 'qtd' in data:
-            if not int(data['qtd']) or int(data['qtd']) <= 0:
-               raise serializers.ValidationError("Quantidade inválida.")
+            if data['qtd']:
+                if int(data['qtd']) <= 0:
+                    raise serializers.ValidationError("Quantidade inválida.")
             
         allos = Historico_Os.objects.filter(os=data["os"], processo=data['processo']).exists()
         osget, prochere, osinicio, osfim = None, None, None, None
