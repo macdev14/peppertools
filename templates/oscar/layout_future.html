@@ -53,15 +53,15 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-2 col-4">
-                        <a href="{% url 'catalogue:index' %}" class="brand-wrap" style="">
+                        <a href="{{ homepage_url }}" class="brand-wrap" style="">
                             <img style="width:100%" src="{% static 'images/logo.png' %}">
                         </a>
                         <!-- brand-wrap.// -->
                     </div>
                     <div class="col-lg-6 col-sm-12">
-                        <form method="GET" action="{% url 'search:search' %}" class="search">
+                        <form action="#" class="search">
                             <div class="input-group w-100">
-                                <input type="text"  name="q" class="form-control" placeholder="Search">
+                                <input type="text" class="form-control" placeholder="Search">
                                 <div class="input-group-append">
                                     <button class="btn btn-dark" type="submit">
 			        <i class="fa fa-search"></i> {% trans 'Search' %}
@@ -79,13 +79,16 @@
                                 <span class="badge badge-pill badge-danger notify">0</span>
                             </div>
                             <div class="widget-header icontext">
-                                <a href="#" class="icon icon-sm rounded-circle border"><i class="fa fa-user"></i></a>
+                                <a href="{% url 'customer:summary' %}" class="icon icon-sm rounded-circle border"><i class="fa fa-user"></i></a>
                                 <div class="text">
-                                    <span class="text-muted">{% trans 'Welcome' %}!</span>
+                                   
+                                    <span class="text-muted">{% trans 'Welcome' %},</span>
+                                    {% if user.is_authenticated %}  <span class="text-muted">{{ user.username.capitalize }}!</span>
+                                    {% else %} 
                                     <div>
-                                        <a href="#">{% trans 'Login' %}</a> |
-                                        <a href="#">{% trans 'Register' %}</a>
-                                    </div>
+                                        <a href="{% url 'customer:login'%}">{% trans 'Login' %}</a> |
+                                        <a href="{% url 'customer:register'%}">{% trans 'Register' %}</a>
+                                    </div>{%endif%}
                                 </div>
                             </div>
 
@@ -144,4 +147,4 @@
 
 </body>
 
-</html>
+</html>         

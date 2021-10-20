@@ -49,18 +49,18 @@ class HistoricoSerializer(serializers.ModelSerializer):
         
         if edfim and 'inicio' in data:
             # se estiver finalizado criar outro 
-            print(f"periodos: {period}")
+            #print(f"periodos: {period}")
             data['periodo'] = period['periodo__max'] + 1
             periodoprint= data['periodo']
-            hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=data['periodo'], qtd=data['qtd'], os=data["os"], processo=data['processo'])
+            hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=data['periodo'], qtd=data['qtd'], os=data["os"], processo=data['processo'], id_func=data['id_func'])
             return hist_os
 
         elif edinicio and 'fim' in data:
-            Historico_Os.objects.filter(os=data["os"], periodo=period['periodo__max'], processo=data['processo']).update(ocorrencias=data["ocorrencias"], fim=data["fim"] )
+            Historico_Os.objects.filter(os=data["os"], periodo=period['periodo__max'], processo=data['processo']).update(ocorrencias=data["ocorrencias"], fim=data["fim"], id_func_fim=data['id_func'])
             hist_os =  Historico_Os.objects.get(os=data["os"], periodo=period['periodo__max'], processo=data['processo'])
             return hist_os
         elif not edfim and 'inicio' in data:
-           hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=1, qtd=data['qtd'], os=data["os"], processo=data['processo'])
+           hist_os = Historico_Os.objects.create(inicio=data['inicio'], periodo=1, qtd=data['qtd'], os=data["os"], processo=data['processo'], id_func=data['id_func'])
            return hist_os
         
     def validate(self, data):
@@ -68,6 +68,11 @@ class HistoricoSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Processo não encontrado.")
         elif not data['os']:
             raise serializers.ValidationError("Ordem de Serviço não encontrada.")
+        elif not data['id_func']:
+            raise serializers.ValidationError("Usuário não encontrado.")
+        elif 'qtd' in data:
+            if not data['qtd'] or data['qtd'] <= 0:
+               raise serializers.ValidationError("Quantidade inválida.")
             
         allos = Historico_Os.objects.filter(os=data["os"], processo=data['processo']).exists()
         osget, prochere, osinicio, osfim = None, None, None, None
@@ -112,22 +117,22 @@ class HistoricoSerializer(serializers.ModelSerializer):
             self.context['request'].data['os'] = decodtoken['osid']
         except:
             decodtoken = None
-        print(token)
+        #print(token)
         osid = decodtoken['osid'] if decodtoken else None
         data['os'] = Cadastro_OS.objects.get(pk=osid) if Cadastro_OS.objects.filter(pk=osid).exists() else None
-        print(data['os'])
+        #print(data['os'])
         data['processo'] =  Processo.objects.get(pk=data['processo']) if Processo.objects.filter(pk=data['processo']).exists() else None
-        print(data['processo'])
-        data['id_func'] =  Processo.objects.get(pk=data['id_func']) if Processo.objects.filter(pk=data['id_func']).exists() else None
+        #print(data['processo'])
+        data['id_func'] =  User.objects.get(pk=data['id_func']) if Processo.objects.filter(pk=data['id_func']).exists() else None
          
         return data
 
     class Meta:
         model = Historico_Os
-        fields = ('processo', 'os', 'qtd' ,'ocorrencias', 'periodo','inicio', 'fim')
+        fields = ('processo', 'os', 'qtd' ,'ocorrencias', 'periodo','inicio', 'fim', 'id_func')
        
 class Cadastro_OS_Serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Cadastro_OS
-        fields = ('STATUS',)
+        fields = ('Numero_Os','STATUS',)
        

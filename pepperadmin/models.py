@@ -189,7 +189,7 @@ class Rosca(models.Model):
 
 class Ferramenta(models.Model):
     nome = models.CharField(max_length=254, default='')
-    material = models.ManyToManyField(Material, null=True, blank=True, db_column='cod_mat', related_name="material_ferramenta")
+    material = models.ManyToManyField(Material, blank=True, db_column='cod_mat', related_name="material_ferramenta")
     arquivo_desenho = models.ImageField(_("Arquivo do desenho"), null=True, blank=True, upload_to='media/desenhos_pedidos', db_column="arquivo_desenho" )
     relatorio = models.ImageField(_("Relatorio do desenho"), null=True, blank=True, upload_to='media/relatorio_ferramenta', db_column="relatorio" )
     descricao = models.TextField(_("Descrição"), db_column="descricao", null=True, blank=True)
@@ -222,7 +222,7 @@ class Item(models.Model):
     ]
     nome = models.CharField(max_length=254, default='')
     descricao = models.TextField(_("Descrição"), db_column="descricao", null=True, blank=True)
-    material = models.ManyToManyField(Material, null=True, blank=True, db_column='cod_mat', related_name="materialitem")
+    material = models.ManyToManyField(Material, blank=True, db_column='cod_mat', related_name="materialitem")
     qtd = models.IntegerField(_("Quantidade") ,null=True, blank=True, default=1, db_column="qtd")
     passo = models.FloatField(_("Passo da Rosca(mm)"), null=True, blank=True, default=1, db_column="passo")
     rosca = models.TextField(db_column="tipo", choices=TIPO, default='canal reto', null=True, blank=True)
@@ -279,7 +279,7 @@ class Cadastro_OS(models.Model):
     #Material = models.ForeignKey(Material ,null=True, blank=True, on_delete=models.CASCADE, db_column="Material",max_length=50)
     #Material = models.ManyToManyField(Material ,null=True, blank=True,db_column="Material",max_length=50)
     Especificacao = models.TextField(null=True, blank=True,db_column="Especificacao")
-    Quantidade = models.IntegerField(null=True, blank=True,db_column="Quantidade")
+    Quantidade = models.IntegerField(null=True, blank=True,db_column="Quantidade", verbose_name="Quantidade")
     unidade = models.CharField(null=True, blank=True,max_length=50, db_column="unidade", choices=UNIDADE, default='peca')
     Desenho_Cliente = models.CharField(null=True, blank=True,db_column="Desenho_Cliente", max_length=50)
     Desenho_Pimentel = models.CharField(null=True, blank=True,db_column="Desenho_Pimentel",max_length=50)
@@ -288,7 +288,7 @@ class Cadastro_OS(models.Model):
     Data_Nf = models.DateField(null=True, blank=True,db_column="Data_Nf")
     Data_Pedido = models.DateField(null=True, blank=True,db_column="Data_Pedido")
     STATUS = models.CharField(null=True, blank=True, db_column="STATUS", max_length=70)
-    Linha = models.ForeignKey(Linha, null=True, blank=True, db_column="id_Linha", on_delete=models.CASCADE, related_name="linha_os")
+    Linha = models.ForeignKey(Linha, null=True, blank=True, db_column="id_Linha", on_delete=models.CASCADE, related_name="linha_os", verbose_name="Linha de Produção")
     data_digit = models.IntegerField(null=True, blank=True,db_column="data_digit", editable=False)
     history = HistoricalRecords()
     def __str__(self):
@@ -389,11 +389,12 @@ class Historico_Os(models.Model):
     os = models.ForeignKey(Cadastro_OS, null=True, blank=True,verbose_name=_("Ordem de Serviço"), on_delete=models.SET_NULL, related_name="id_os", db_column='id_os')
     inicio = models.TimeField(_("Início"), default=datetime.now().strftime('%H:%M:%S') ,auto_now=False, auto_now_add=False, db_column="inicio")
     fim =  models.TimeField(_("Fim"), null=True, blank=True,auto_now=False, auto_now_add=False, db_column="fim")
-    ocorrencias = models.TextField(null=True, blank=True, db_column="ocorrencias")
-    periodo = models.IntegerField(null=True, blank=True, db_column="periodo")
+    ocorrencias = models.TextField(null=True, blank=True, db_column="ocorrencias", verbose_name="Ocorrência(s)")
+    periodo = models.IntegerField(null=True, blank=True, db_column="periodo", verbose_name="Período(s)")
     data = models.DateTimeField(db_column='data', default=now, null=True, blank=True)
-    qtd = models.IntegerField(null=True, blank=True,db_column="qtd")
-    id_func = models.ForeignKey(User, null=True, blank=True, db_column="Colaborador", on_delete=models.SET_NULL)
+    qtd = models.IntegerField(null=True, blank=True,db_column="qtd", verbose_name="Quantidade")
+    id_func = models.ForeignKey(User, null=True, blank=True, db_column="Colaborador", on_delete=models.SET_NULL, verbose_name="Colaborador que iniciou")
+    id_func_fim = models.ForeignKey( User, null=True, blank=True, db_column="Colaborador_Final", on_delete=models.SET_NULL, related_name="id_func_fim", verbose_name="Colaborador que finalizou")
     history = HistoricalRecords()
     def __str__(self):
         

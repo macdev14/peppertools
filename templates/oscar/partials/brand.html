@@ -1,1 +1,5 @@
-<div class="col-sm-6 h2"><a href="{{ homepage_url }}" style="text-decoration:none; color: black">{% block brand_title %}{{ shop_name }}{% endblock %}</a><small> {{ shop_tagline }}</small></div>
+{% load static %}
+<div class="col-sm-6 h2"><a href="{{ homepage_url }}" style="text-decoration:none; color: black">
+    <img style="width:50%" src="{% static 'images/logo.png' %}">
+
+</a><small> {{ shop_tagline }}</small></div>

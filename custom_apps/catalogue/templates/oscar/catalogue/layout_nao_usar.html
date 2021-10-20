@@ -79,13 +79,16 @@
                                 <span class="badge badge-pill badge-danger notify">0</span>
                             </div>
                             <div class="widget-header icontext">
-                                <a href="#" class="icon icon-sm rounded-circle border"><i class="fa fa-user"></i></a>
+                                <a href="{% url 'customer:summary' %}" class="icon icon-sm rounded-circle border"><i class="fa fa-user"></i></a>
                                 <div class="text">
-                                    <span class="text-muted">{% trans 'Welcome' %}!</span>
+                                   
+                                    <span class="text-muted">{% trans 'Welcome' %},</span>
+                                    {% if user.is_authenticated %}  <span class="text-muted">{{ user.username.capitalize }}!</span>
+                                    {% else %} 
                                     <div>
-                                        <a href="#">{% trans 'Login' %}</a> |
-                                        <a href="#">{% trans 'Register' %}</a>
-                                    </div>
+                                        <a href="{% url 'customer:login'%}">{% trans 'Login' %}</a> |
+                                        <a href="{% url 'customer:register'%}">{% trans 'Register' %}</a>
+                                    </div>{%endif%}
                                 </div>
                             </div>
 

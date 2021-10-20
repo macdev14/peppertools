@@ -2,6 +2,42 @@ from oscar.apps.checkout.views import *
 from oscar.apps.order.utils import OrderNumberGenerator
 from django.shortcuts import redirect
 from django.urls import reverse
+from oscar.core.loading import get_class, get_model
+from oscar.apps.checkout.forms import ShippingAddressForm as ShippingForm
+from oscar.apps.address.forms import AbstractAddressForm as AbstractForm
+
+class AbstractAddressForm(AbstractForm):
+    def __init__(self, *args, **kwargs):
+        """
+        Set fields in OSCAR_REQUIRED_ADDRESS_FIELDS as required.
+        """
+        super().__init__(*args, **kwargs)
+        print(self.fields)
+        field_names = (set(self.fields)
+                       & set(settings.OSCAR_REQUIRED_ADDRESS_FIELDS))
+        print(field_names)
+        for field_name in field_names:
+            self.fields[field_name].required = True
+
+
+
+class ShippingAddressForm(ShippingForm):
+    def __init__(self, *args, **kwargs):
+      
+        print(super().__init__(*args, **kwargs))
+        super().__init__(*args, **kwargs)
+        self.fields.insert(0,'postcode',self.forms.EmailField(initial=str(time.time())))
+    class Meta:
+        model = get_model('order', 'shippingaddress')
+        fields = [
+           'first_name', 'last_name',
+            'postcode', 'title', 
+            'line1', 'line2', 'line3', 'line4',
+            'state', 'country',
+            'phone_number', 'notes',
+        ]
+
+
 ''' 
 
 from oscar.apps.checkout.utils import CheckoutSessionData
@@ -32,6 +68,7 @@ import stripe
 from oscar.core.loading import get_class
 #Scaffold = get_class('adyen.scaffold', 'Scaffold')
 import django
+from custom_apps.checkout.views import AbstractAddressForm
 stripe.api_key = 'sk_test_51GlbyhHzlEOb03uFZ0ci0YJ97ma6RUitaFXosbrzvLVRN1ZIa8iMxQwNAkww2pVa6V7i0lXsOdc8k6korHzaX83V00tizaViz7'
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

@@ -119,7 +119,7 @@ INSTALLED_APPS = [
 
     'oscar.config.Shop',
     'custom_apps.analytics.apps.AnalyticsConfig',
-    'oscar.apps.checkout.apps.CheckoutConfig',
+    'custom_apps.checkout.apps.CheckoutConfig',
     'oscar.apps.address.apps.AddressConfig',
     'oscar.apps.shipping.apps.ShippingConfig',
     'custom_apps.catalogue.apps.CatalogueConfig',
