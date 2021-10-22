@@ -1,3 +1,4 @@
+import django.test
 from pepperadmin.models import *
 from django.http import JsonResponse
 from rest_framework import serializers
@@ -131,9 +132,25 @@ class HistoricoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Historico_Os
         fields = ('processo', 'os', 'qtd' ,'ocorrencias', 'periodo','inicio', 'fim', 'id_func')
-       
+
+class Cliente_Serializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Cliente
+        fields = ('nome',) 
+
 class Cadastro_OS_Serializer(serializers.HyperlinkedModelSerializer):
+    Cliente = Cliente_Serializer(read_only=True)
     class Meta:
         model = Cadastro_OS
-        fields = ('Numero_Os','STATUS',)
-       
+        fields = ('Numero_Os','STATUS','Prazo' ,'Cliente')
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('__all__')
+class UserOsSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    os = Cadastro_OS_Serializer(read_only=True)
+    class Meta:
+        model = Historico_Os
+        fields = ('__all__')

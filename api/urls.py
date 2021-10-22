@@ -12,6 +12,7 @@ from rest_framework.authtoken.views import(
 router = routers.DefaultRouter()
 router.register(r'processos', views.ProcViewSet)
 router.register(r'historico_os', views.HistoricalView)
+router.register(r'osuserhist', views.HistOsUserView, basename="historico_os")
 router.register(r'ordem_de_servico', views.Cadastro_OSView)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
