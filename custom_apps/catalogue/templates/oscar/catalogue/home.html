@@ -1,0 +1,87 @@
+ {% extends 'oscar/layout.html' %} {% load static %} {% load i18n %} {% load product_tags %} {% load basket_tags %} {% load category_tags%} {% block home %}
+<!-- ========================= SECTION MAIN ========================= -->
+<section class="section-main bg padding-y">
+    <div class="container">
+
+        <div class="row">
+            <aside class="col-md-3">
+                <nav class="card">
+                    <ul class="menu-category">
+                        {% category_tree depth=1 as tree_categories %} {% if tree_categories %} {% for tree_category in tree_categories %}
+                        <li><a href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a></li>
+                        {% endfor %} {% endif %}
+                        <li class="has-submenu"><a href="#">More items</a>
+                            <ul class="submenu">
+                                <li><a href="#">Submenu name</a></li>
+                                <li><a href="#">Great submenu</a></li>
+                                <li><a href="#">Another menu</a></li>
+                                <li><a href="#">Some others</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </nav>
+            </aside>
+            <!-- col.// -->
+            <div class="col-md-9">
+                <article class="banner-wrap">
+                    <img src="{% static 'images/banners/2.jpg' %}" class="w-100 rounded">
+                </article>
+            </div>
+            <!-- col.// -->
+        </div>
+        <!-- row.// -->
+    </div>
+    <!-- container //  -->
+</section>
+<!-- ========================= SECTION MAIN END// ========================= -->
+{% endblock home %} {% block products%}
+
+<!-- ========================= SECTION  ========================= -->
+<section class="section-name padding-y-sm">
+    <div class="container">
+
+        <header class="section-heading">
+            <a href="#" class="btn btn-outline-dark float-right">{% trans 'See'%} {% trans 'all' %}</a>
+            <h3 class="section-title">{% trans 'Popular products' %}</h3>
+        </header>
+        <!-- sect-heading -->
+        {{analytics}}
+        {% for product in analytics.product %}
+        
+        <div class="row">
+            <div class="col-md-3">
+                <div href="#" class="card card-product-grid">
+
+                    <figcaption class="info-wrap">
+                        {% render_product product %}
+                    </figcaption>
+                </div>
+            </div>
+       
+            {% endfor %}
+            <!-- col.// -->
+
+            <!-- col.// -->
+
+            <!-- col.// -->
+
+            <!-- col.// -->
+
+            <!-- col.// -->
+
+            <!-- col.// -->
+
+            <!-- col.// -->
+
+            <!-- col.// -->
+        </div>
+        <!-- row.// -->
+
+    </div>
+    <!-- container // -->
+</section>
+<!-- ========================= SECTION  END// ========================= -->
+
+
+{%endblock products%}

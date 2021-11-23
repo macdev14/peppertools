@@ -1,0 +1,295 @@
+<html>
+{% load static %}
+
+<head>
+    <meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+    <style type="text/css">
+        @page {
+            size: "A4";
+            margin-left: 0.5cm;
+            margin-right: 1.5cm;
+            margin-top: 0.5cm;
+            margin-bottom: 0.5cm;
+            background: url({% static 'background.jpg' %}) no-repeat center top;
+            background-size: auto 1.5cm;
+
+        }
+
+        < !-- span.cls_003 {
+            font-family: Arial, serif;
+            font-size: 10.1px;
+            color: rgb(119, 119, 119);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        div.cls_003 {
+            font-family: Arial, serif;
+            font-size: 10.1px;
+            color: rgb(119, 119, 119);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        span.cls_004 {
+            font-family: Arial, serif;
+            font-size: 12.1px;
+            color: rgb(119, 119, 119);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        div.cls_004 {
+            font-family: Arial, serif;
+            font-size: 12.1px;
+            color: rgb(119, 119, 119);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        span.cls_005 {
+            font-family: Arial, serif;
+            font-size: 12.1px;
+            color: rgb(0, 0, 0);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        div.cls_005 {
+            font-family: Arial, serif;
+            font-size: 12.1px;
+            color: rgb(0, 0, 0);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        span.cls_006 {
+            font-family: Arial, serif;
+            font-size: 14.1px;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        div.cls_006 {
+            font-family: Arial, serif;
+            font-size: 14.1px;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        span.cls_002 {
+            font-family: Arial, serif;
+            font-size: 12.1px;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        div.cls_002 {
+            font-family: Arial, serif;
+            font-size: 12.1px;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        span.cls_007 {
+            font-family: Arial, serif;
+            font-size: 10.1px;
+            color: rgb(0, 0, 0);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        div.cls_007 {
+            font-family: Arial, serif;
+            font-size: 10.1px;
+            color: rgb(0, 0, 0);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        span.cls_008 {
+            font-family: Arial, serif;
+            font-size: 9.1px;
+            color: rgb(0, 0, 0);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        div.cls_008 {
+            font-family: Arial, serif;
+            font-size: 9.1px;
+            color: rgb(0, 0, 0);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        span.cls_009 {
+            font-family: Arial, serif;
+            font-size: 9.1px;
+            color: rgb(119, 119, 119);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        div.cls_009 {
+            font-family: Arial, serif;
+            font-size: 9.1px;
+            color: rgb(119, 119, 119);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        span.cls_010 {
+            font-family: Arial, serif;
+            font-size: 10.1px;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        div.cls_010 {
+            font-family: Arial, serif;
+            font-size: 10.1px;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        span.cls_011 {
+            font-family: Arial, serif;
+            font-size: 9.1px;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        div.cls_011 {
+            font-family: Arial, serif;
+            font-size: 9.1px;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        span.cls_012 {
+            font-family: Arial, serif;
+            font-size: 8.1px;
+            color: rgb(0, 0, 0);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        div.cls_012 {
+            font-family: Arial, serif;
+            font-size: 8.1px;
+            color: rgb(0, 0, 0);
+            font-weight: normal;
+            font-style: normal;
+            text-decoration: none
+        }
+
+        -->
+    </style>
+    <script type="text/javascript"
+        src="9d645468-d448-11eb-a980-0cc47a792c0a_id_9d645468-d448-11eb-a980-0cc47a792c0a_files/wz_jsgraphics.js"></script>
+</head>
+
+<body>
+    <div
+        style="position:absolute;left:50%;margin-left:-297px;top:0px;width:595px;height:842px;border-style:outset;overflow:hidden">
+        <div style="position:absolute;left:0px;top:0px">
+            <img src="9d645468-d448-11eb-a980-0cc47a792c0a_id_9d645468-d448-11eb-a980-0cc47a792c0a_files/background1.jpg"
+                width=595 height=842>
+        </div>
+        <div style="position:absolute;left:15.00px;top:31.90px" class="cls_003"><span class="cls_003">21/06/2021</span>
+        </div>
+        <div style="position:absolute;left:488.14px;top:27.06px" class="cls_004"><span
+                class="cls_004">Orçamento</span><span class="cls_005"> </span><span class="cls_006">2183</span></div>
+        <div style="position:absolute;left:94.00px;top:66.48px" class="cls_002"><span class="cls_002">PIMENTEL
+                FERRAMENTAS LTDA - ME</span></div>
+        <div style="position:absolute;left:497.58px;top:68.48px" class="cls_002"><span class="cls_002">(11)
+                969695375</span></div>
+        <div style="position:absolute;left:94.00px;top:80.43px" class="cls_007"><span class="cls_007">R VOL. ANTONIO DOS
+                SANTOS, 429 - VILA BIANCHI - Bragança</span></div>
+        <div style="position:absolute;left:94.00px;top:92.40px" class="cls_007"><span class="cls_007">Paulista - SP -
+                CEP: 12910-320</span></div>
+        <div style="position:absolute;left:466.53px;top:100.61px" class="cls_008"><span
+                class="cls_008">contato@peppertools.com.br</span></div>
+        <div style="position:absolute;left:94.00px;top:115.11px" class="cls_009"><span class="cls_009">PIMENTEL
+                FERRAMENTAS LTDA - ME</span></div>
+        <div style="position:absolute;left:94.00px;top:130.61px" class="cls_009"><span class="cls_009">CNPJ:
+                05499375000161 IE: 225192730118</span></div>
+        <div style="position:absolute;left:24.00px;top:173.90px" class="cls_010"><span class="cls_010">TaeguTools</span>
+        </div>
+        <div style="position:absolute;left:467.00px;top:177.90px" class="cls_010"><span class="cls_010">Validade da
+                proposta</span></div>
+        <div style="position:absolute;left:467.00px;top:188.90px" class="cls_007"><span
+                class="cls_007">21/07/2021</span></div>
+        <div style="position:absolute;left:40.06px;top:260.61px" class="cls_011"><span class="cls_011">Qt.</span></div>
+        <div style="position:absolute;left:87.00px;top:260.61px" class="cls_011"><span
+                class="cls_011">Produto/Serviço</span></div>
+        <div style="position:absolute;left:239.00px;top:260.61px" class="cls_011"><span class="cls_011">Detalhe do
+                item</span></div>
+        <div style="position:absolute;left:455.91px;top:260.61px" class="cls_011"><span class="cls_011">Valor
+                unitário</span></div>
+        <div style="position:absolute;left:535.48px;top:260.61px" class="cls_011"><span class="cls_011">Subtotal</span>
+        </div>
+        <div style="position:absolute;left:41.22px;top:280.11px" class="cls_008"><span class="cls_008">20</span></div>
+        <div style="position:absolute;left:89.32px;top:280.11px" class="cls_008"><span class="cls_008">Fabricacao Macho
+                Maquina HSSE</span></div>
+        <div style="position:absolute;left:239.00px;top:280.11px" class="cls_008"><span class="cls_008">Rosca M13 X 1 -
+                6H L= 100; L1= 28 C= 9, conforme</span></div>
+        <div style="position:absolute;left:493.90px;top:280.11px" class="cls_008"><span class="cls_008">1,00</span>
+        </div>
+        <div style="position:absolute;left:545.16px;top:280.11px" class="cls_008"><span class="cls_008">20,00</span>
+        </div>
+        <div style="position:absolute;left:239.00px;top:290.89px" class="cls_008"><span class="cls_008">s/ Desenho
+                U3759</span></div>
+        <div style="position:absolute;left:443.34px;top:309.61px" class="cls_009"><span class="cls_009">Total</span>
+        </div>
+        <div style="position:absolute;left:545.83px;top:309.61px" class="cls_011"><span class="cls_011">20,00</span>
+        </div>
+        <div style="position:absolute;left:412.23px;top:330.61px" class="cls_011"><span class="cls_011">Valor
+                líquido</span></div>
+        <div style="position:absolute;left:545.83px;top:330.61px" class="cls_011"><span class="cls_011">20,00</span>
+        </div>
+        <div style="position:absolute;left:22.00px;top:372.61px" class="cls_011"><span class="cls_011">Forma de
+                pagamento:</span></div>
+        <div style="position:absolute;left:22.00px;top:385.11px" class="cls_008"><span class="cls_008">28 DDL</span>
+        </div>
+        <div style="position:absolute;left:22.00px;top:450.61px" class="cls_011"><span
+                class="cls_011">Observações:</span></div>
+        <div style="position:absolute;left:22.00px;top:463.11px" class="cls_008"><span class="cls_008">FRETE FOB</span>
+        </div>
+        <div style="position:absolute;left:525.17px;top:791.32px" class="cls_012"><span class="cls_012">Página 1 de
+                1</span></div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,296 @@
+
+   {% extends "easy_pdf/base.html" %}
+   
+   
+  
+  
+   
+{% block extra_style %}
+{% load qr_tags %}
+<meta http-equiv="content-type" content="text/html; charset=utf-8"> 
+<style type="text/css">
+   .style1 {
+      font-family: Geneva, Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      font-size: 18px;
+   }
+   .style4 {
+   
+      font-family: verdana;
+      font-size: 12px;
+   }
+   .style5 {
+      
+      font-family: verdana;
+      font-size: 12px;
+   }
+   .style6 {
+      font-family: verdana;
+      font-size: 12px;
+   }
+   .style8 {
+      font-family: verdana;
+      font-style: italic;
+      font-size: 10px;
+   }
+   .style12 {font-size: 20px; color: #FF0000; font-family: verdana;}
+   .style13 {font-family: verdana}
+   .style15 {font-size: 12px}
+   .LINHA {
+      margin-left:auto;
+      border-bottom-width: 1px;
+      border-right-width: 1px;
+      border-left-width: 1px;
+      border-top-style: none;
+      border-right-style: solid;
+      border-bottom-style: solid;
+      border-left-style: solid;
+      border-left-width: 0.02px;
+      border-top-color: #000000;
+      border-right-color: #000000;
+      border-bottom-color: #000000;
+      border-left-color: #000000;
+      padding-left:5px;
+   }
+   
+   
+   </style>
+   {% endblock %}
+  
+    {% block content %}
+   <hr>
+   
+   <table width="100%"  border="0" align="center" cellpadding="0" cellspacing="1">
+    <tr>
+      <td width="16%" ><div align="center" class="style6">DATA </div></td>
+      <td width="17%"  class="style6"><div align="center">PRAZO</div></td>
+      <td colspan="3" rowspan="2"><div align="center"></div>
+          <div align="center"><span class="style1">ORDEM DE SERVI&Ccedil;O <br>
+                <br>
+        </span></div></td>
+      <td width="28%" colspan="2" ><div align="center" class="style6">N&deg; O.S</div></td>
+    </tr>
+    <tr>
+      <td><div align="center"><em><span class="style4">{{field.Data.day }}/{{  field.Data.month }}/{{field.Data.year}}</span><br>
+              <br>
+      </em></div></td>
+      <td><div align="center"><em><span class="style5">{{field.Prazo.day }}/{{  field.Prazo.month }}/{{field.Prazo.year}}</span><br>
+              <br>
+      </em></div></td>
+      <td width="28%" colspan="2"><div align="center" class="style3"><span class="style12">{{ field.Numero_Os }}/{{ field.Data_digit  }}</span><br>
+              <br>
+      </div></td>
+    </tr>
+    <tr>
+      <td ><div align="center" class="style6">QUANTIDADE</div></td>
+      <td colspan="2"  backgroundcolor="#F4F4F4"><div align="center" class="style6">CLIENTE</div></td>
+      <td width="23%" colspan="2" ><div align="center" class="style6">
+        <div align="right">PEDIDO</div>
+      </div></td>
+      <td colspan="2" ><div align="center" class="style6">
+        <div align="right">N.F.</div>
+      </div></td>
+    </tr>
+    <tr>
+      <td valign="top"  background="##F4F4F4"><div align="center" class="style6"><em>{{field.Quantidade }}</em></div></td>
+      <td colspan="2" rowspan="2" valign="top"><div align="center" class="style8">{{field.Cliente }}</div></td>
+      <td><div align="left" class="style6">
+        <div align="right">N&deg;: </div>
+      </div>      </td>
+      <td><div align="left" class="style6">
+        <div align="right"><em>
+                {{field.Numero_Pedido |default_if_none:""}}
+        </em> </div>
+      </div>
+        <div align="right"><span class="style6"></span></div></td>
+      <td><div align="right"><span class="style6">N&deg;:</span></div></td>
+      <td><div align="right"><span class="style6"><em>
+           
+              {{ field.Numero_Nf |default_if_none:"" }}
+      
+        </em></span> <span class="style6"></span> </div></td>
+    </tr>
+    <tr>
+      <td valign="top"><div align="center"><span class="style6"><em> {{ field.unidade |default_if_none:"" }}</em></span></div></td>
+      <td><div align="right"><span class="style6">DATA:</span></div></td>
+      <td><div align="right"><span class="style6"><em>{% if field.Data_Pedido %} {{ field.Data_Pedido.day |default_if_none:""   }}/{{ field.Data_Pedido.month |default_if_none:""}}/{{ field.Data_Pedido.year |default_if_none:""}} {% endif %} </em></span></div></td>
+      <td><div align="right"><span class="style6">DATA:</span></div></td>
+      <td><div align="right"><span class="style6"><em>{% if field.Data_Nf %}{{ field.Data_Nf.day  | default_if_none:"" }}/{{ field.Data_Nf.month  | default_if_none:"" }}/{{ field.Data_Nf.year  | default_if_none:"" }}{%endif%}</em></span></div></td>
+    </tr>
+    
+    <tr>
+      <td colspan="7"><div align="center"> </div></td>
+    </tr>
+  </table>
+  <script>
+    window.print();
+    
+    </script>
+  <table width="100%"  border="0" align="center" cellpadding="0" cellspacing="5">
+    <tr>
+      <td width="23%"><div align="right"></div></td>
+      <td colspan="2">&nbsp;</td>
+      <td width="35%"><div align="center"> </div></td>
+    </tr>
+    <tr>
+      <td width="23%" class="style6"><div align="right">FERRAMENTA: &nbsp;</div></td>
+      <td colspan="2" class="style6"><div align="left"><em>{{ field.Ferramenta |default_if_none:"" }}</em></div></td>
+      <td width="35%"><div align="center" class="style6">TIPO DA O.S. </div></td>
+    </tr>
+    <tr>
+      <td class="style6"><div align="right">MATERIAL: &nbsp;</div></td>
+      <td colspan="2" class="style6"><div align="left"><em> {{ field.Material|default_if_none:""  }} </em></div></td>
+      <td><div align="center" class="style6"><strong><em>{{ field.Tipo |default_if_none:"" }}</em></strong></div></td>
+      
+    </tr>
+    <tr>
+      <td class="style6"><div align="right">DESENHO CLIENTE: &nbsp; </div></td>
+      <td colspan="2" class="style6"><div align="left"><em>{{ field.Desenho_Cliente |default_if_none:"" }}</em></div></td>
+      <td rowspan="5">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="style6"><div align="right">DESENHO PIMENTEL: &nbsp; </div></td>
+      <td colspan="2" class="style6"><div align="left"><em>{{ field.Desenho_Pimentel |default_if_none:"" }}</em></div></td>
+    </tr>
+   <!--- <tr>
+      <td class="style6"><div align="right">CODIGO DO PRODUTO: &nbsp; </div></td>
+      <td colspan="2" class="style6"><div align="left"><em>#lista.codigo#</em></div></td>
+    </tr>  --->
+    <tr>
+      <td height="59" valign="top" class="style6"><div align="right">ESPECIFICA&Ccedil;&Atilde;O: &nbsp;</div></td>
+      <td colspan="2" class="style6"><p><em>{{ field.Especificacao  |default_if_none:"" }}</em></p>
+        <p>&nbsp;</p></td>
+    </tr>
+    <tr>
+      <td valign="top" class="style6"><div align="right">GRAVA&Ccedil;&Atilde;O:</div></td>
+      <td colspan="2" class="style6"><em>{{ field.gravacao  |default_if_none:"" }}</em></td>
+    </tr>
+    <tr>
+      <td valign="top" class="style6"><div align="right">GRAVA&Ccedil;&Atilde;O C&Oacute;D: </div></td>
+      <td colspan="2" class="style6"><em>{{ field.gravacao2 |default_if_none:"" }}</em></td>
+    </tr>
+    <tr>
+      <td colspan="4">&nbsp;</td>
+    </tr>
+  </table>
+
+
+  <table style="float:left" width="50%"  border="0" cellspacing="0" cellpadding="0">
+    <th style="font-family:verdana">
+          <strong>PROCESSOS:</strong>
+    </th>
+    <tr>
+       
+   <tr class="style13">
+     <td colspan="4" class="LINHA"><div align="left"></div>      <div align="center"></div></td>
+   </tr>
+
+   <tr>
+    <td width="20%" class="LINHA">
+   <div align="right" class="style15">
+      <div align="left"><span class="style13"><b>Nome</b></span></div>
+    </div>
+   </td>
+    <td class="LINHA" width="20%" ><b>Quantidade&nbsp;</b></td>
+    <td class="LINHA" width="20%" ><b>Início&nbsp;</b></td>
+    <td class="LINHA" width="22%" ><b>Fim&nbsp;</b></td>
+  </tr>
+
+
+  {% if processes %}
+   {% for process in processes%}
+   {{procs}}
+  
+
+   <tr>
+    <td width="20%" class="LINHA">
+   <div align="right" class="style15">
+      <div align="left"><span class="style13">{{process.processo.procname}}</span></div>
+    </div>
+   </td>
+    <td class="LINHA" width="10%" align="center">{{process.qtd |default_if_none:"" }}</td>
+    <td class="LINHA" width="20%" >{{process.inicio |default_if_none:"" }}</td>
+    <td class="LINHA" width="22%" >{{process.fim |default_if_none:"" }}</td>
+  </tr>
+   
+{%endfor%}
+{%endif %}
+ </table>
+
+ <table style="float: left; margin-left:10px" width="45%" border="0" cellspacing="0" cellpadding="0">
+  <th style="font-family:verdana"><strong>OCORR&Ecirc;NCIAS</strong></th>
+  <tr class="style13">
+    <td class="LINHA"><div align="left"></div>      <div align="center"></div></td>
+  </tr>
+ {% if historyos %}
+
+  {% for ocorrencia in historyos%}
+     
+  
+  <tr class="style13">
+    <td class="LINHA"> {{ ocorrencia |default_if_none:"" }}</td>
+  </tr>
+  {%endfor%}
+  {%endif%}
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  <tr class="style13">
+    <td class="LINHA">&nbsp;</td>
+  </tr>
+  
+ 
+</table>
+
+
+
+<table style="float:left" width="100%"  border="0" align="center" cellpadding="0" cellspacing="1">
+  
+      <tr> <td colspan="95" align="center">---------------------------------------------------------------------------------------------------------------</td> </tr>
+ 
+   <tr>
+      <td class="style6"><div align="right">DESENHO PIMENTEL: &nbsp; </div></td>
+      <td colspan="2" class="style6"><div align="left"><em>{{ field.Desenho_Pimentel |default_if_none:""  }}</em></div></td><br>
+   </tr>
+   <tr>
+    <td width="23%" class="style6"><div align="right">FERRAMENTA: &nbsp;</div></td>
+    <td colspan="2" class="style6"><div align="left"><em>{{ field.Ferramenta |default_if_none:""  }}</em></div></td>
+    <td width="35%"><div align="center" class="style6">TIPO DA O.S. </div></td>
+  </tr>
+  <tr>
+    <td class="style6"><div align="right">MATERIAL: &nbsp;</div></td>
+    <td colspan="2" class="style6"><div align="left"><em>{{ field.Material |default_if_none:""  }}</em></div></td>
+    <td><div align="center" class="style6"><strong><em>{{ field.Tipo|upper |default_if_none:""  }}</em></strong></div></td>
+  </tr>
+  <tr>
+    <td class="style6"><div align="right">DESENHO CLIENTE: &nbsp; </div></td>
+    <td colspan="2" class="style6"><div align="left"><em>{{ field.Desenho_Cliente |default_if_none:""   }}</em></div></td>
+    <td colspan="4"  class="style6"><div align="center" class="style6">
+      {{ qr |safe }}
+    </div></td>
+   </tr>
+ </table>
+
+
+       {% endblock %}
+
+   
+
+  
+      
+   

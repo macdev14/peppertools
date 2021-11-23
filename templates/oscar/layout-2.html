@@ -1,0 +1,85 @@
+{% extends "oscar/layout.html"%} {% load static %} {% block favicon %}
+
+<link rel="shortcut icon" href="{% static " favicon.ico " %}" /> {% endblock %} {% block styles %}
+
+<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'fonts/fontawesome/css/all.min.css' %}" type="text/css" rel="stylesheet" />
+<link href="{% static 'css/ui.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'css/responsive.css' %}" rel="stylesheet" media="only screen and (max-width: 1200px)" /> {% endblock %} {% block scripts %} {{ block.super }}
+
+<!-- jQuery -->
+<script src="{% static 'js/jquery-2.0.0.min.js'%}" type="text/javascript"></script>
+
+<!-- Bootstrap -->
+<script src="{% static 'js/bootstrap.bundle.min.js'%}" type="text/javascript"></script>
+
+<!-- custom javascript -->
+<script src="{% static 'js/script.js' %}" type="text/javascript"></script>
+
+{% endblock %} {% block layout %}
+
+
+<header class="section-header">
+
+    <section class="header-main border-bottom">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-2 col-4">
+                    <a href="{{ homepage_url }}" style="text-decoration: none; font-size: x-large; color: black">
+                        {% block brand_title %}
+                        {{ shop_name }}
+                        {% endblock %}
+                    </a><small> {{ shop_tagline }}</small>
+                    <!-- brand-wrap.// -->
+                </div>
+
+
+
+                <div class="col-lg-6 col-sm-12">
+                    <form action="#" class="search">
+                        <div class="input-group w-100">
+                            <input type="text" class="form-control" placeholder="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-search"></i> Search
+                      </button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- search-wrap .end// -->
+                </div>
+                <!-- col.// -->
+                <div class="col-lg-4 col-sm-6 col-12">
+                    <div class="widgets-wrap float-md-right">
+                        <div class="widget-header  mr-3">
+                            <a href="{% url 'basket:summary' %}" class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></a>
+                            <span class="badge badge-pill badge-danger notify">0</span>
+                        </div>
+                        <div class="widget-header icontext">
+                            <a href="#" class="icon icon-sm rounded-circle border"><i class="fa fa-user"></i></a>
+                            <div class="text">
+                                <span class="text-muted">Welcome!</span>
+                                <div>
+                                    <a href="#">Sign in</a> |
+                                    <a href="#"> Register</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- widgets-wrap.// -->
+                </div>
+                <!-- col.// -->
+            </div>
+            <!-- row.// -->
+        </div>
+        <!-- container.// -->
+    </section>
+
+    {% block navigation %} {% include "oscar/partials/nav_primary.html" %} {% endblock %}
+
+    <!-- header-main .// -->
+</header>
+{% block banner %} {% endblock %}
+<!-- section-header.// -->
+{% block content_wrapper %} {{ super.content_wrapper }} {% endblock %} {% include "oscar/partials/footer.html" %} {% endblock %}
