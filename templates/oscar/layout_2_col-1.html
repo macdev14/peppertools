@@ -1,0 +1,25 @@
+{% extends "oscar/layout.html" %} {% load static %} {% block content_wrapper%}
+<div class="{% block content_wrapper_classes %}container page{% endblock %}">
+    <div class="page_inner">
+        {% block breadcrumbs %}{% endblock %}
+        <div class="row">
+
+            <aside class="sidebar col-sm-4 col-md-3">
+                {% block column_left %}{% endblock %} {% block column_left_extra %}{% endblock %}
+            </aside>
+
+            <div class="col-sm-8 col-md-9">
+                {% block header %}
+                <div class="page-header">
+                    <h1>{% block headertext %}{% endblock %}</h1>
+                </div>
+                {% endblock %} {% include "oscar/partials/alert_messages.html" %} {% block pre_content %}{% endblock %} {% block content %}{% endblock %}
+            </div>
+
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /page_inner -->
+</div>
+<!-- /container -->
+{% endblock %}
