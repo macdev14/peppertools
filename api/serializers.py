@@ -104,18 +104,20 @@ class HistoricoSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):   
         print(self.context['request'])
         url = self.context['request'].data['os']
-        u = url.find('http')
-        if  u < 0:
-            token = url
-        else:
-            token = url[50:]    
         try:
+            u = url.find('http')
+            if  u < 0:
+                token = url
+            else:
+                token = url[50:]  
+       
             decodtoken = jwt.decode(token, peppertools.settings.SECRET_KEY ,algorithms=['HS256'])
             self.context['request'].data['os'] = decodtoken['osid']
         except:
             decodtoken = None
-        print(decodtoken['osid'])
-        osid = decodtoken['osid'] if decodtoken else None
+           
+        print((decodtoken['osid'] if decodtoken and 'osid' in decodtoken else url))
+        osid = decodtoken['osid'] if decodtoken  and 'osid' in decodtoken else url
         data['os'] = Cadastro_OS.objects.get(pk=osid) if Cadastro_OS.objects.filter(pk=osid).exists() else None
         print(data['os'])
         data['processo'] =  Processo.objects.get(pk=data['processo']) if Processo.objects.filter(pk=data['processo']).exists() else None
@@ -129,7 +131,7 @@ class HistoricoSerializer(serializers.ModelSerializer):
 class Cadastro_OS_Serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Cadastro_OS
-        fields = ('STATUS', 'Prazo', 'Numero_Os')
+        fields = ('STATUS', 'Prazo', 'Numero_Os', 'id')
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

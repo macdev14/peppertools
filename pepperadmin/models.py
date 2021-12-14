@@ -22,20 +22,20 @@ from django.contrib.auth.signals import user_logged_in
 from django.urls import reverse
 #signal used for is_active=False to is_active=True
 
-@receiver(pre_save, sender=User, dispatch_uid='active')
-def active(sender, instance, **kwargs):
-    if instance.is_active and User.objects.filter(pk=instance.pk, is_active=True).exists():
-        subject = 'Active account'
-        message = '%s your account is now active' %(instance.username)
-        from_email = settings.EMAIL_HOST_USER
-        send_mail(subject, message, from_email, [settings.EMAIL_HOST_USER], fail_silently=False)
+# @receiver(pre_save, sender=User, dispatch_uid='active')
+# def active(sender, instance, **kwargs):
+#     if instance.is_active and User.objects.filter(pk=instance.pk, is_active=True).exists():
+#         subject = 'Active account'
+#         message = '%s your account is now active' %(instance.username)
+#         from_email = settings.EMAIL_HOST_USER
+#         send_mail(subject, message, from_email, [settings.EMAIL_HOST_USER], fail_silently=False)
 
 
 def login_handler(sender, user, request, **kwargs):
     print('logged in')
     subject = f'{user.username} realizou login'
     message = f'{user.username} realizou login'
-    from_email = settings.EMAIL_HOST_USER
+    from_email = 'nao-responda@peppertools.com.br'
     send_mail(subject, message, from_email, [settings.EMAIL_HOST_USER], fail_silently=False)
 
 
@@ -401,6 +401,7 @@ class Historico_Os(models.Model):
     
     class Meta:
         db_table = 'Historico_os'
+        ordering = ['fim']
         verbose_name = _("Localização O.S")
         verbose_name_plural = _("Localizar O.S")
 
@@ -444,8 +445,8 @@ class Historico_Os(models.Model):
         tempo = 'iniciada' if not self.fim else 'finalizada'
         subject = 'Ordem de Serviço N. '+ str(self.os.Numero_Os) +' '+tempo+' por '+ self.colaborador.username +' em '+self.processo.procname       
         message = 'Ordem de Serviço '+tempo+' por '+ self.colaborador.username +' em '+self.processo.procname+tempo_por_peca +' '+ admin_url + os_url
-        from_email = settings.EMAIL_HOST_USER
-        send_mail(subject, message, from_email, [settings.EMAIL_HOST_USER], fail_silently=False)
+        from_email = 'nao-responda@peppertools.com.br'
+        send_mail(subject, message, from_email, ['contato@peppertools.com.br'], fail_silently=False)
         
         
 

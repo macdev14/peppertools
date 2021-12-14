@@ -203,6 +203,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:19002',
     'http://localhost:19001',
     'http://localhost:3000',
+    'http://localhost:19006'
 ]
 
 

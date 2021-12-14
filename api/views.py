@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwnerOrReadOnly, IsOwnerProfileOrReadOnly
-
+import datetime as datetime2
 # Create your views here.
 
 class ProcViewSet(viewsets.ModelViewSet):
@@ -21,9 +21,13 @@ class HistOsUserView(viewsets.ModelViewSet):
     #queryset = Historico_Os.objects.all().order_by('id')
     def get_queryset(self):
         print(self.request.GET)
-        funcid = self.request.GET['id_func'] if 'id_func' in self.request.GET else None
+        funcid = self.request.GET['id_func'] if 'id_func' in self.request.GET else self.request.user.id
+        
         if funcid and Historico_Os.objects.filter(colaborador=funcid).exists():
-            return Historico_Os.objects.filter(colaborador=funcid)
+            active_on = datetime2.date(datetime2.datetime.now().year, datetime2.datetime.now().month, datetime2.datetime.now().day-7)
+            next_day = active_on + datetime2.timedelta(8)
+            print(next_day)
+            return Historico_Os.objects.filter(colaborador=funcid, data__range=(active_on, next_day ))
         return Historico_Os.objects.all() 
     #def get(self, request, **kwargs):
         
