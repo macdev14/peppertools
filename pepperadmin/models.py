@@ -401,7 +401,7 @@ class Historico_Os(models.Model):
     
     class Meta:
         db_table = 'Historico_os'
-        ordering = ['fim']
+        ordering = ['-fim']
         verbose_name = _("Localização O.S")
         verbose_name_plural = _("Localizar O.S")
 
@@ -445,8 +445,8 @@ class Historico_Os(models.Model):
         tempo = 'iniciada' if not self.fim else 'finalizada'
         subject = 'Ordem de Serviço N. '+ str(self.os.Numero_Os) +' '+tempo+' por '+ self.colaborador.username +' em '+self.processo.procname       
         message = 'Ordem de Serviço '+tempo+' por '+ self.colaborador.username +' em '+self.processo.procname+tempo_por_peca +' '+ admin_url + os_url
-        from_email = 'nao-responda@peppertools.com.br'
-        send_mail(subject, message, from_email, ['contato@peppertools.com.br'], fail_silently=False)
+        from_email = 'lauromigliorini@gmail.com'
+        send_mail(subject, message, from_email, ['lauromigliorini@gmail.com'], fail_silently=False)
         
         
 
