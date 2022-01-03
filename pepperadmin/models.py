@@ -244,8 +244,6 @@ class Item(models.Model):
          
 
     def __str__(self):
-        if self.preco and self.nome:
-            return f"{self.nome} - Qtd: {self.qtd} - R${self.preco}"
         return self.nome
     class Meta:
         verbose_name_plural = _("Itens")
