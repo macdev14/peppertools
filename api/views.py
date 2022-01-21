@@ -25,13 +25,14 @@ class HistOsUserView(viewsets.ModelViewSet):
         
         if funcid and Historico_Os.objects.filter(colaborador=funcid).exists():
             try:
-                active_on = datetime2.date(datetime2.datetime.now().year, datetime2.datetime.now().month, datetime2.datetime.now().day-7)
-                next_day = active_on + datetime2.timedelta(8)
-                print(next_day)
+                active_on = datetime2.date(timezone.now().year, timezone.now().month, timezone.now().day-3)
             except:
-                active_on = datetime2.date(datetime2.datetime.now().year, datetime2.datetime.now().month, datetime2.datetime.now().day)
-                next_day = active_on + datetime2.timedelta(8)
-                print(next_day)
+                active_on = datetime2.date(timezone.now().year-1, 12, 31)
+            
+            next_day = datetime2.date(timezone.now().year, timezone.now().month, timezone.now().day+7)
+            print(active_on)
+            print(next_day)
+            #print(Historico_Os.objects.filter(colaborador=funcid, data__range=(datetime2.date(datetime2.datetime.now().year-1, 12, 31),  )).exists() )
             return Historico_Os.objects.filter(colaborador=funcid, data__range=(active_on, next_day ))
         return Historico_Os.objects.all() 
     #def get(self, request, **kwargs):
