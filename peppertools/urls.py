@@ -26,6 +26,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import redirect
+
 def ssl_view(request):
 
     content = '3ntwQiXqiZ77EFQlJtaWlZzmkA_zu8lkhXWpCzv0nmI.1tWBfLlnFRvAzp8SnlPF8GQsqCxzC36BC1vRDGe0sFs'
@@ -34,6 +35,8 @@ def ssl_view(request):
 # path('', RedirectView.as_view(url=reverse_lazy('admin:index')) ),
 urlpatterns = i18n_patterns(
     # ...
+
+    #path("process/", include('pepperadmin.urls') ),
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url("favicon.ico") ) ),
     path('', lambda request: redirect('admin/', permanent=True) ),
     path('admin/os/change/<str:token>', tokRedirect, name="tokenRedirect"),

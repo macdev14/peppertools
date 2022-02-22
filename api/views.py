@@ -29,7 +29,12 @@ class HistOsUserView(viewsets.ModelViewSet):
             except:
                 active_on = datetime2.date(timezone.now().year-1, 12, 31)
             
-            next_day = datetime2.date(timezone.now().year, timezone.now().month, timezone.now().day+7)
+            try:
+                next_day = datetime2.date(timezone.now().year, timezone.now().month, timezone.now().day+7)
+            except:
+                next_day = datetime2.date(timezone.now().year, timezone.now().month+1, 1)
+            finally:
+                next_day = datetime2.date(timezone.now().year+1, 1, 1)
             print(active_on)
             print(next_day)
             #print(Historico_Os.objects.filter(colaborador=funcid, data__range=(datetime2.date(datetime2.datetime.now().year-1, 12, 31),  )).exists() )

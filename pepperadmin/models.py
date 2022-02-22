@@ -47,11 +47,14 @@ osid = None
 
 
 def get_last_os():
-    largest = Cadastro_OS.objects.values("Numero_Os").latest('Numero_Os')
-    print(largest['Numero_Os'])
-    if not largest:
+    try:
+        largest = Cadastro_OS.objects.values("Numero_Os").latest('Numero_Os')
+        print(largest['Numero_Os'])
+        if not largest:
+            return 1
+        return largest['Numero_Os'] + 1
+    except:
         return 1
-    return largest['Numero_Os'] + 1
 
 
 

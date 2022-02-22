@@ -25,7 +25,7 @@ class SystemTests(TestCase):
         
         self.formato = Formato.objects.create(nome="DIN371")
         # Create item
-        self.item = Ferramenta.objects.create(nome="Test", norma=self.formato)
+        self.item = Ferramenta.objects.create(nome="Test")
         self.item.processos.set(Processo.objects.filter(pk=self.processo.id))
         self.item.save()
         # Create quote
