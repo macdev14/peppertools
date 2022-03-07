@@ -9,6 +9,7 @@ pepperadmin/migrations/__pycache__/
 *.so
 
 # Distribution / packaging
+static/
 .Python
 build/
 develop-eggs/
