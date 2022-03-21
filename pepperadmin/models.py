@@ -59,13 +59,6 @@ def get_last_os():
 
 
 
-def get_last_periodo(osid):
-    lastperiodo = Historico_Os.objects.values('periodo').filter(os=osid).latest('periodo')
-    #print(lastperiodo['periodo'])
-    if not lastperiodo:
-        return 1
-    return lastperiodo['periodo'] + 1
-
 def get_last_pedido():
     
     if Pedido.objects.exists():
@@ -392,8 +385,19 @@ class Orcamento(models.Model):
         super().save(*args, **kwargs)
 
 
+    
+def get_last_periodo(osid):
+    try:
+        lastperiodo = Historico_Os.objects.values('periodo').filter(os=osid).latest('periodo')
+        return lastperiodo['periodo'] + 1
+    except:
+        if not lastperiodo:
+            return 1
+    
 
 class Historico_Os(models.Model):
+    
+    
     processo = models.ForeignKey(Processo, null=True, verbose_name=_("Processo"), on_delete=models.SET_NULL, db_column='id_proc',  related_name="id_proc")
     os = models.ForeignKey(Cadastro_OS, null=True, verbose_name=_("Ordem de Serviço"), on_delete=models.SET_NULL, related_name="id_os", db_column='id_os')
     colaborador = models.ForeignKey(User, null=True, verbose_name=_("Colaborador"), on_delete=models.SET_NULL, related_name="id_func", db_column='colaborador')
@@ -441,7 +445,16 @@ class Historico_Os(models.Model):
         except:
             return 'Data não encontrada.'
 
+   
+    
     def save(self, *args, **kwargs):
+        try:
+            lperiod = Historico_Os.objects.values('periodo').filter(os=self.os).latest('periodo')
+            lperiod = lperiod['periodo'] + 1
+        except:
+            lperiod = 1
+        
+        self.periodo = lperiod
         super().save(*args, **kwargs)
         domain = 'https://admin.peppertools.com.br'
         info = (self._meta.app_label, self._meta.model_name)

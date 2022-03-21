@@ -43,7 +43,7 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     status_time.short_description = 'Tempo total'
     list_display=('Numero_Os','Cliente','Tipo', 'Numero_Nf','Quantidade', 'STATUS', 'status_time')
   
-    search_fields = ('Numero_Os', 'Especificacao', 'Cliente__nome' )
+    search_fields = ('Numero_Os', 'Especificacao', 'Cliente__nome', 'Numero_Nf', 'STATUS', 'Quantidade' )
     readonly_fields=('Data',)
     def printos(self, request, obj):
        
@@ -301,7 +301,7 @@ class Historico_OsAdmin(simpleHistory.SimpleHistoryAdmin):
     date_obj.short_description = 'Data'
     time.short_description = 'Tempo total'
     list_display=('os','qtd','processo','date_obj', 'time' , 'avg_qtd', 'inicio', 'fim', 'periodo')
-    search_fields = ('processo', 'qtd', 'os' )
+    search_fields = ('processo__procname', 'qtd', 'os__Numero_Os', 'os__Cliente__nome', 'os__Numero_Nf' )
     actions = (export_to_csv_action, )
 
 
