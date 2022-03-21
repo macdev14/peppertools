@@ -22,7 +22,27 @@ from django.db.models import Max, F
 
 
 class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
-    list_display=('Numero_Os','Cliente','Tipo','Quantidade', 'STATUS')
+    
+    def status_time(self, obj):
+        
+      
+        if Historico_Os.objects.filter(os_id=obj.id).exists():
+            os = Historico_Os.objects.filter(os_id=obj.id)
+            time_total = datetime2.timedelta()
+            for time in os:
+               if not time.fim: break
+               enter_delta = datetime2.timedelta(hours=time.inicio.hour, minutes=time.inicio.minute, seconds=time.inicio.second)
+               exit_delta = datetime2.timedelta(hours=time.fim.hour, minutes=time.fim.minute, seconds=time.fim.second)
+               difference_delta = exit_delta - enter_delta
+
+               time_total +=difference_delta
+               #time_total_out = time_total
+            return time_total
+        else:
+            return "Não iniciada"
+    status_time.short_description = 'Tempo total'
+    list_display=('Numero_Os','Cliente','Tipo', 'Numero_Nf','Quantidade', 'STATUS', 'status_time')
+  
     search_fields = ('Numero_Os', 'Especificacao', 'Cliente__nome' )
     readonly_fields=('Data',)
     def printos(self, request, obj):

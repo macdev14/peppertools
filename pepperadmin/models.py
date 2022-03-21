@@ -35,8 +35,8 @@ def login_handler(sender, user, request, **kwargs):
     print('logged in')
     subject = f'{user.username} realizou login'
     message = f'{user.username} realizou login'
-    from_email = 'nao-responda@peppertools.com.br'
-    send_mail(subject, message, from_email, [settings.EMAIL_HOST_USER], fail_silently=False)
+    from_email = 'contato@peppertools.com.br'
+    send_mail(subject, message, from_email, ['contato@peppertools.com.br'], fail_silently=False)
 
 
 user_logged_in.connect(login_handler)
@@ -298,6 +298,14 @@ class Cadastro_OS(models.Model):
         db_table = 'cadastro_os'
         verbose_name = _("Ordem de Serviço")
 
+def get_last_pedido_out():
+        try:
+            largest = Pedido.objects.values("numero_pedido").latest('numero_pedido')
+            print(largest['numero_pedido'])
+            return largest['numero_pedido'] + 1
+        except:
+            return 1
+       
 
 class Pedido(models.Model):
     UNIDADE = [
@@ -314,7 +322,7 @@ class Pedido(models.Model):
         return largest['numero_pedido'] + 1
 
 
-    numero_pedido = models.IntegerField(default=get_last_pedido ,db_column="numero", editable=False)
+    numero_pedido = models.IntegerField(default=get_last_pedido_out ,db_column="numero", editable=False)
     ano = models.IntegerField(_('ano'), default=datetime2.date.today().year, db_column='ano', editable=False)
     Cliente = models.ForeignKey(Cliente, swappable=False, on_delete=models.CASCADE, db_column='id_cliente', related_name="cliente_pedido")
     item = models.ManyToManyField(Ferramenta, db_column='id_ferramenta', related_name="item_pedido")
@@ -435,7 +443,7 @@ class Historico_Os(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        domain = 'https://peppertools-test.herokuapp.com'
+        domain = 'https://admin.peppertools.com.br'
         info = (self._meta.app_label, self._meta.model_name)
         info_os = (self.os._meta.app_label, self.os._meta.model_name)
         os_url = '\nVeja a Ordem de Serviço em '+ domain + reverse('admin:%s_%s_change' % info_os, args=(self.os.pk,))  
@@ -446,8 +454,8 @@ class Historico_Os(models.Model):
         tempo = 'iniciada' if not self.fim else 'finalizada'
         subject = 'Ordem de Serviço N. '+ str(self.os.Numero_Os) +' '+tempo+' por '+ self.colaborador.username +' em '+self.processo.procname       
         message = 'Ordem de Serviço '+tempo+' por '+ self.colaborador.username +' em '+self.processo.procname+tempo_por_peca +' '+ admin_url + os_url
-        from_email = 'lauromigliorini@gmail.com'
-        send_mail(subject, message, from_email, ['lauromigliorini@gmail.com'], fail_silently=False)
+        from_email = 'contato@peppertools.com.br'
+        send_mail(subject, message, from_email, ['contato@peppertools.com.br'], fail_silently=False)
         
         
 
