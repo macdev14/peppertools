@@ -95,6 +95,7 @@ class Processo(models.Model):
         return f"{self.procname}"
     class Meta:
         db_table = 'processos'
+        ordering=["procname"]
         
 
 
@@ -107,6 +108,7 @@ class Tipo(models.Model):
         return self.nome
     class Meta:
         db_table = "Tipo"
+        ordering=["nome"]
         
 
 
@@ -131,6 +133,7 @@ class Cliente(models.Model):
         return self.nome
     class Meta:
         db_table = "cliente"
+        ordering=["nome"]
 
 class Fornecedor(models.Model):
     cnpj =  BRCNPJField(blank=True, max_length=254, null=True, db_column='cnpj')
@@ -151,6 +154,7 @@ class Fornecedor(models.Model):
         return self.nome
     class Meta:
         db_table = "Fornecedor"
+        ordering=["nome"]
 
 
 
@@ -164,6 +168,7 @@ class Material(models.Model):
     class Meta:
         verbose_name_plural = _("Materiais")
         db_table = "material"
+        ordering=["nome"]
 
 class Linha(models.Model):
     nome = models.CharField(max_length=254, db_column='nome')
@@ -173,15 +178,21 @@ class Linha(models.Model):
         return self.nome
     class Meta:
       db_table = 'linha'
+      ordering=["nome"]
 
 class Formato(models.Model):
     nome = models.CharField(max_length=254, default='')
     def __str__(self):
         return self.nome
+    class Meta:
+      ordering=["nome"]
+
 class Rosca(models.Model):
     nome = models.CharField(max_length=254, default='')
     def __str__(self):
         return self.nome
+    class Meta:
+      ordering=["nome"]
 
 class Ferramenta(models.Model):
     nome = models.CharField(max_length=254, default='')
@@ -209,7 +220,7 @@ class Ferramenta(models.Model):
         return self.nome
     class Meta:
         db_table = 'Ferramenta'
-
+        ordering=["nome"]
 
 
 class Item(models.Model):
@@ -244,6 +255,7 @@ class Item(models.Model):
     class Meta:
         verbose_name_plural = _("Itens")
         db_table = 'itens'
+        ordering=["nome"]
    
 class Cadastro_OS(models.Model):
     readonly_fields = ("Numero_Os","Data",)
@@ -491,6 +503,9 @@ class Product(models.Model):
     @property
     def code(self):
         return str(self.id)
+    
+    class Meta:
+        ordering=["nome"]
 
 
 '''
