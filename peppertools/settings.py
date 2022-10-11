@@ -61,7 +61,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 #DEBUG_PROPAGATE_EXCEPTIONS = env('DEBUG')
 THUMBNAIL_DEBUG = env('DEBUG')
-ALLOWED_HOSTS = ['peppertools.herokuapp.com', 'peppertools.lauromtp.com', 'localhost:8000', 'localhost:19006']
+ALLOWED_HOSTS = ['pentercorp.herokuapp.com', 'peppertools.herokuapp.com', 'peppertools.lauromtp.com', 'localhost:8000', 'localhost:19006']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = location('media')
