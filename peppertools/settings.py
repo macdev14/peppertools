@@ -87,7 +87,7 @@ INSTALLED_APPS = [
 
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'django.contrib.gis',
+    # 'django.contrib.gis',
     'widget_tweaks',
     'haystack',
     'treebeard',
