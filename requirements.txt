@@ -70,7 +70,7 @@ pycountry==20.7.3
 pycparser==2.20
 PyJWT==2.1.0
 pyOpenSSL==20.0.1
-PyPDF2==1.26.0
+PyPDF2==1.27.9
 Pyphen==0.10.0
 pysigep==0.1.0
 python-bidi==0.4.2
