@@ -59,7 +59,7 @@ paypal-checkout-serversdk==1.0.1
 paypalhttp==1.0.0
 pdfkit==0.6.1
 phonenumbers==8.12.26
-Pillow==9.0.1
+Pillow==10.0.1
 pipenv==2022.1.8
 poyo==0.5.0
 psycopg2==2.9.1
