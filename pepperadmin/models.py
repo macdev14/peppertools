@@ -505,7 +505,7 @@ class Product(models.Model):
         return str(self.id)
     
     class Meta:
-        ordering=["nome"]
+        ordering=["name"]
 
 
 '''

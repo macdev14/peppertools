@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import datetime, django_heroku, dj_database_url, environ, os, sys, socket
+import datetime, dj_database_url, environ, os, sys, socket
 from django.http import HttpRequest
 from pathlib import Path
 from django.utils.timezone import activate
@@ -40,9 +40,9 @@ HOMOG_CODIGO_ADMIN = env('HOMOG_CODIGO_ADMIN')
 HOMOG_CONTRATO = env('HOMOG_CONTRATO')
 HOMOG_CNPJ = env('HOMOG_CNPJ')
 
-STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
-STRIPE_CURRENCY = env("STRIPE_CURRENCY")
-STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
+# STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
+# STRIPE_CURRENCY = env("STRIPE_CURRENCY")
+# STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
    
 location = lambda x: os.path.join(
 os.path.dirname(os.path.realpath(__file__)), x)
@@ -61,7 +61,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 #DEBUG_PROPAGATE_EXCEPTIONS = env('DEBUG')
 THUMBNAIL_DEBUG = env('DEBUG')
-ALLOWED_HOSTS = ['pentercorp.herokuapp.com', 'peppertools.herokuapp.com', 'peppertools.lauromtp.com', 'localhost:8000', 'localhost:19006']
+ALLOWED_HOSTS = ['localhost:8000', 'pentercorp.herokuapp.com', 'peppertools.herokuapp.com', 'peppertools.lauromtp.com', 'localhost', 'peppertools.fly.dev', 'admin.peppertools.com.br']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = location('media')
@@ -238,13 +238,11 @@ DATABASES = {
 }
 '''
 
-DATABASES = {
-     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+
+DATABASES = { 
+      'default': dj_database_url.config(default=env('DATABASE_URL'))
+        
     }
-    
-}
 
 if 'test' in sys.argv:
     DATABASES['default'] = {
@@ -374,7 +372,7 @@ MEDIA_URL = AWS_URL + '/media/'
 MEDIA_ROOT = AWS_URL + '/media/'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-django_heroku.settings(locals(), staticfiles=False)
+
 
 
 

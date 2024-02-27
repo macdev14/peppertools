@@ -13,7 +13,7 @@ from django.shortcuts import render, redirect
 from datetime import datetime
 import datetime as datetime2
 from django.contrib import messages
-from .utils import render_to_pdf as render_pdf
+# from .utils import render_to_pdf as render_pdf
 from simple_history import admin as simpleHistory
 import jwt
 from tabular_export.admin import export_to_csv_action, export_to_excel_action
@@ -41,9 +41,9 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         else:
             return "Não iniciada"
     status_time.short_description = 'Tempo total'
-    list_display=('Numero_Os','Cliente','Tipo', 'Numero_Nf','Quantidade', 'STATUS', 'status_time')
+    list_display=('Numero_Os','Cliente','Tipo', 'Numero_Nf','Quantidade', 'STATUS', 'Desenho_Pimentel', 'Desenho_Cliente' ,'status_time')
   
-    search_fields = ('Numero_Os', 'Especificacao', 'Cliente__nome', 'Numero_Nf', 'STATUS', 'Quantidade' )
+    search_fields = ('Numero_Os', 'Especificacao', 'Cliente__nome', 'Numero_Nf', 'STATUS', 'Quantidade', 'Desenho_Pimentel', 'Desenho_Cliente' )
     readonly_fields=('Data',)
     def printos(self, request, obj):
        
