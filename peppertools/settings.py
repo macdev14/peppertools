@@ -96,6 +96,7 @@ INSTALLED_APPS = [
     'pysigep',
     'localflavor',
     'simple_history',
+    'rangefilter',
   
     'django_object_actions',
   

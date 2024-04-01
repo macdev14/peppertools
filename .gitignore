@@ -68,7 +68,8 @@ Dockerfile
 # Flask stuff:
 instance/
 .webassets-cache
-
+zappa_settings.json
+vercel.json
 # Scrapy stuff:
 .scrapy
 
@@ -131,9 +132,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-<<<<<<< HEAD
 
 .DS_Store
 .vscode/
-=======
->>>>>>> peppertools/main
+
+peppertools/.env

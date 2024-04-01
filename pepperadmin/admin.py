@@ -20,6 +20,12 @@ from tabular_export.admin import export_to_csv_action, export_to_excel_action
 
 from django.db.models import Max, F
 
+from rangefilter.filters import (
+    DateRangeFilterBuilder,
+    DateTimeRangeFilterBuilder,
+    NumericRangeFilterBuilder,
+    DateRangeQuickSelectListFilterBuilder,
+)
 
 class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     
@@ -41,8 +47,26 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         else:
             return "Não iniciada"
     status_time.short_description = 'Tempo total'
-    list_display=('Numero_Os','Cliente','Tipo', 'Numero_Nf','Quantidade', 'STATUS', 'Desenho_Pimentel', 'Desenho_Cliente' ,'status_time')
-  
+    list_display=('Numero_Os','Cliente','Tipo', 'Numero_Nf','Quantidade', 'Desenho_Pimentel', 'Desenho_Cliente' ,'Data', 'STATUS')
+    date_hierarchy = 'Data'
+    # list_filter = (
+    #     ("Data", DateRangeFilterBuilder(
+    #         title="Data de Cadastro",
+    #         default_start=datetime.now(),
+    #         default_end=datetime(2030, 1, 1),
+    #     )),
+    #     (
+    #         "Prazo",
+    #         DateRangeFilterBuilder(
+    #             title="Prazo de Entrega",
+    #             default_start=datetime.now(),
+    #             default_end=datetime(2030, 1, 1),
+    #         ),
+    #     ),
+       
+       
+    # )
+    save_as = True
     search_fields = ('Numero_Os', 'Especificacao', 'Cliente__nome', 'Numero_Nf', 'STATUS', 'Quantidade', 'Desenho_Pimentel', 'Desenho_Cliente' )
     readonly_fields=('Data',)
     def printos(self, request, obj):
@@ -52,7 +76,7 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         codyear = str(obj.Data.year)
         obj.Data_digit = codyear[-2:]
         osid = obj.id
-        qr = 'https://peppertools.herokuapp.com/admin/os/change/' + jwt.encode({'osid': osid }, peppertools.settings.SECRET_KEY)
+        qr = 'https://peppertools.fly.dev/admin/os/change/' + jwt.encode({'osid': osid }, peppertools.settings.SECRET_KEY)
         #print(qr)
         factory = qrcode.image.svg.SvgImage
         img = qrcode.make(qr, image_factory=factory, box_size=5)
