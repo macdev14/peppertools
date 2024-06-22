@@ -1,0 +1,36 @@
+{% extends "admin/base.html" %}
+{% load my_tags %}
+{% block title %} Pimentel Ferramentas {% endblock %}
+{% block content %}
+<div class="container">
+    <table>
+        <thead>
+            <tr>
+                {% for process in processes %}
+                <th>{{ process.procname }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            {% for key, value in historico_by_process.items %}
+         
+               
+                <th>{{ value|safe }}</th>
+            
+          
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+    
+</div>
+<script type="text/javascript">    
+   document.addEventListener('DOMContentLoaded',()=>{
+    setInterval(function() {
+    window.location.reload();
+}, 5000); // in ms
+   })
+ 
+</script>
+{% endblock %}

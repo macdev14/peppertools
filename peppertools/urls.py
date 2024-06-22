@@ -19,23 +19,58 @@ from django.contrib import admin
 import django.http
 from django.urls import path, include
 from django.urls import path, reverse_lazy
-from django.views.generic.base import RedirectView
+from django.views.generic.base import RedirectView, TemplateView
 from django.contrib.staticfiles.storage import staticfiles_storage
+from pepperadmin.models import Historico_Os, Processo
 from pepperadmin.views import tokRedirect
 from django.http import HttpResponse
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import redirect
+from django.views.generic.list import ListView
+
 
 def ssl_view(request):
 
     content = '3ntwQiXqiZ77EFQlJtaWlZzmkA_zu8lkhXWpCzv0nmI.1tWBfLlnFRvAzp8SnlPF8GQsqCxzC36BC1vRDGe0sFs'
     return HttpResponse(content, content_type='text/plain')
-    
+
+
+
+class ListProcessesView(ListView):
+    model = Historico_Os
+
+    def get_queryset(self, *args, **kwargs): 
+        qs = super().get_queryset(*args, **kwargs) 
+        qs = qs.order_by("-id") 
+       
+        return qs
+
+   
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        processes = Processo.objects.all()
+        rows = {}
+        for process in processes:
+            os_queryset = Historico_Os.objects.filter(processo=process).order_by('-data')
+            os_string_list = [str(obj.os.Numero_Os) + ' ' + str(obj.data.strftime("%d/%m/%Y" )) for obj in os_queryset]
+            os_string = '   <br> <br> '.join(os_string_list)
+            rows[process.procname] = os_string
+        # for entry in historico_entries:
+        #     procname = entry.processo.procname
+        #     if procname not in historico_by_process:
+        #         historico_by_process[procname] = []
+        #     historico_by_process[procname].append(entry)
+        context['historico_by_process'] = rows
+        context['processes'] = processes
+
+        return context
+
+
 # path('', RedirectView.as_view(url=reverse_lazy('admin:index')) ),
 urlpatterns = i18n_patterns(
     # ...
-
+    path('admin/process/', ListProcessesView.as_view(template_name='admin/process/process.html'), name='process-table'),
     #path("process/", include('pepperadmin.urls') ),
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url("favicon.ico") ) ),
     path('', lambda request: redirect('admin/', permanent=True) ),

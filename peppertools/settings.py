@@ -72,12 +72,14 @@ THUMBNAIL_KEY_PREFIX = 'sandbox'
 # Application definition
 
 INSTALLED_APPS = [
+   
     'api',
     'rest_framework',
     'rest_framework_simplejwt',
     'easy_pdf',
     'corsheaders',
     'pepperadmin',
+    'pepperadmin.templatetags',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
