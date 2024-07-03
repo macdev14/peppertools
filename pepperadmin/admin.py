@@ -1,7 +1,9 @@
+import django
+from import_export import resources
 from django.contrib import admin
 from peppertools.settings import SECRET_KEY
 from .models import *
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django_object_actions import DjangoObjectActions
 from django.http import HttpResponse
 import peppertools.settings
@@ -16,8 +18,8 @@ from django.contrib import messages
 # from .utils import render_to_pdf as render_pdf
 from simple_history import admin as simpleHistory
 import jwt
-from tabular_export.admin import export_to_csv_action, export_to_excel_action
-
+from import_export.fields import Field
+from import_export.admin import ImportExportModelAdmin, ExportActionModelAdmin
 from django.db.models import Max, F
 
 from rangefilter.filters import (
@@ -27,8 +29,136 @@ from rangefilter.filters import (
     DateRangeQuickSelectListFilterBuilder,
 )
 
-class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
+from import_export import fields, resources
+from import_export.widgets import ForeignKeyWidget
+
+
+class ClientForeignKeyWidget(ForeignKeyWidget):
+    model = Cliente
+    field = 'nome'
+
+    def __init__(self, publisher_id, **kwargs):
+        super().__init__(self.model, field=self.field, **kwargs)
+        self.publisher_id = publisher_id
+
+    def get_queryset(self, value, row, *args, **kwargs):
+        return self.model.objects.filter(pk=self.publisher_id)
+
+class HistoricoOsResource(resources.ModelResource):
+    # processo = fields.Field(
+    #     column_name='id_proc',
+    #     attribute='processo',
+    #     widget=ForeignKeyWidget(Processo, 'id')
+    # )
+    # os = fields.Field(
+    #     column_name='id_os',
+    #     attribute='os',
+    #     widget=ForeignKeyWidget(Cadastro_OS, 'id')
+    # )
+    # colaborador = fields.Field(
+    #     column_name='colaborador',
+    #     attribute='colaborador',
+    #     widget=ForeignKeyWidget(User, 'id')
+    # )
+ 
+    class Meta:
+        model = Historico_Os
+        fields = (
+            'processo__procname', 
+            'os__Numero_Os', 
+            'colaborador__username', 
+            'inicio', 
+            'fim', 
+            'ocorrencias', 
+            'periodo', 
+            'data', 
+            'qtd'
+        )
+        export_order = (
+            'processo__procname', 
+            'os__Numero_Os', 
+            'colaborador__username', 
+            'inicio', 
+            'fim', 
+            'ocorrencias', 
+            'periodo', 
+            'data', 
+            'qtd'
+        )
+
+
+class ServiceOrderResource(resources.ModelResource):
+
+
     
+    class Meta:
+        model = Cadastro_OS
+        
+        # nome_do_cliente = fields.Field(
+        #     column_name='nome',
+        #     attribute='cliente',
+        #     widget=ForeignKeyWidget(Cliente, 'nome'))
+
+
+        fields = (
+            # 'nome_do_cliente', 
+            'Numero_Os',
+            'Cliente', 
+            'Cliente__nome',
+            'Tipo', 
+            'Data', 
+            'Prazo', 
+            'gravacao', 
+            'gravacao2', 
+            'Ferramenta', 
+            'Material', 
+            'Especificacao', 
+            'Quantidade', 
+            'unidade', 
+            'Desenho_Cliente', 
+            'Desenho_Pimentel', 
+            'Numero_Nf', 
+            'Numero_Pedido', 
+            'Data_Nf', 
+            'Data_Pedido', 
+            'STATUS', 
+            'Linha', 
+            'data_digit'
+        )
+        export_order = (
+            
+            'Numero_Os',
+            'Cliente',
+            'Cliente__nome',
+            'Tipo', 
+            'Data', 
+            'Prazo', 
+            'gravacao', 
+            'gravacao2', 
+            'Ferramenta', 
+            'Material', 
+            'Especificacao', 
+            'Quantidade', 
+            'unidade', 
+            'Desenho_Cliente', 
+            'Desenho_Pimentel', 
+            'Numero_Nf', 
+            'Numero_Pedido', 
+            'Data_Nf', 
+            'Data_Pedido', 
+            'STATUS', 
+            'Linha', 
+            'data_digit'
+        )
+
+
+class osModel(ImportExportModelAdmin, DjangoObjectActions, ExportActionModelAdmin, simpleHistory.SimpleHistoryAdmin):
+    resource_classes = [ServiceOrderResource]
+
+    class Media:
+        js = ('js/admin/custom_admin.js',)
+        # css = { 'all': ('css/admin/custom_admin.css',)}
+
     def status_time(self, obj):
         
       
@@ -79,7 +209,7 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
         qr = 'https://peppertools.fly.dev/admin/os/change/' + jwt.encode({'osid': osid }, peppertools.settings.SECRET_KEY)
         #print(qr)
         factory = qrcode.image.svg.SvgImage
-        img = qrcode.make(qr, image_factory=factory, box_size=5)
+        img = qrcode.make(qr, image_factory=factory)
         stream = BytesIO()
         img.save(stream)
         svg = stream.getvalue().decode()
@@ -135,7 +265,7 @@ class osModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     class Meta:
         verbose_name = _("Ordem de Serviço")
 
-class ClienteModel(simpleHistory.SimpleHistoryAdmin):
+class ClienteModel(ImportExportModelAdmin, ExportActionModelAdmin, simpleHistory.SimpleHistoryAdmin):
     list_display=('nome','cnpj','telefone')
     search_fields = ('nome', 'cnpj')
     
@@ -279,8 +409,10 @@ class PedidoModel(DjangoObjectActions, simpleHistory.SimpleHistoryAdmin):
     actions = ['createOs']
 
 
-class FerramentaModel(simpleHistory.SimpleHistoryAdmin):
+class FerramentaModel(ImportExportModelAdmin, ExportActionModelAdmin, simpleHistory.SimpleHistoryAdmin):
     filter_horizontal = ("processos", "material")
+    list_display =  ("nome","codigo_do_cliente","codigo_do_desenho_da_pimentel")
+    search_fields =  ("nome","codigo_do_cliente","codigo_do_desenho_da_pimentel", "material__nome")
     def get_form(self, request, obj=None, **kwargs):
         users_in_group=None
         if Group.objects.filter(name="Producao").exists():
@@ -291,9 +423,9 @@ class FerramentaModel(simpleHistory.SimpleHistoryAdmin):
         form = super().get_form(request, obj, **kwargs)
         return form
 
-class Historico_OsAdmin(simpleHistory.SimpleHistoryAdmin):
+class Historico_OsAdmin(ImportExportModelAdmin, ExportActionModelAdmin, simpleHistory.SimpleHistoryAdmin):
     
-    
+    resource_classes = [HistoricoOsResource]
     raw_id_fields=('os',)
 
     def time(self, obj):
@@ -326,9 +458,10 @@ class Historico_OsAdmin(simpleHistory.SimpleHistoryAdmin):
     time.short_description = 'Tempo total'
     list_display=('os','qtd','processo','date_obj', 'time' , 'avg_qtd', 'inicio', 'fim', 'periodo')
     search_fields = ('processo__procname', 'qtd', 'os__Numero_Os', 'os__Cliente__nome', 'os__Numero_Nf' )
-    actions = (export_to_csv_action, )
+    # actions = (export_to_csv_action, )
 
-
+admin.autodiscover()
+admin.site.enable_nav_sidebar = True
 admin.site.register(Cliente, ClienteModel)
 admin.site.register(Cadastro_OS, osModel)
 admin.site.register(Item, simpleHistory.SimpleHistoryAdmin)

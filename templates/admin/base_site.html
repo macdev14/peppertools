@@ -1,11 +1,15 @@
-{% extends "admin/base.html" %}
 
+
+{% extends "admin/base.html" %}
 {% block title %} Pimentel Ferramentas {% endblock %}
 
 {% block branding %}
 <h1 id="site-name"><a href="{% url 'admin:index' %}"> {{ 'Pimentel Ferramentas'| default:_('Pimentel Ferramentas') }}</a></h1>
+
+{% if user.is_anonymous %}
+  {% include "admin/color_theme_toggle.html" %}
+{% endif %}
 {% endblock %}
 
-{% block nav-global %}
-
-{% endblock %}
+{% block nav-global %}{% endblock %}
+  

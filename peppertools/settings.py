@@ -15,7 +15,7 @@ from pathlib import Path
 from django.utils.timezone import activate
 #from oscar.defaults import *
 from django.utils.translation import gettext_lazy as _
-
+from import_export.formats.base_formats import CSV, XLSX, JSON
 env = environ.Env()
 environ.Env.read_env()
 
@@ -61,8 +61,8 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 #DEBUG_PROPAGATE_EXCEPTIONS = env('DEBUG')
 THUMBNAIL_DEBUG = env('DEBUG')
-ALLOWED_HOSTS = ['localhost:8000', 'pentercorp.herokuapp.com', 'peppertools.herokuapp.com', 'peppertools.lauromtp.com', 'localhost', 'peppertools.fly.dev', 'admin.peppertools.com.br']
-
+ALLOWED_HOSTS = ['127.0.0.1:8000' ,'localhost:8000', 'pentercorp.herokuapp.com', 'peppertools.herokuapp.com', 'peppertools.lauromtp.com', 'localhost', 'peppertools.fly.dev', 'admin.peppertools.com.br']
+CSRF_TRUSTED_ORIGINS =  ['http://127.0.0.1:8000','http://localhost:8000', 'https://peppertools.lauromtp.com', 'http://localhost', 'https://peppertools.fly.dev', 'https://admin.peppertools.com.br']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = location('media')
 
@@ -103,13 +103,18 @@ INSTALLED_APPS = [
     'django_object_actions',
   
     'qrcode',
-   
-    
+   'import_export',
+    'controlcenter',
    
     
   
 
 ] 
+
+
+
+
+
 
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 
@@ -357,7 +362,7 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
-
+EXPORT_FORMATS = [XLSX, CSV, JSON]
 
 
 
@@ -377,6 +382,9 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
+CONTROLCENTER_DASHBOARDS = (
+    ('mydash', 'peppertools.dashboards.MyDashboard'),
+)
 
 
 

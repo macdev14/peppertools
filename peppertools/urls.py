@@ -28,7 +28,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import redirect
 from django.views.generic.list import ListView
-
+from controlcenter.views import controlcenter
 
 def ssl_view(request):
 
@@ -75,6 +75,7 @@ urlpatterns = i18n_patterns(
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url("favicon.ico") ) ),
     path('', lambda request: redirect('admin/', permanent=True) ),
     path('admin/os/change/<str:token>', tokRedirect, name="tokenRedirect"),
+    path('admin/dashboard/', controlcenter.urls),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('.well-known/acme-challenge/3ntwQiXqiZ77EFQlJtaWlZzmkA_zu8lkhXWpCzv0nmI', ssl_view),

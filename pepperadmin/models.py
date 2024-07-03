@@ -3,7 +3,7 @@ from localflavor.br.models import BRCPFField, BRCNPJField, BRPostalCodeField, BR
 from datetime import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
 #from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
 #from .utils import get_last_periodo
 # Create your models here.
@@ -160,7 +160,7 @@ class Fornecedor(models.Model):
 
 
 class Material(models.Model):
-    nome = models.CharField(blank=True, null=True, max_length=254, db_column='nome')
+    nome = models.CharField(default="", max_length=254, db_column='nome')
     custo = models.IntegerField(blank=True, null=True, db_column='custo')
     history = HistoricalRecords()
     def __str__(self):
@@ -196,6 +196,8 @@ class Rosca(models.Model):
 
 class Ferramenta(models.Model):
     nome = models.CharField(max_length=254, default='')
+    codigo_do_cliente = models.CharField(_("Codigo do item que está na N.F"),max_length=254, default='')
+    codigo_do_desenho_da_pimentel = models.CharField(_("Codigo do desenho da Pimentel") ,max_length=254, default='')
     material = models.ManyToManyField(Material, blank=True, db_column='cod_mat', related_name="material_ferramenta")
     arquivo_desenho = models.ImageField(_("Arquivo do desenho"), null=True, blank=True, upload_to='media/desenhos_pedidos', db_column="arquivo_desenho" )
     relatorio = models.ImageField(_("Relatorio do desenho"), null=True, blank=True, upload_to='media/relatorio_ferramenta', db_column="relatorio" )
@@ -283,7 +285,7 @@ class Cadastro_OS(models.Model):
     Ferramenta = models.TextField(null=True, blank=True,db_column="Ferramenta")
     Material = models.CharField(null=True, blank=True, max_length=50, db_column="Material")
     #Material = models.ForeignKey(Material ,null=True, blank=True, on_delete=models.CASCADE, db_column="Material",max_length=50)
-    #Material = models.ManyToManyField(Material ,null=True, blank=True,db_column="Material",max_length=50)
+    # Material_Object = models.ManyToManyField(Material ,null=True, blank=True,db_column="Material")
     Especificacao = models.TextField(null=True, blank=True,db_column="Especificacao")
     Quantidade = models.IntegerField(null=True, blank=True,db_column="Quantidade")
     unidade = models.CharField(null=True, blank=True,max_length=50, db_column="unidade", choices=UNIDADE, default='peca')
@@ -302,7 +304,8 @@ class Cadastro_OS(models.Model):
     class Meta:
         db_table = 'cadastro_os'
         verbose_name = _("Ordem de Serviço")
-
+       
+    
 def get_last_pedido_out():
         try:
             largest = Pedido.objects.values("numero_pedido").latest('numero_pedido')
